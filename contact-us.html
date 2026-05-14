@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contact Us — Yuanta Wealth Management</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="https://landing.yuanta.co.th/hubfs/Wealth/icon-elite.png">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -28,7 +29,6 @@
         <div class="navbar-right">
           <nav class="navbar-menu">
             <a href="index.html">Home</a>
-            <a href="insights.html">Insights</a>
             <a href="why-us.html">Why us</a>
             <a href="privileges-events.html">Privileges &amp; Events</a>
             <a href="contact-us.html" class="active">Contact Us</a>
@@ -59,7 +59,7 @@
       <div class="row gy-5 align-items-stretch">
 
         <!-- Left: Contact Info -->
-        <div class="col-12 col-lg-5">
+        <div class="col-12 col-lg-6">
           <div class="contact-info-list">
 
             <div class="contact-info-item">
@@ -115,7 +115,7 @@
         </div>
 
         <!-- Right: Form Card -->
-        <div class="col-12 col-lg-7">
+        <div class="col-12 col-lg-6">
           <div class="contact-form-card">
             <h2 class="contact-form-card__title"><span style="font-family: var(--font-sans); font-weight: 500;">สมัครบริการ</span> <span style="font-family: var(--font-serif); font-size: 1.15em;">Yuanta Wealth</span></h2>
             <form class="contact-form" id="contact-form" onsubmit="handleSubmit(event);">
@@ -132,7 +132,21 @@
                   <input type="tel" name="phone" placeholder="เบอร์โทรศัพท์" />
                 </div>
                 <div class="form-group">
-                  <input type="email" name="email" placeholder="Email" required />
+                  <input type="email" name="email" placeholder="อีเมล" required />
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="select-wrapper">
+                  <select name="investment_amount">
+                    <option value="" disabled selected>มูลค่าสินทรัพย์รวมที่ต้องการบริหาร</option>
+                    <option value="ไม่เกิน 5 ล้านบาท">ไม่เกิน 5 ล้านบาท</option>
+                    <option value="5 – 30 ล้านบาท">5 – 30 ล้านบาท</option>
+                    <option value="31 - 50 ล้านบาท">31 - 50 ล้านบาท</option>
+                    <option value="51 - 100 ล้านบาท">51 - 100 ล้านบาท</option>
+                    <option value="101 - 500 ล้านบาท">101 - 500 ล้านบาท</option>
+                    <option value="501 ล้านบาทขึ้นไป">501 ล้านบาทขึ้นไป</option>
+                  </select>
+                  <svg class="select-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                 </div>
               </div>
               <div class="form-group">
@@ -185,26 +199,26 @@
           <div class="footer-contact-col">
             <div class="footer-contact-item">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
-              <span>0-2009-8000</span>
+              <a href="tel:020098000">0-2009-8000</a>
             </div>
             <div class="footer-contact-item">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
-              <span>online@yuanta.co.th</span>
+              <a href="mailto:online@yuanta.co.th">online@yuanta.co.th</a>
             </div>
             <div class="footer-social">
-              <a href="#"><img src="https://www.figma.com/api/mcp/asset/69bd64dc-2f78-4028-b8db-8eea7650474f" alt="Facebook" /></a>
-              <a href="#"><img src="https://www.figma.com/api/mcp/asset/07d0efe0-5e36-422c-89d1-a32dd025218b" alt="Line" /></a>
-              <a href="#"><img src="https://www.figma.com/api/mcp/asset/61a3074b-7ebd-479e-bc23-5f1e14714cba" alt="YouTube" /></a>
-              <a href="#" class="footer-social-svg"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
-              <a href="#"><img src="https://www.figma.com/api/mcp/asset/67b1d8ef-38ee-409a-91f8-697ac6706ef8" alt="Telegram" /></a>
-              <a href="#"><img src="https://www.figma.com/api/mcp/asset/11fe34ce-3aa6-4ab9-971d-130e6121fa95" alt="X" /></a>
+              <a href="https://www.facebook.com/yuantathai" target="_blank"><img src="images/Facebook.png" alt="Facebook" /></a>
+              <a href="https://line.me/R/ti/p/@sxk4157s" target="_blank"><img src="images/Line.png" alt="Line" /></a>
+              <a href="https://www.youtube.com/channel/UCqpfaQS5MRpI_As13qX3-hA" target="_blank"><img src="images/Youtube.png" alt="YouTube" /></a>
+              <a href="https://www.instagram.com/yuantathai" target="_blank"><img src="images/Instagram.png" alt="Instagram" /></a>
+              <a href="https://t.me/Yuantathai" target="_blank"><img src="images/Telegram.png" alt="Telegram" /></a>
+              <a href="https://x.com/yuantathai" target="_blank"><img src="images/X.png" alt="X" /></a>
             </div>
           </div>
         </div>
 
         <!-- Address -->
         <div class="col-12 col-lg-2">
-          <p class="footer-address-text">เลขที่ 127 อาคารเกษร ทาวเวอร์ ชั้น 14-16 ถนนราชดำริ แขวงลุมพินี เขตปทุมวัน จังหวัดกรุงเทพฯ 10330</p>
+          <p class="footer-address-text">เลขที่ 127 อาคารเกษร ทาวเวอร์ ชั้น 14-16 ถนนราชดำริ แขวงลุมพินี เขตปทุมวัน กรุงเทพมหานคร 10330</p>
         </div>
 
       </div>
@@ -261,6 +275,13 @@
       }
     }
   </script>
-
+  <script>
+    (function() {
+      var nav = document.getElementById('navbarMain');
+      if (!nav) return;
+      nav.addEventListener('hide.bs.collapse', function() { nav.classList.add('is-closing'); });
+      nav.addEventListener('hidden.bs.collapse', function() { nav.classList.remove('is-closing'); });
+    })();
+  </script>
 </body>
 </html>

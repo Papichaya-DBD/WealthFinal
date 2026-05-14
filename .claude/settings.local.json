@@ -4,7 +4,9 @@
       "mcp__claude_ai_Figma__get_screenshot",
       "mcp__claude_ai_Figma__get_metadata",
       "Bash(curl *)",
-      "Bash(python3 *)"
+      "Bash(python3 *)",
+      "Bash(sed -i '' 's|<img class=\"event-img\" src=\"https://www.figma.com/api/mcp/asset/[^\"]*\"|<img class=\"event-img\" src=\"images/comingsoon.png\"|g' /Users/papichaya-dbd/Documents/yuanta-wealth-website/index.html)",
+      "Bash(sed -i '' 's|<img class=\"priv-img\" src=\"https://www.figma.com/api/mcp/asset/[^\"]*\"|<img class=\"priv-img\" src=\"images/comingsoon.png\"|g' /Users/papichaya-dbd/Documents/yuanta-wealth-website/privileges-events.html)"
     ]
   }
 }
