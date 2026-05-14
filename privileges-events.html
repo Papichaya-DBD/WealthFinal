@@ -56,9 +56,11 @@
   <!-- TABS + CARDS -->
   <section style="padding: 60px 0 0; background: var(--color-white);">
     <div class="container">
-      <div class="tabs-bar">
-        <button class="tab-chip active" onclick="switchTab(this, 'events')">Events</button>
-        <button class="tab-chip" onclick="switchTab(this, 'privileges')">Privileges</button>
+      <div class="tabs-outer">
+        <div class="tabs-bar">
+          <button class="tab-chip active" onclick="switchTab(this, 'events')">Events</button>
+          <button class="tab-chip" onclick="switchTab(this, 'privileges')">Privileges</button>
+        </div>
       </div>
 
       <!-- Events tab -->
@@ -143,64 +145,399 @@
             </div>
           </a>
         </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+          <button class="page-btn">
+            <img src="https://www.figma.com/api/mcp/asset/79ef7a05-2119-478c-882a-a35953cc287c" alt="Prev" />
+          </button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn">
+            <img src="https://www.figma.com/api/mcp/asset/e461fbea-57cb-4282-b828-ec7e7883699f" alt="Next" />
+          </button>
+        </div>
       </div>
 
       <!-- Privileges tab (hidden by default) -->
-      <div id="tab-privileges" class="row g-4" style="display:none;">
-        <div class="col-12 col-sm-6 col-lg-3">
-          <a href="#" class="privilege-card">
-            <img class="priv-img" src="https://www.figma.com/api/mcp/asset/f1b5c085-6928-4ab2-92b7-1af427f13d06" alt="Privilege" />
-            <div class="privilege-card-content">
-              <p class="privilege-card-type">Art &amp; Culture</p>
-              <h3 class="privilege-card-title">สิทธิ์เข้าชม Art Exhibition ระดับนานาชาติ Bangkok Art Biennale</h3>
-              <p class="privilege-card-date">ตลอดเดือน July 2025</p>
-            </div>
-          </a>
+      <div id="tab-privileges" style="display:none;">
+
+        <!-- Yuanta Rewards info box -->
+        <div class="priv-rewards-box">
+          <p class="priv-rewards-heading">
+            <img src="images/icon-prestige.png" alt="" class="priv-rewards-icon" />
+            Yuanta Rewards
+          </p>
+          <p class="priv-rewards-tagline">เปลี่ยนทุกการลงทุนให้คุ้มค่ายิ่งขึ้น</p>
+          <p class="priv-rewards-body"><strong>Yuanta Rewards</strong> คือ โปรแกรมสิทธิพิเศษที่ออกแบบมา เพื่อลูกค้าหยวนต้าโดยเฉพาะ</p>
+          <p class="priv-rewards-body">สะสมคะแนนจากการลงทุนผ่านผลิตภัณฑ์ หรือบริการ ของ Yuanta และรับสิทธิพิเศษที่เพิ่มขึ้นตามระดับ สถานะของคุณ ยิ่งลงทุนมาก ยิ่งได้รับมาก ทั้งของรางวัลสุดพิเศษและสิทธิประโยชน์เฉพาะลูกค้าในแต่ละระดับ</p>
         </div>
-        <div class="col-12 col-sm-6 col-lg-3">
-          <a href="#" class="privilege-card">
-            <img class="priv-img" src="https://www.figma.com/api/mcp/asset/2f9530cd-8d29-41a7-b558-ab3848a812c5" alt="Privilege" />
-            <div class="privilege-card-content">
-              <p class="privilege-card-type">Lifestyle</p>
-              <h3 class="privilege-card-title">บริการห้องพักสุดหรูระดับ 5 ดาว พร้อมสิทธิพิเศษเพิ่มเติม</h3>
-              <p class="privilege-card-date">ตลอดปี 2025</p>
-            </div>
-          </a>
+
+        <!-- Section heading above cards -->
+        <div class="priv-card-heading">
+          <p>สิทธิประโยชน์ที่คุณจะได้รับ</p>
+          <p>จาก <strong>Yuanta Ultimate</strong></p>
         </div>
-        <div class="col-12 col-sm-6 col-lg-3">
-          <a href="#" class="privilege-card">
-            <img class="priv-img" src="https://www.figma.com/api/mcp/asset/5f0c6bd0-af43-4c8c-8275-bf766ac81b85" alt="Privilege" />
-            <div class="privilege-card-content">
-              <p class="privilege-card-type">Health &amp; Wellness</p>
-              <h3 class="privilege-card-title">โปรแกรม Health Screening พรีเมียม สำหรับลูกค้า Wealth</h3>
-              <p class="privilege-card-date">ตลอดปี 2025</p>
-            </div>
-          </a>
+
+        <!-- Card tiers -->
+        <div class="priv-card-img-wrap">
+          <img src="images/card.png" alt="Yuanta Elite, Signature, Prestige Cards" class="priv-card-img" />
         </div>
-        <div class="col-12 col-sm-6 col-lg-3">
-          <a href="#" class="privilege-card">
-            <img class="priv-img" src="https://www.figma.com/api/mcp/asset/4162d91e-146f-47c6-9c5a-bb340b03e387" alt="Privilege" />
-            <div class="privilege-card-content">
-              <p class="privilege-card-type">Travel</p>
-              <h3 class="privilege-card-title">Airport Lounge Access ทั่วโลกกว่า 1,300 แห่ง</h3>
-              <p class="privilege-card-date">ตลอดปี 2025</p>
-            </div>
-          </a>
+
+        <!-- Bordered content box -->
+        <div class="priv-content-box">
+
+        <!-- Section heading -->
+        <div class="priv-section-heading">
+          <p class="priv-section-num"><span>1</span> สิทธิพิเศษตามสถานะ</p>
+          <p class="priv-section-sub">ไม่ว่าคุณจะอยู่ในสถานะใด ก็สามารถได้รับสิทธิประโยชน์ ที่ออกแบบมาเฉพาะสำหรับระดับนั้นๆทันที</p>
+          <p class="priv-section-sub">เพียงสะสมคะแนนจากการลงทุนผ่านผลิตภัณฑ์หรือบริการของ Yuanta คุณก็สามารถคงระดับหรืออัปเกรดสถานะ เพื่อรับสิทธิประโยชน์ที่มากขึ้นได้อย่างต่อเนื่อง</p>
         </div>
+
+        <!-- Comparison table — each section is an independent bordered box -->
+        <div class="priv-table-area">
+
+          <!-- Header box: สิทธิพิเศษตามสถานะ -->
+          <div class="priv-section-box">
+            <table class="priv-table">
+              <colgroup>
+                <col class="priv-col-feature">
+                <col class="priv-col-tier">
+                <col class="priv-col-tier">
+                <col class="priv-col-tier">
+              </colgroup>
+              <tbody>
+                <tr class="priv-main-header-row">
+                  <td colspan="4">สิทธิพิเศษตามสถานะ</td>
+                </tr>
+                <tr class="priv-tier-icons-row">
+                  <td>ระดับสมาชิก</td>
+                  <td><img src="images/icon-elite.png" class="priv-tier-icon-sm" alt="Elite" /></td>
+                  <td><img src="images/icon-prestige.png" class="priv-tier-icon-sm" alt="Prestige" /></td>
+                  <td><img src="images/icon-signature.png" class="priv-tier-icon-sm" alt="Signature" /></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Box: Yuanta Point -->
+          <div class="priv-section-box">
+            <table class="priv-table">
+              <colgroup>
+                <col class="priv-col-feature">
+                <col class="priv-col-tier">
+                <col class="priv-col-tier">
+                <col class="priv-col-tier">
+              </colgroup>
+              <tbody>
+                <tr class="priv-section-row"><td colspan="4">Yuanta Point</td></tr>
+                <tr class="priv-row">
+                  <td>อัตราส่วน RC :<br>1 Yuanta Point</td>
+                  <td class="priv-val elite-val">6</td>
+                  <td class="priv-val prestige-val">6</td>
+                  <td class="priv-val signature-val">6</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Box: Special Privileges -->
+          <div class="priv-section-box">
+            <table class="priv-table">
+              <colgroup>
+                <col class="priv-col-feature">
+                <col class="priv-col-tier">
+                <col class="priv-col-tier">
+                <col class="priv-col-tier">
+              </colgroup>
+              <tbody>
+                <tr class="priv-section-row"><td colspan="4">Special Privileges</td></tr>
+                <tr class="priv-row">
+                  <td>Trading Tools</td>
+                  <td><img src="images/check-elite.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-prestige.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-signature.png" class="priv-check-img" alt="✓" /></td>
+                </tr>
+                <tr class="priv-row">
+                  <td>Investment Planning<br>(Portfolio)</td>
+                  <td><img src="images/check-elite.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-prestige.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-signature.png" class="priv-check-img" alt="✓" /></td>
+                </tr>
+                <tr class="priv-row">
+                  <td>Tax planning</td>
+                  <td><img src="images/check-elite.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-prestige.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-signature.png" class="priv-check-img" alt="✓" /></td>
+                </tr>
+                <tr class="priv-row">
+                  <td>VIP Trade Room Access</td>
+                  <td><img src="images/check-elite.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-prestige.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-signature.png" class="priv-check-img" alt="✓" /></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Box: Research & Insights -->
+          <div class="priv-section-box">
+            <table class="priv-table">
+              <colgroup>
+                <col class="priv-col-feature">
+                <col class="priv-col-tier">
+                <col class="priv-col-tier">
+                <col class="priv-col-tier">
+              </colgroup>
+              <tbody>
+                <tr class="priv-section-row"><td colspan="4">Research &amp; Insights</td></tr>
+                <tr class="priv-row">
+                  <td>Research Paper / Channel</td>
+                  <td><img src="images/check-elite.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-prestige.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-signature.png" class="priv-check-img" alt="✓" /></td>
+                </tr>
+                <tr class="priv-row">
+                  <td>Private Analyst Talk</td>
+                  <td><img src="images/check-elite.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-prestige.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-signature.png" class="priv-check-img" alt="✓" /></td>
+                </tr>
+                <tr class="priv-row">
+                  <td>Company Visit /<br>Roadshow</td>
+                  <td><img src="images/check-elite.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-prestige.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-signature.png" class="priv-check-img" alt="✓" /></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Box: Event & Training Access -->
+          <div class="priv-section-box">
+            <table class="priv-table">
+              <colgroup>
+                <col class="priv-col-feature">
+                <col class="priv-col-tier">
+                <col class="priv-col-tier">
+                <col class="priv-col-tier">
+              </colgroup>
+              <tbody>
+                <tr class="priv-section-row"><td colspan="4">Event &amp; Training Access</td></tr>
+                <tr class="priv-row">
+                  <td>Event</td>
+                  <td><img src="images/check-elite.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-prestige.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-signature.png" class="priv-check-img" alt="✓" /></td>
+                </tr>
+                <tr class="priv-row">
+                  <td>Quarterly Event</td>
+                  <td><img src="images/check-elite.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-prestige.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-signature.png" class="priv-check-img" alt="✓" /></td>
+                </tr>
+                <tr class="priv-row">
+                  <td>Exclusive Event / Workshop</td>
+                  <td><img src="images/check-elite.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-prestige.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-signature.png" class="priv-check-img" alt="✓" /></td>
+                </tr>
+                <tr class="priv-row">
+                  <td>Private Event / Dinner</td>
+                  <td><span class="priv-arrow">▲</span></td>
+                  <td><span class="priv-arrow">▲</span></td>
+                  <td><span class="priv-arrow">▲</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Box: Special gift -->
+          <div class="priv-section-box">
+            <table class="priv-table">
+              <colgroup>
+                <col class="priv-col-feature">
+                <col class="priv-col-tier">
+                <col class="priv-col-tier">
+                <col class="priv-col-tier">
+              </colgroup>
+              <tbody>
+                <tr class="priv-section-row"><td colspan="4">Special gift</td></tr>
+                <tr class="priv-row">
+                  <td>New Year Gift</td>
+                  <td><img src="images/check-elite.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-prestige.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-signature.png" class="priv-check-img" alt="✓" /></td>
+                </tr>
+                <tr class="priv-row">
+                  <td>Birthday Gift</td>
+                  <td><img src="images/check-elite.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-prestige.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-signature.png" class="priv-check-img" alt="✓" /></td>
+                </tr>
+                <tr class="priv-row">
+                  <td>Chinese New Year Gift</td>
+                  <td><img src="images/check-elite.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-prestige.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-signature.png" class="priv-check-img" alt="✓" /></td>
+                </tr>
+                <tr class="priv-row">
+                  <td>Moon Festival</td>
+                  <td><img src="images/check-elite.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-prestige.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-signature.png" class="priv-check-img" alt="✓" /></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Box: Ultimate Privilege -->
+          <div class="priv-section-box">
+            <table class="priv-table">
+              <colgroup>
+                <col class="priv-col-feature">
+                <col class="priv-col-tier">
+                <col class="priv-col-tier">
+                <col class="priv-col-tier">
+              </colgroup>
+              <tbody>
+                <tr class="priv-section-row"><td colspan="4">Ultimate Privilege</td></tr>
+                <tr class="priv-row">
+                  <td>Ultimate Club / Priority Service / Private Event Invitation</td>
+                  <td><img src="images/check-elite.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-prestige.png" class="priv-check-img" alt="✓" /></td>
+                  <td><img src="images/check-signature.png" class="priv-check-img" alt="✓" /></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Header box: เงื่อนไขการรับสถานะ -->
+          <div class="priv-section-box" style="margin-top: 24px;">
+            <table class="priv-table">
+              <colgroup>
+                <col class="priv-col-feature">
+                <col class="priv-col-tier">
+                <col class="priv-col-tier">
+                <col class="priv-col-tier">
+              </colgroup>
+              <tbody>
+                <tr class="priv-main-header-row">
+                  <td colspan="4">เงื่อนไขการรับสถานะ</td>
+                </tr>
+                <tr class="priv-tier-icons-row">
+                  <td>ระดับสมาชิก</td>
+                  <td><img src="images/icon-elite.png" class="priv-tier-icon-sm" alt="Elite" /></td>
+                  <td><img src="images/icon-prestige.png" class="priv-tier-icon-sm" alt="Prestige" /></td>
+                  <td><img src="images/icon-signature.png" class="priv-tier-icon-sm" alt="Signature" /></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Box: เงื่อนไขการเข้า Tier -->
+          <div class="priv-section-box">
+            <table class="priv-table">
+              <colgroup>
+                <col class="priv-col-feature">
+                <col class="priv-col-tier">
+                <col class="priv-col-tier">
+                <col class="priv-col-tier">
+              </colgroup>
+              <tbody>
+                <tr class="priv-section-row"><td colspan="4">เงื่อนไขการเข้า Tier (6 เดือน)</td></tr>
+                <tr class="priv-row">
+                  <td>RC สะสม</td>
+                  <td class="priv-val">24,000</td>
+                  <td class="priv-val">48,000</td>
+                  <td class="priv-val">96,000</td>
+                </tr>
+                <tr class="priv-row">
+                  <td>หรือ AUM กองทุนสะสม</td>
+                  <td class="priv-val">240<br><span class="priv-unit">MB</span></td>
+                  <td class="priv-val">480<br><span class="priv-unit">MB</span></td>
+                  <td class="priv-val">960<br><span class="priv-unit">MB</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+        <!-- Footnote inside box -->
+        <div class="priv-footnote">
+          <p>การรับสถานะสามารถทำได้ผ่าน 2 เงื่อนไข</p>
+          <p>1. สะสมค่า RC ให้ถึงเกณฑ์ หรือ</p>
+          <p>2. มีมูลค่าสินทรัพย์การลงทุนในพอร์ตกองทุน ถึงที่กำหนดในวันใดๆที่ได้ภายในช่วงเวลาที่กำหนด</p>
+          <br>
+          <p>รอบการคิดค่าธรรมเนียมสะสม, มูลค่าการลงทุนในหุ้นกู้ที่มีอนุพันธ์แฝง และหุ้นกู้ จะพิจารณาทุก 6 เดือน (2 รอบ/ปี) ได้แก่ :</p>
+          <p>• รอบที่ 1: 1 มกราคม – 30 มิถุนายน</p>
+          <p>• รอบที่ 2: 1 กรกฎาคม – 31 ธันวาคม</p>
+          <p>โดยในแต่ละรอบจะเริ่มนับมูลค่าการลงทุนสะสมตั้งแต่ 0 บาท และจะมีการตัดยอดเมื่อสิ้นสุดรอบดังกล่าว</p>
+        </div>
+
+        </div><!-- /priv-content-box -->
+
+        <!-- Section 2 -->
+        <div class="priv-content-box" style="margin-top: 24px;">
+
+          <div class="priv-section-heading">
+            <p class="priv-section-num"><span>2</span> สะสมคะแนนจากการลงทุน หรือ ร่วมภารกิจพิเศษ</p>
+            <p class="priv-section-sub">นำคะแนนไปแลกรางวัลที่คุณเลือกเองได้ตามความต้องการ ผ่าน YSInvest มูลค่าของคะแนน จะแตกต่างกันไปตามรางวัลที่คุณเลือก</p>
+            <p class="priv-section-sub">ยิ่งสะสมมาก ยิ่งมีสิทธิ์เลือกของรางวัลพรีเมียม ที่ตรงใจคุณได้มากขึ้น</p>
+          </div>
+
+          <div class="priv-table-area">
+
+            <div class="priv-section-box">
+              <table class="priv-table">
+                <colgroup>
+                  <col class="priv-col-half">
+                  <col class="priv-col-half">
+                </colgroup>
+                <tbody>
+                  <tr class="priv-main-header-row">
+                    <td colspan="2">การสะสม Yuanta Point จากผลิตภัณฑ์ลงทุน</td>
+                  </tr>
+                  <tr class="priv-section-row priv-col-header-row">
+                    <td>ผลิตภัณฑ์ลงทุน</td>
+                    <td>รับ 1 RC</td>
+                  </tr>
+                  <tr class="priv-row">
+                    <td>
+                      <p>• หุ้นไทย</p>
+                      <p>• อนุพันธ์</p>
+                      <p>• หุ้นต่างประเทศ</p>
+                      <p>• DR</p>
+                      <p>• กองทุนรวม</p>
+                    </td>
+                    <td class="priv-val">ทุกค่าธรรมเนียม 25 บาท</td>
+                  </tr>
+                  <tr class="priv-row">
+                    <td>• หุ้นกู้ที่มีอนุพันธ์แฝง (Structured Notes)</td>
+                    <td class="priv-val">ทุกการลงทุน 2,500 บาท</td>
+                  </tr>
+                  <tr class="priv-row">
+                    <td>• หุ้นกู้</td>
+                    <td class="priv-val">ทุกการลงทุน 500,000 บาท</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
+          <div class="priv-footnote">
+            <p class="priv-footnote-title">ระยะเวลาสะสมคะแนน Yuanta Points</p>
+            <p class="priv-footnote-bold">คะแนน Yuanta Points จะสะสมตลอดทั้งปี และมีอายุ 1 ปีปฏิทิน</p>
+            <p>เช่น คะแนนสะสมตลอดปี 2026 จะหมดอายุวันที่ 31 ธ.ค. 2027</p>
+          </div>
+
+        </div><!-- /priv-content-box section 2 -->
+
       </div>
 
-      <!-- Pagination -->
-      <div class="pagination">
-        <button class="page-btn">
-          <img src="https://www.figma.com/api/mcp/asset/79ef7a05-2119-478c-882a-a35953cc287c" alt="Prev" />
-        </button>
-        <button class="page-btn active">1</button>
-        <button class="page-btn">2</button>
-        <button class="page-btn">3</button>
-        <button class="page-btn">
-          <img src="https://www.figma.com/api/mcp/asset/e461fbea-57cb-4282-b828-ec7e7883699f" alt="Next" />
-        </button>
-      </div>
     </div>
   </section>
 
