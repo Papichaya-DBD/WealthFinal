@@ -535,7 +535,7 @@ input, textarea, select { font-family: inherit; }
 }
 .insight-card-small:hover { background: #f9f7f4; }
 .insight-card-small img.card-thumb {
-  width: 175px;
+  width: 185px;
   height: 100%;
   min-height: 80px;
   object-fit: cover;
@@ -715,6 +715,53 @@ input, textarea, select { font-family: inherit; }
 /* ============================================
    CTA BOOK A MEETING
    ============================================ */
+/* ============================================
+   TERMS & CONDITIONS ACCORDION
+   ============================================ */
+.tac-section {
+  padding: 60px 0;
+  background: var(--color-bg-beige);
+}
+.tac-outer {
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-white);
+  overflow: hidden;
+}
+.tac-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 20px 28px;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-primary);
+  background: var(--color-white);
+  border: none;
+  text-align: left;
+  gap: 16px;
+}
+.tac-chevron {
+  flex-shrink: 0;
+  color: var(--color-primary);
+  transition: transform 0.3s ease;
+}
+.tac-toggle[aria-expanded="true"] .tac-chevron {
+  transform: rotate(180deg);
+}
+.tac-body {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  padding: 20px 28px;
+  border-top: 1px solid var(--color-border);
+}
+.tac-body p { margin-bottom: 8px; }
+.tac-body p:last-child { margin-bottom: 0; }
+
 .cta-section {
   position: relative;
   background-size: cover;
@@ -1413,7 +1460,7 @@ input, textarea, select { font-family: inherit; }
 }
 .priv-card-img {
   max-width: 100%;
-  width: 100%;
+  width: 90%;
   height: auto;
   display: inline-block;
 }
@@ -1424,7 +1471,7 @@ input, textarea, select { font-family: inherit; }
 }
 .priv-section-num {
   font-family: var(--font-sans);
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
   color: var(--color-primary);
   margin-bottom: 8px;
@@ -1447,7 +1494,7 @@ input, textarea, select { font-family: inherit; }
 }
 .priv-section-sub {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 15px;
   color: var(--color-text-secondary);
   line-height: 1.65;
   margin-bottom: 4px;
@@ -1475,8 +1522,8 @@ input, textarea, select { font-family: inherit; }
 }
 .priv-section-box {
   border: 1px solid var(--color-border);
-  border-radius: 8px;
   overflow: hidden;
+  margin: 10px 0;
 }
 .priv-section-box table tr:last-child td {
   border-bottom: none;
@@ -1581,22 +1628,23 @@ input, textarea, select { font-family: inherit; }
 /* Footnote */
 .priv-footnote {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 15px;
   color: var(--color-text-muted);
-  line-height: 1.7;
+  line-height: 1;
   padding: 20px 24px;
   border-top: 1px solid var(--color-border);
 }
 .priv-footnote-title {
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 700;
   color: var(--color-primary);
-  margin-bottom: 6px;
+  margin-bottom: 10px;
 }
 .priv-footnote-bold {
   font-weight: 600;
   color: var(--color-primary);
-  margin-bottom: 4px;
+  margin-bottom: 10px;
+  font-size: 16px;
 }
 
 /* Contact CTA block */

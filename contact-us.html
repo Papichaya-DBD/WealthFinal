@@ -107,7 +107,7 @@
               </div>
               <div class="contact-info-text">
                 <span class="contact-info-value">หยวนต้า (สำนักงานใหญ่)</span>
-                <span class="contact-info-address" style="font-family: var(--font-sans); font-size: 14px; color: var(--color-text-muted); display: block; margin-top: 4px; line-height: 1.6;">127 อาคารเกษร ทาวเวอร์ ชั้น 14-16 ถนนราชดำริ แขวงลุมพินี เขตปทุมวัน กรุงเทพฯ 10330</span>
+                <span class="contact-info-address" style="font-family: var(--font-sans); font-size: 14px; color: var(--color-text-muted); display: block; margin-top: 4px; line-height: 1.6;">127 อาคารเกษร ทาวเวอร์ ชั้น 14-16 ถนนราชดำริ แขวงลุมพินี เขตปทุมวัน กรุงเทพมหานคร 10330</span>
               </div>
             </div>
 
@@ -139,12 +139,10 @@
                 <div class="select-wrapper">
                   <select name="investment_amount">
                     <option value="" disabled selected>มูลค่าสินทรัพย์รวมที่ต้องการบริหาร</option>
-                    <option value="ไม่เกิน 5 ล้านบาท">ไม่เกิน 5 ล้านบาท</option>
-                    <option value="5 – 30 ล้านบาท">5 – 30 ล้านบาท</option>
-                    <option value="31 - 50 ล้านบาท">31 - 50 ล้านบาท</option>
-                    <option value="51 - 100 ล้านบาท">51 - 100 ล้านบาท</option>
-                    <option value="101 - 500 ล้านบาท">101 - 500 ล้านบาท</option>
-                    <option value="501 ล้านบาทขึ้นไป">501 ล้านบาทขึ้นไป</option>
+                    <option value="น้อยกว่า 100,000 บาท">น้อยกว่า 100,000 บาท</option>
+                    <option value="100,000 - 500,000 บาท">100,000 - 500,000 บาท</option>
+                    <option value="500,000 - 1,000,000 บาท">500,000 - 1,000,000 บาท</option>
+                    <option value="1,000,000 บาทขึ้นไป">1,000,000 บาทขึ้นไป</option>
                   </select>
                   <svg class="select-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                 </div>
@@ -246,7 +244,7 @@
 
       try {
         const res = await fetch(
-          'https://api.hsforms.com/submissions/v3/integration/submit/43844850/3a76db52-5b50-4e3e-9f52-def7ee716652',
+          'https://api.hsforms.com/submissions/v3/integration/submit/43844850/cadba2e5-8730-4fa2-9df2-3f3c9bc0fe00',
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
