@@ -19,7 +19,8 @@
       "Bash(hs *)",
       "Bash(hs cms *)",
       "Bash(echo \"PID: $!\")",
-      "WebFetch(domain:landing.yuanta.co.th)"
+      "WebFetch(domain:landing.yuanta.co.th)",
+      "Bash(awk '{print $2}')"
     ]
   }
 }

@@ -360,7 +360,7 @@ input, textarea, select { font-family: inherit; }
 }
 .btn-primary {
   font-family: var(--font-serif);
-  font-size: 18px;
+  font-size: 15px;
   color: var(--color-white);
   background: var(--color-brand);
   padding: 14px 28px;
@@ -517,7 +517,7 @@ input, textarea, select { font-family: inherit; }
 }
 .card-views {
   font-family: var(--font-sans);
-  font-size: 16px;
+  font-size: 12px;
   color: var(--color-text-muted);
   margin: 0;
 }
@@ -535,13 +535,18 @@ input, textarea, select { font-family: inherit; }
 }
 .insight-card-small:hover { background: #f9f7f4; }
 .insight-card-small img.card-thumb {
-  width: 185px;
+  width: 200px;
   height: 100%;
   min-height: 80px;
   object-fit: cover;
   border-radius: 4px;
   flex-shrink: 0;
   align-self: stretch;
+}
+@media (max-width: 575.98px) {
+  .insight-card-small img.card-thumb {
+    width: 150px;
+  }
 }
 
 .insight-card-small-content { flex: 1; min-width: 0; }
@@ -1515,7 +1520,7 @@ input, textarea, select { font-family: inherit; }
 
 /* Comparison table */
 .priv-table-area {
-  padding: 16px 20px;
+  padding: 16px 10px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -1630,7 +1635,7 @@ input, textarea, select { font-family: inherit; }
   font-family: var(--font-sans);
   font-size: 15px;
   color: var(--color-text-muted);
-  line-height: 1;
+  line-height: 1.2;
   padding: 20px 24px;
   border-top: 1px solid var(--color-border);
 }
@@ -1802,7 +1807,6 @@ input, textarea, select { font-family: inherit; }
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding-top: 8px;
 }
 .contact-info-item {
   display: flex;
