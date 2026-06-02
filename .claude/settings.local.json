@@ -20,7 +20,12 @@
       "Bash(hs cms *)",
       "Bash(echo \"PID: $!\")",
       "WebFetch(domain:landing.yuanta.co.th)",
-      "Bash(awk '{print $2}')"
+      "Bash(awk '{print $2}')",
+      "Bash(hubspot --version)",
+      "Bash(npx @hubspot/cli --version)",
+      "Read(//Users/papichaya-dbd/.config/**)",
+      "Read(//Users/papichaya-dbd/**)",
+      "Bash(git checkout *)"
     ]
   }
 }

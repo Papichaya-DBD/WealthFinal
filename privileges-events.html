@@ -22,9 +22,12 @@
           <img src="logo.png" alt="Yuanta Wealth" />
         </a>
       </div>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+      <div class="d-flex d-lg-none align-items-center" style="gap: 20px;">
+        <a href="contact-us.html" class="btn-book-meeting d-none d-sm-inline-flex" data-setmore-trigger>Book a meeting</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
       <div class="collapse navbar-collapse" id="navbarMain">
         <div class="navbar-right">
           <nav class="navbar-menu">
@@ -33,7 +36,7 @@
             <a href="privileges-events.html" class="active">Privileges &amp; Events</a>
             <a href="contact-us.html">Contact Us</a>
           </nav>
-          <a href="contact-us.html" class="btn-book-meeting">Book a meeting</a>
+          <a href="contact-us.html" class="btn-book-meeting" data-setmore-trigger>Book a meeting</a>
         </div>
       </div>
     </div>
@@ -44,8 +47,7 @@
     <div class="hero-overlay"></div>
     <div class="hero-inner hero-content" style="width:100%;">
       <div class="container">
-        <div>
-          <p class="hero-label">Yuanta Wealth</p>
+        <div style="text-align:center; width:100%;">
           <h1 class="hero-title hero-page">Privileges &amp; Events</h1>
           <p class="hero-subtitle">กิจกรรมพิเศษและสิทธิประโยชน์เฉพาะสำหรับลูกค้า Yuanta Wealth</p>
         </div>
@@ -66,84 +68,180 @@
       <!-- Events tab -->
       <div id="tab-events" class="row g-4">
         <div class="col-12 col-sm-6 col-lg-3">
-          <a href="#" class="privilege-card">
-            <img class="priv-img" src="images/comingsoon.png" alt="Event" />
-            <div class="privilege-card-content">
-              <p class="privilege-card-type">Seminar</p>
-              <h3 class="privilege-card-title">Investment Outlook 2025: Global Market Trends &amp; Opportunities</h3>
-              <p class="privilege-card-date">15 June 2025</p>
+          <div class="event-card">
+            <img class="event-img" src="images/comingsoon.png" alt="Event" />
+            <div class="event-card-content">
+              <h3 class="event-title">Investment Outlook 2025: Global Market Trends &amp; Opportunities</h3>
+              <div class="event-meta">
+                <p class="event-datetime">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="3" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 1v4M11 1v4M2 7h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  <span class="event-date-text">15 มิ.ย. 2568</span><span class="event-date-sep"></span><span class="event-time">09.00–12.00</span>
+                </p>
+                <p class="event-location">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 14s5-4.686 5-8a5 5 0 10-10 0c0 3.314 5 8 5 8z" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="6" r="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+                  <span>โรงแรม Marriott กรุงเทพ ชั้น 18</span>
+                </p>
+                <p class="event-capacity">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 14c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  <span class="event-count-label">ผู้เข้าร่วม</span> <span class="event-count-value">150/200</span>
+                </p>
+              </div>
             </div>
-          </a>
+          </div>
         </div>
         <div class="col-12 col-sm-6 col-lg-3">
-          <a href="#" class="privilege-card">
-            <img class="priv-img" src="images/comingsoon.png" alt="Event" />
-            <div class="privilege-card-content">
-              <p class="privilege-card-type">Exclusive Dinner</p>
-              <h3 class="privilege-card-title">Yuanta Wealth Private Dinner &amp; Q3 Market Update</h3>
-              <p class="privilege-card-date">22 June 2025</p>
+          <div class="event-card">
+            <img class="event-img" src="images/comingsoon.png" alt="Event" />
+            <div class="event-card-content">
+              <h3 class="event-title">Yuanta Wealth Private Dinner &amp; Q3 Market Update</h3>
+              <div class="event-meta">
+                <p class="event-datetime">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="3" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 1v4M11 1v4M2 7h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  <span class="event-date-text">22 มิ.ย. 2568</span><span class="event-date-sep"></span><span class="event-time">18.30–21.00</span>
+                </p>
+                <p class="event-location">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 14s5-4.686 5-8a5 5 0 10-10 0c0 3.314 5 8 5 8z" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="6" r="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+                  <span>ห้องบอลรูม โรงแรม Four Seasons กรุงเทพ</span>
+                </p>
+                <p class="event-capacity">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 14c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  <span class="event-count-label">ผู้เข้าร่วม</span> <span class="event-count-value">80/80</span>
+                </p>
+              </div>
             </div>
-          </a>
+          </div>
         </div>
         <div class="col-12 col-sm-6 col-lg-3">
-          <a href="#" class="privilege-card">
-            <img class="priv-img" src="images/comingsoon.png" alt="Event" />
-            <div class="privilege-card-content">
-              <p class="privilege-card-type">Workshop</p>
-              <h3 class="privilege-card-title">Portfolio Construction Workshop กับผู้เชี่ยวชาญระดับประเทศ</h3>
-              <p class="privilege-card-date">30 June 2025</p>
+          <div class="event-card">
+            <img class="event-img" src="images/comingsoon.png" alt="Event" />
+            <div class="event-card-content">
+              <h3 class="event-title">Portfolio Construction Workshop กับผู้เชี่ยวชาญระดับประเทศ</h3>
+              <div class="event-meta">
+                <p class="event-datetime">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="3" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 1v4M11 1v4M2 7h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  <span class="event-date-text">30 มิ.ย. 2568</span><span class="event-date-sep"></span><span class="event-time">09.00–16.00</span>
+                </p>
+                <p class="event-location">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 14s5-4.686 5-8a5 5 0 10-10 0c0 3.314 5 8 5 8z" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="6" r="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+                  <span>ห้องอบรม อาคารเกษร ชั้น 15</span>
+                </p>
+                <p class="event-capacity">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 14c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  <span class="event-count-label">ผู้เข้าร่วม</span> <span class="event-count-value">40/50</span>
+                </p>
+              </div>
             </div>
-          </a>
+          </div>
         </div>
         <div class="col-12 col-sm-6 col-lg-3">
-          <a href="#" class="privilege-card">
-            <img class="priv-img" src="images/comingsoon.png" alt="Event" />
-            <div class="privilege-card-content">
-              <p class="privilege-card-type">Forum</p>
-              <h3 class="privilege-card-title">Yuanta Wealth Forum: ESG Investing &amp; Sustainable Returns</h3>
-              <p class="privilege-card-date">10 July 2025</p>
+          <div class="event-card">
+            <img class="event-img" src="images/comingsoon.png" alt="Event" />
+            <div class="event-card-content">
+              <h3 class="event-title">Yuanta Wealth Forum: ESG Investing &amp; Sustainable Returns</h3>
+              <div class="event-meta">
+                <p class="event-datetime">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="3" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 1v4M11 1v4M2 7h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  <span class="event-date-text">10 ก.ค. 2568</span><span class="event-date-sep"></span><span class="event-time">13.00–17.00</span>
+                </p>
+                <p class="event-location">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 14s5-4.686 5-8a5 5 0 10-10 0c0 3.314 5 8 5 8z" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="6" r="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+                  <span>ห้องประชุม อาคารเกษร ทาวเวอร์</span>
+                </p>
+                <p class="event-capacity">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 14c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  <span class="event-count-label">ผู้เข้าร่วม</span> <span class="event-count-value">60/100</span>
+                </p>
+              </div>
             </div>
-          </a>
+          </div>
         </div>
         <div class="col-12 col-sm-6 col-lg-3">
-          <a href="#" class="privilege-card">
-            <img class="priv-img" src="images/comingsoon.png" alt="Event" />
-            <div class="privilege-card-content">
-              <p class="privilege-card-type">Webinar</p>
-              <h3 class="privilege-card-title">Digital Asset Allocation: Bitcoin and Beyond ในพอร์ตลงทุน</h3>
-              <p class="privilege-card-date">18 July 2025</p>
+          <div class="event-card">
+            <img class="event-img" src="images/comingsoon.png" alt="Event" />
+            <div class="event-card-content">
+              <h3 class="event-title">Digital Asset Allocation: Bitcoin and Beyond ในพอร์ตลงทุน</h3>
+              <div class="event-meta">
+                <p class="event-datetime">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="3" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 1v4M11 1v4M2 7h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  <span class="event-date-text">18 ก.ค. 2568</span><span class="event-date-sep"></span><span class="event-time">10.00–12.00</span>
+                </p>
+                <p class="event-location">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 14s5-4.686 5-8a5 5 0 10-10 0c0 3.314 5 8 5 8z" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="6" r="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+                  <span>ออนไลน์ (Zoom Webinar)</span>
+                </p>
+                <p class="event-capacity">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 14c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  <span class="event-count-label">ผู้เข้าร่วม</span> <span class="event-count-value">200/500</span>
+                </p>
+              </div>
             </div>
-          </a>
+          </div>
         </div>
         <div class="col-12 col-sm-6 col-lg-3">
-          <a href="#" class="privilege-card">
-            <img class="priv-img" src="images/comingsoon.png" alt="Event" />
-            <div class="privilege-card-content">
-              <p class="privilege-card-type">Annual Conference</p>
-              <h3 class="privilege-card-title">Yuanta Wealth Annual Conference 2025: Vision for the Future</h3>
-              <p class="privilege-card-date">25 July 2025</p>
+          <div class="event-card">
+            <img class="event-img" src="images/comingsoon.png" alt="Event" />
+            <div class="event-card-content">
+              <h3 class="event-title">Yuanta Wealth Annual Conference 2025: Vision for the Future</h3>
+              <div class="event-meta">
+                <p class="event-datetime">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="3" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 1v4M11 1v4M2 7h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  <span class="event-date-text">25 ก.ค. 2568</span><span class="event-date-sep"></span><span class="event-time">09.00–18.00</span>
+                </p>
+                <p class="event-location">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 14s5-4.686 5-8a5 5 0 10-10 0c0 3.314 5 8 5 8z" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="6" r="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+                  <span>โรงแรม Athenee กรุงเทพ</span>
+                </p>
+                <p class="event-capacity">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 14c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  <span class="event-count-label">ผู้เข้าร่วม</span> <span class="event-count-value">300/300</span>
+                </p>
+              </div>
             </div>
-          </a>
+          </div>
         </div>
         <div class="col-12 col-sm-6 col-lg-3">
-          <a href="#" class="privilege-card">
-            <img class="priv-img" src="images/comingsoon.png" alt="Event" />
-            <div class="privilege-card-content">
-              <p class="privilege-card-type">Masterclass</p>
-              <h3 class="privilege-card-title">Real Estate Investment Masterclass สำหรับนักลงทุนมือโปร</h3>
-              <p class="privilege-card-date">2 August 2025</p>
+          <div class="event-card">
+            <img class="event-img" src="images/comingsoon.png" alt="Event" />
+            <div class="event-card-content">
+              <h3 class="event-title">Real Estate Investment Masterclass สำหรับนักลงทุนมือโปร</h3>
+              <div class="event-meta">
+                <p class="event-datetime">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="3" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 1v4M11 1v4M2 7h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  <span class="event-date-text">2 ส.ค. 2568</span><span class="event-date-sep"></span><span class="event-time">09.00–16.00</span>
+                </p>
+                <p class="event-location">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 14s5-4.686 5-8a5 5 0 10-10 0c0 3.314 5 8 5 8z" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="6" r="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+                  <span>ห้อง Boardroom อาคารเกษร ชั้น 15</span>
+                </p>
+                <p class="event-capacity">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 14c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  <span class="event-count-label">ผู้เข้าร่วม</span> <span class="event-count-value">30/40</span>
+                </p>
+              </div>
             </div>
-          </a>
+          </div>
         </div>
         <div class="col-12 col-sm-6 col-lg-3">
-          <a href="#" class="privilege-card">
-            <img class="priv-img" src="images/comingsoon.png" alt="Event" />
-            <div class="privilege-card-content">
-              <p class="privilege-card-type">Roundtable</p>
-              <h3 class="privilege-card-title">C-Suite Roundtable: Economic Outlook Q4 2025</h3>
-              <p class="privilege-card-date">15 August 2025</p>
+          <div class="event-card">
+            <img class="event-img" src="images/comingsoon.png" alt="Event" />
+            <div class="event-card-content">
+              <h3 class="event-title">C-Suite Roundtable: Economic Outlook Q4 2025</h3>
+              <div class="event-meta">
+                <p class="event-datetime">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="3" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 1v4M11 1v4M2 7h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  <span class="event-date-text">15 ส.ค. 2568</span><span class="event-date-sep"></span><span class="event-time">09.00–12.00</span>
+                </p>
+                <p class="event-location">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 14s5-4.686 5-8a5 5 0 10-10 0c0 3.314 5 8 5 8z" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="6" r="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+                  <span>โรงแรม Peninsula กรุงเทพ</span>
+                </p>
+                <p class="event-capacity">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 14c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  <span class="event-count-label">ผู้เข้าร่วม</span> <span class="event-count-value">25/25</span>
+                </p>
+              </div>
             </div>
-          </a>
+          </div>
         </div>
 
         <!-- Pagination -->
@@ -273,7 +371,7 @@
             </div>
           </div>
           <div class="col-12 col-lg-4 d-flex justify-content-lg-end">
-            <a href="contact-us.html" class="btn btn-primary">
+            <a href="contact-us.html" class="btn btn-primary" data-setmore-trigger>
               Book a meeting
             </a>
           </div>
@@ -299,7 +397,6 @@
           <div class="footer-nav-wrap">
             <ul class="footer-nav-links">
               <li><a href="#">Services</a></li>
-              <li><a href="insights.html">Insights</a></li>
               <li><a href="why-us.html">Why us</a></li>
             </ul>
             <ul class="footer-nav-links">
@@ -447,6 +544,17 @@
           document.getElementById('priv-products-table').innerHTML = '';
         });
     })();
+  </script>
+  <!-- Setmore Booking -->
+  <button id="Anywhere_button_iframe" data-booking-url="https://yuantasecuritiesthailand.setmore.com" data-new-tab="false" style="position:fixed;left:-9999px;top:-9999px;visibility:hidden;" aria-hidden="true"></button>
+  <script id="anywhere_book_now_script" src="https://assets.setmore.com/integration/book-now/live/v1/anywhere-book-now.js"></script>
+  <script>
+    document.querySelectorAll('[data-setmore-trigger]').forEach(function(el) {
+      el.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('Anywhere_button_iframe').click();
+      });
+    });
   </script>
 </body>
 </html>

@@ -22,9 +22,12 @@
           <img src="logo.png" alt="Yuanta Wealth" />
         </a>
       </div>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+      <div class="d-flex d-lg-none align-items-center" style="gap: 20px;">
+        <a href="contact-us.html" class="btn-book-meeting d-none d-sm-inline-flex" data-setmore-trigger>Book a meeting</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
       <div class="collapse navbar-collapse" id="navbarMain">
         <div class="navbar-right">
           <nav class="navbar-menu">
@@ -33,7 +36,7 @@
             <a href="privileges-events.html">Privileges &amp; Events</a>
             <a href="contact-us.html" class="active">Contact Us</a>
           </nav>
-          <a href="contact-us.html" class="btn-book-meeting">Book a meeting</a>
+          <a href="contact-us.html" class="btn-book-meeting" data-setmore-trigger>Book a meeting</a>
         </div>
       </div>
     </div>
@@ -44,8 +47,7 @@
     <div class="hero-overlay"></div>
     <div class="hero-inner hero-content" style="width:100%;">
       <div class="container">
-        <div>
-          <p class="hero-label">Yuanta Wealth</p>
+        <div style="text-align:center; width:100%;">
           <h1 class="hero-title">Contact Us</h1>
           <p class="hero-subtitle">พูดคุยกับทีมที่ปรึกษาของเรา เพื่อเริ่มต้นเส้นทางสู่ความมั่งคั่งที่ยั่งยืน</p>
         </div>
@@ -182,7 +184,6 @@
           <div class="footer-nav-wrap">
             <ul class="footer-nav-links">
               <li><a href="#">Services</a></li>
-              <li><a href="insights.html">Insights</a></li>
               <li><a href="why-us.html">Why us</a></li>
             </ul>
             <ul class="footer-nav-links">
@@ -280,6 +281,17 @@
       nav.addEventListener('hide.bs.collapse', function() { nav.classList.add('is-closing'); });
       nav.addEventListener('hidden.bs.collapse', function() { nav.classList.remove('is-closing'); });
     })();
+  </script>
+  <!-- Setmore Booking -->
+  <button id="Anywhere_button_iframe" data-booking-url="https://yuantasecuritiesthailand.setmore.com" data-new-tab="false" style="position:fixed;left:-9999px;top:-9999px;visibility:hidden;" aria-hidden="true"></button>
+  <script id="anywhere_book_now_script" src="https://assets.setmore.com/integration/book-now/live/v1/anywhere-book-now.js"></script>
+  <script>
+    document.querySelectorAll('[data-setmore-trigger]').forEach(function(el) {
+      el.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('Anywhere_button_iframe').click();
+      });
+    });
   </script>
 </body>
 </html>
