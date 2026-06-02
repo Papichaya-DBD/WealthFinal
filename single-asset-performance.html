@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Asset Performance — Yuanta Wealth Management</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="https://landing.yuanta.co.th/hubfs/Wealth/icon-elite.png">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+
+    /* ── Page wrapper ── */
+    .insight-page { margin-top: 90px; background: #fff; }
+
+    /* ── Breadcrumb ── */
+    .insight-breadcrumb {
+      padding: 30px 0;
+      background: #fff;
+    }
+    .insight-breadcrumb ol {
+      margin: 0; padding: 0;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 13px;
+      color: #8f9aac;
+    }
+    .insight-breadcrumb li a { color: #8f9aac; text-decoration: none; }
+    .insight-breadcrumb li a:hover { color: #a2603c; }
+    .insight-breadcrumb li.active { color: #a2603c; }
+    .insight-breadcrumb li.sep { color: #ccc; }
+
+    /* ── Article header ── */
+    .article-header {
+      padding: 32px 0 32px;
+      text-align: center;
+    }
+    .article-meta-row-mobile { display: none; }
+    @media (max-width: 767px) {
+      .insight-page { margin-top: 68px; }
+    }
+    @media (max-width: 767px) {
+      .article-header { padding: 20px 0 24px; }
+      .article-header .container { align-items: center !important; }
+      .article-category-tag { text-align: center; }
+      .article-title        { text-align: center; }
+      .article-subtitle     { text-align: center; }
+      .article-title  { font-size: 36px; }
+      .article-subtitle { font-size: 15px; }
+      .article-date { text-align: left !important; width: 100%; }
+      .article-meta-row {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        border-top: 1px solid rgba(0,0,0,.1);
+        padding-top: 16px;
+        margin-top: 8px;
+      }
+      .article-share { flex-wrap: wrap; }
+      .article-share-label { font-size: 14px; color: #3d506e; }
+    }
+    .article-category-tag {
+      display: inline-block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 4px 16px;
+      border-radius: 3px;
+      background: #f6f3ef;
+      color: #0c244a;
+      border: 1px solid rgba(0,0,0,.1);
+      margin-bottom: 20px;
+      letter-spacing: .03em;
+    }
+    .article-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 60px;
+      font-weight: 700;
+      color: #0c244a;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .article-subtitle {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #0c244a;
+      margin-bottom: 28px;
+    }
+    .article-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-align: left;
+      max-width: 75%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    @media (max-width: 991px) {
+      .article-meta-row { max-width: 100%; }
+    }
+    .article-date {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 14px;
+      color: #a2603c;
+      font-weight: 600;
+    }
+    .article-share {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .article-share-label {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 14px;
+      color: #3d506e;
+      margin-right: 4px;
+    }
+    .share-btn {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(0,0,0,.12);
+      background: #fff;
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .share-btn:hover { background: #f5f5f5; }
+    .share-btn svg { width: 16px; height: 16px; }
+
+    /* ── Article body layout ── */
+    .article-body { padding: 48px 0 64px; }
+    .article-sidebar {
+      position: sticky;
+      top: 80px;
+    }
+
+    /* ── AI Summary ── */
+    .ai-summary-box {
+      background: linear-gradient(135deg, #f0f6ff 0%, #e8f4ff 100%);
+      border: 1px solid #c8e0ff;
+      border-radius: 8px;
+      padding: 28px 32px;
+      margin-bottom: 40px;
+    }
+    .ai-summary-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .ai-summary-icon {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, #0c244a, #2d5fa6);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .ai-summary-label {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #0c244a;
+    }
+    .ai-summary-text {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 14px;
+      color: #3d506e;
+      line-height: 1.75;
+    }
+    .ai-summary-text p { margin-bottom: 8px; }
+    .ai-summary-text p:last-child { margin-bottom: 0; }
+
+    /* ── Chart section ── */
+    .chart-section { margin-bottom: 48px; }
+    .chart-section-title {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #0c244a;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #0c244a;
+      display: inline-block;
+    }
+    .chart-placeholder {
+      background: #f9f7f4;
+      border: 1px solid rgba(0,0,0,.08);
+      border-radius: 4px;
+      padding: 24px;
+    }
+    .chart-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      height: 180px;
+      margin-bottom: 8px;
+    }
+    .chart-bar-group {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      flex: 1;
+    }
+    .chart-bar {
+      flex: 1;
+      border-radius: 2px 2px 0 0;
+      min-width: 8px;
+    }
+    .bar-pos { background: #a2603c; }
+    .bar-neg { background: #3d7ed6; border-radius: 0 0 2px 2px; align-self: flex-start; }
+    .chart-labels {
+      display: flex;
+      gap: 8px;
+    }
+    .chart-label {
+      flex: 1;
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 10px;
+      color: #8f9aac;
+      text-align: center;
+    }
+    .chart-desc {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 13px;
+      color: #3d506e;
+      line-height: 1.7;
+      margin-top: 16px;
+    }
+    .chart-legend {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+    .chart-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 12px;
+      color: #3d506e;
+    }
+    .legend-dot {
+      width: 10px; height: 10px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    /* ── CTA box ── */
+    .article-cta-row {
+      display: grid;
+      grid-template-columns: 3fr 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .article-cta-left {
+      border: 1.5px dashed rgba(0,0,0,.2);
+      border-radius: 8px;
+      background: #f6f3ef;
+      padding: 44px 40px;
+    }
+    .article-cta-divider { display: none; }
+    .article-cta-right {
+      border: 1.5px dashed rgba(0,0,0,.2);
+      border-radius: 8px;
+      background: #f6f3ef url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Ccircle cx='200' cy='150' r='130' fill='none' stroke='rgba(12,36,74,0.06)' stroke-width='50'/%3E%3Ccircle cx='200' cy='150' r='80' fill='none' stroke='rgba(12,36,74,0.06)' stroke-width='35'/%3E%3Ccircle cx='200' cy='150' r='35' fill='none' stroke='rgba(12,36,74,0.06)' stroke-width='20'/%3E%3C/svg%3E") right center no-repeat;
+      background-size: auto 100%;
+      padding: 44px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .article-cta-title {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #0c244a;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+    .article-cta-sub {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 14px;
+      color: #3d506e;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+    .article-cta-btn {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      background: #0c244a;
+      color: #fff;
+      border: none;
+      padding: 11px 22px;
+      border-radius: 4px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background .2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .article-cta-btn:hover { background: #1a3a6b; color: #fff; }
+    .article-cta-right-title {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #0c244a;
+      margin-bottom: 24px;
+      line-height: 1.4;
+      text-align: center;
+    }
+    .article-cta-outline-btn {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      background: #fff;
+      color: #0c244a;
+      border: 1.5px solid #0c244a;
+      padding: 10px 22px;
+      border-radius: 4px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all .2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .article-cta-outline-btn:hover { background: #0c244a; color: #fff; }
+    @media (max-width: 767px) {
+      .article-cta-row { grid-template-columns: 1fr; }
+      .article-cta-left, .article-cta-right { padding: 24px 20px; }
+      .article-cta-right { align-items: flex-start; }
+      .article-cta-right-title { text-align: left; }
+    }
+
+    /* ── มุมมองเพิ่มเติม ── */
+    .more-views-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #0c244a;
+      background: #fff;
+      border: 1.5px solid #0c244a;
+      border-radius: 4px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: all .15s;
+      margin-bottom: 48px;
+    }
+    .more-views-btn:hover { background: #0c244a; color: #fff; }
+
+    /* ── Experts ── */
+    .experts-section { margin-bottom: 48px; }
+    .experts-title {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #0c244a;
+      margin-bottom: 20px;
+    }
+    .expert-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .expert-item {
+      background: #fff;
+      box-shadow: 0 0 1px rgba(102,102,102,.14), 0 4px 16px rgba(102,102,102,.1);
+      border-radius: 4px;
+      overflow: hidden;
+      padding: 0;
+    }
+    .expert-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 0;
+      object-fit: cover;
+      flex-shrink: 0;
+      display: block;
+      box-shadow: none;
+    }
+    .expert-info {
+      padding: 14px 16px;
+      flex: 1;
+    }
+    .expert-name {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #0c244a;
+      margin-bottom: 4px;
+    }
+    .expert-title {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 12px;
+      color: #8f9aac;
+      line-height: 1.5;
+    }
+
+    /* ── Related articles ── */
+    .related-section { margin-bottom: 48px; }
+    .related-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .related-title {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #0c244a;
+      margin: 0;
+    }
+    /* Mobile horizontal list */
+    .related-week-header {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .related-week-chip {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      background: #0c244a;
+      color: #fff;
+      padding: 3px 10px;
+      border-radius: 3px;
+    }
+    .related-week-label {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: #0c244a;
+    }
+    .related-list-item {
+      display: none;
+      background: #fff;
+      padding: 16px;
+      margin-bottom: 10px;
+      box-shadow: 0 0 1px rgba(102,102,102,.12), 0 2px 8px rgba(102,102,102,.07);
+      cursor: pointer;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .related-list-text { flex: 1; min-width: 0; }
+    .related-list-tag { margin-bottom: 6px; }
+    .related-list-title {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #0c244a;
+      line-height: 1.45;
+      margin-bottom: 8px;
+    }
+    .related-list-date {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 12px;
+      color: #8f9aac;
+    }
+    .related-list-thumb {
+      flex-shrink: 0;
+      width: 100px;
+      height: 80px;
+      object-fit: cover;
+    }
+    @media (max-width: 767px) {
+      .related-week-header { display: flex; }
+      .related-list-item { display: flex; }
+      .related-grid { display: none !important; }
+    }
+    .insight-card {
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      cursor: pointer;
+      transition: box-shadow .2s, transform .18s;
+      box-shadow: 0 0 1px rgba(102,102,102,.14), 0 2px 6px rgba(102,102,102,.08);
+    }
+    .insight-card:hover { box-shadow: 0 4px 18px rgba(0,0,0,.11); transform: translateY(-2px); }
+    .insight-card-img-wrap { position: relative; flex-shrink: 0; }
+    .insight-card-img { width: 100%; height: 160px; object-fit: cover; display: block; }
+    .insight-card-img-tag { position: absolute; top: 8px; left: 8px; }
+    .insight-card-content { padding: 14px; display: flex; flex-direction: column; flex: 1; }
+    .insight-card-date { font-family: 'Noto Sans Thai', sans-serif; font-size: 11px; color: #8f9aac; margin-bottom: 6px; }
+    .insight-card-title { font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; font-weight: 700; color: #0c244a; line-height: 1.45; margin-bottom: 7px; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .insight-card-excerpt { font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; color: #3d506e; line-height: 1.55; flex: 1; display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .insight-tag { font-family: 'Noto Sans Thai', sans-serif; font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 3px; white-space: nowrap; display: inline-block; }
+    .tag-hot-issue     { background: #fef3cd; color: #92600a; }
+    .tag-buy-list      { background: #d4edda; color: #155724; }
+    .tag-asset-perf    { background: #cce5ff; color: #004085; }
+    .tag-mkt-calendar  { background: #e2d9f3; color: #4a235a; }
+    .tag-asset-outlook { background: #d1ecf1; color: #0c5460; }
+    .tag-mkt-outlook   { background: #f8d7da; color: #721c24; }
+
+    /* ── Weekly views modal (reuse insight popup) ── */
+    .week-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      z-index: 1050;
+      overflow-y: auto;
+      padding: 40px 0;
+    }
+    .week-modal-overlay.open { display: flex; align-items: flex-start; justify-content: center; }
+    .week-modal {
+      background: #fff;
+      width: 100%;
+      max-width: 1100px;
+      margin: auto;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .week-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 28px;
+      border-bottom: 1px solid rgba(0,0,0,.08);
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 1;
+    }
+    .week-modal-title { font-family: 'Noto Sans Thai', sans-serif; font-size: 16px; font-weight: 700; color: #0c244a; margin: 0; }
+    .week-modal-close { width: 32px; height: 32px; border: none; background: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #3d506e; border-radius: 50%; transition: background .15s; }
+    .week-modal-close:hover { background: #f0f0f0; }
+    .week-modal-body { padding: 24px 28px 32px; }
+
+    /* ── Sidebar TOC ── */
+    .article-toc {
+      background: #f9f7f4;
+      border-radius: 6px;
+      padding: 20px 22px;
+      margin-bottom: 24px;
+    }
+    .article-toc-title {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: #0c244a;
+      margin-bottom: 12px;
+    }
+    .article-toc a {
+      display: block;
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 13px;
+      color: #3d506e;
+      text-decoration: none;
+      padding: 4px 0;
+      border-left: 2px solid transparent;
+      padding-left: 10px;
+      transition: all .15s;
+    }
+    .article-toc a:hover { color: #a2603c; border-left-color: #a2603c; }
+
+    /* ── Responsive ── */
+    @media (max-width: 991px) {
+      .article-title { font-size: 28px; }
+      .article-cta-box { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 767px) {
+      .article-title { font-size: 22px; }
+      .article-body { padding: 32px 0 48px; }
+      .ai-summary-box { padding: 20px; }
+      .chart-bars { height: 130px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <div class="navbar-left">
+        <a href="https://www.yuanta.co.th/" target="_blank" class="navbar-main-site-btn d-none d-lg-inline-flex">
+          <img src="https://landing.yuanta.co.th/hubfs/AI-Generated%20Media/wh.png" width="16" height="16" alt="" style="object-fit:contain;flex-shrink:0;" />
+          เว็บไซต์หลัก
+        </a>
+        <a href="index.html" class="navbar-logo">
+          <img src="logo.png" alt="Yuanta Wealth" />
+        </a>
+      </div>
+      <div class="d-flex d-lg-none align-items-center" style="gap: 20px;">
+        <a href="contact-us.html" class="btn-book-meeting d-none d-sm-inline-flex" data-setmore-trigger>Book a meeting</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+      <div class="collapse navbar-collapse" id="navbarMain">
+        <div class="navbar-right">
+          <nav class="navbar-menu">
+            <a href="index.html">Home</a>
+            <a href="insights.html" class="active">Insights</a>
+            <a href="why-us.html">Why us</a>
+            <a href="privileges-events.html">Privileges &amp; Events</a>
+            <a href="contact-us.html">Contact Us</a>
+          </nav>
+          <a href="contact-us.html" class="btn-book-meeting" data-setmore-trigger>Book a meeting</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="insight-page">
+
+    <!-- BREADCRUMB -->
+    <div class="insight-breadcrumb">
+      <div class="container">
+        <ol>
+          <li><a href="index.html">Home</a></li>
+          <li class="sep">/</li>
+          <li><a href="insights.html">Insights</a></li>
+          <li class="sep">/</li>
+          <li class="active">Asset performance</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- ARTICLE HEADER -->
+    <section class="article-header">
+      <div class="container">
+        <span class="article-category-tag">Asset performance</span>
+        <h1 class="article-title">Asset performance</h1>
+        <p class="article-subtitle">บทวิเคราะห์สัปดาห์ที่ 11–17 เมษายน 2569</p>
+        <div class="article-meta-row">
+          <p class="article-date">11 เมษายน 2569</p>
+          <div class="article-share">
+            <span class="article-share-label">แชร์</span>
+            <button class="share-btn" onclick="shareToFacebook()" title="Facebook">
+              <svg viewBox="0 0 20 20" fill="none"><path d="M11 10.5h2l.5-2.5H11V6.5c0-.7.35-1.5 1.5-1.5H13.5V2.5A13 13 0 0011.5 2.5C9.14 2.5 8 3.9 8 6v2H5.5v2.5H8V18h3v-7.5z" fill="#1877F2"/></svg>
+            </button>
+            <button class="share-btn" onclick="shareToX()" title="X">
+              <svg viewBox="0 0 20 20" fill="none"><path d="M15.5 3h-2.1l-3.4 4.3L6.4 3H2l5.7 7.3L2.1 17H4.2l3.7-4.6 3.7 4.6H16l-6-7.7L15.5 3z" fill="#000"/></svg>
+            </button>
+            <button class="share-btn" onclick="copyLink()" title="คัดลอก">
+              <svg viewBox="0 0 20 20" fill="none"><path d="M8.5 11.5a4 4 0 005.66 0l2-2a4 4 0 00-5.66-5.66l-1 1" stroke="#555" stroke-width="1.5" stroke-linecap="round"/><path d="M11.5 8.5a4 4 0 00-5.66 0l-2 2a4 4 0 005.66 5.66l1-1" stroke="#555" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </button>
+            <button class="share-btn" onclick="shareByEmail()" title="อีเมล">
+              <svg viewBox="0 0 20 20" fill="none"><rect x="2" y="4" width="16" height="12" rx="2" stroke="#555" stroke-width="1.5"/><path d="M2 7l8 5 8-5" stroke="#555" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ARTICLE BODY -->
+    <section class="article-body">
+      <div class="container">
+        <div class="row g-5">
+
+          <!-- Main content -->
+          <div class="col-12 col-lg-9 mx-auto">
+
+            <!-- AI Summary -->
+            <div class="ai-summary-box" id="ai-summary">
+              <div class="ai-summary-header">
+                <div class="ai-summary-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+                </div>
+                <span class="ai-summary-label">AI Summary</span>
+              </div>
+              <div class="ai-summary-text">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, but the also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+              </div>
+            </div>
+
+            <!-- Chart 1: Asset class performance -->
+            <div class="chart-section" id="asset-class">
+              <h2 class="chart-section-title">Asset class performance</h2>
+              <img src="https://landing.yuanta.co.th/hubfs/Wealth/Frame%201618873288.png" alt="Asset class performance chart" style="width:100%;display:block;" />
+              <p class="chart-desc">Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
+
+            <!-- Chart 2: Stock market performance -->
+            <div class="chart-section" id="stock-market">
+              <h2 class="chart-section-title">Stock market performance</h2>
+              <img src="https://landing.yuanta.co.th/hubfs/Wealth/Frame%201618873288.png" alt="Stock market performance chart" style="width:100%;display:block;" />
+              <p class="chart-desc">Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris.</p>
+            </div>
+
+            <!-- Chart 3: U.S. sector performance -->
+            <div class="chart-section" id="us-sector">
+              <h2 class="chart-section-title">U.S. sector performance</h2>
+              <img src="https://landing.yuanta.co.th/hubfs/Wealth/Frame%201618873288.png" alt="U.S. sector performance chart" style="width:100%;display:block;" />
+              <p class="chart-desc">Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris.</p>
+            </div>
+
+            <!-- CTA: ต้องการดูภาพรวมทั้งสัปดาห์ -->
+            <div class="article-cta-row">
+              <div class="article-cta-left">
+                <p class="article-cta-title">ต้องการดูภาพรวมทั้งสัปดาห์?</p>
+                <p class="article-cta-sub">เนื้อหานี้เป็นส่วนหนึ่งของบทวิเคราะห์ฉบับเต็มที่ครอบคลุมเนื้อหาทุก asset class</p>
+                <a href="contact-us.html" class="article-cta-btn">อ่านบทวิเคราะห์ฉบับเต็ม</a>
+              </div>
+              <div class="article-cta-divider"></div>
+              <div class="article-cta-right">
+                <p class="article-cta-right-title">เจาะลึกภาพรวม<br>แบบรายเดือน</p>
+                <button class="article-cta-outline-btn" onclick="openWeeklyModal()">
+                  บทวิเคราะห์ประจำเดือน
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
+
+
+            <!-- Experts (Marketing_Wealth_Database_Expert: 2238813912) -->
+            <div class="experts-section" id="expertsSection">
+              <p class="experts-title">บทวิเคราะห์โดย</p>
+              <div class="row g-3" id="expertsGrid">
+                <!-- loaded by JS -->
+              </div>
+            </div>
+
+            <!-- Related articles (exclude asset-performance) -->
+            <div class="related-section">
+              <div class="related-header">
+                <h3 class="related-title">บทความอื่นๆ ในสัปดาห์เดียวกัน</h3>
+              </div>
+
+              <!-- Mobile: week header -->
+              <div class="related-week-header">
+                <span class="related-week-chip">Weekly</span>
+                <span class="related-week-label">11–17 เมษายน</span>
+              </div>
+
+              <!-- Mobile: horizontal list -->
+              <div class="related-list-item" onclick="location.href='#'">
+                <div class="related-list-text">
+                  <div class="related-list-tag"><span class="insight-tag tag-hot-issue">Hot issue</span></div>
+                  <p class="related-list-title">THEME STRATEGY - คาดกำไร 1Q26 โต QoQ, YoY เด่นที่สื่อสารและพลังงาน</p>
+                  <p class="related-list-date">9 ธันวาคม 2569</p>
+                </div>
+                <img class="related-list-thumb" src="images/comingsoon.png" alt="" />
+              </div>
+              <div class="related-list-item" onclick="location.href='#'">
+                <div class="related-list-text">
+                  <div class="related-list-tag"><span class="insight-tag tag-asset-outlook">Asset class outlook</span></div>
+                  <p class="related-list-title">THEME STRATEGY - คาดกำไร 1Q26 โต QoQ, YoY เด่นที่สื่อสารและพลังงาน</p>
+                  <p class="related-list-date">9 ธันวาคม 2569</p>
+                </div>
+                <img class="related-list-thumb" src="images/comingsoon.png" alt="" />
+              </div>
+              <div class="related-list-item" onclick="location.href='#'">
+                <div class="related-list-text">
+                  <div class="related-list-tag"><span class="insight-tag tag-mkt-outlook">Market outlook</span></div>
+                  <p class="related-list-title">THEME STRATEGY - คาดกำไร 1Q26 โต QoQ, YoY เด่นที่สื่อสารและพลังงาน</p>
+                  <p class="related-list-date">9 ธันวาคม 2569</p>
+                </div>
+                <img class="related-list-thumb" src="images/comingsoon.png" alt="" />
+              </div>
+              <div class="related-list-item" onclick="location.href='#'">
+                <div class="related-list-text">
+                  <div class="related-list-tag"><span class="insight-tag tag-hot-issue">Hot issue</span></div>
+                  <p class="related-list-title">THEME STRATEGY - คาดกำไร 1Q26 โต QoQ, YoY เด่นที่สื่อสารและพลังงาน</p>
+                  <p class="related-list-date">9 ธันวาคม 2569</p>
+                </div>
+                <img class="related-list-thumb" src="images/comingsoon.png" alt="" />
+              </div>
+
+              <!-- Desktop: 4-col grid -->
+              <div class="row g-3 related-grid">
+                <div class="col-6 col-lg-3">
+                  <div class="insight-card" onclick="location.href='#'">
+                    <div class="insight-card-img-wrap"><img class="insight-card-img" src="images/comingsoon.png" alt="" /><span class="insight-card-img-tag insight-tag tag-hot-issue">Hot issue</span></div>
+                    <div class="insight-card-content"><p class="insight-card-date">11 ม.ค. 2569</p><h4 class="insight-card-title">Mapping the Market: กลยุทธ์ลงทุนท่ามกลางความผันผวน</h4><p class="insight-card-excerpt">Lorem ipsum dolor sit amet consectetur adipiscing elit.</p></div>
+                  </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                  <div class="insight-card" onclick="location.href='#'">
+                    <div class="insight-card-img-wrap"><img class="insight-card-img" src="images/comingsoon.png" alt="" /><span class="insight-card-img-tag insight-tag tag-buy-list">Buy list</span></div>
+                    <div class="insight-card-content"><p class="insight-card-date">12 ม.ค. 2569</p><h4 class="insight-card-title">หุ้นแนะนำประจำสัปดาห์ 11–17 ม.ค. 2569</h4><p class="insight-card-excerpt">Lorem ipsum dolor sit amet consectetur adipiscing elit.</p></div>
+                  </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                  <div class="insight-card" onclick="location.href='#'">
+                    <div class="insight-card-img-wrap"><img class="insight-card-img" src="images/comingsoon.png" alt="" /><span class="insight-card-img-tag insight-tag tag-mkt-outlook">Market outlook</span></div>
+                    <div class="insight-card-content"><p class="insight-card-date">13 ม.ค. 2569</p><h4 class="insight-card-title">Quarterly Outlook Q1/2026: ตลาดโลกในมุมมอง Yuanta</h4><p class="insight-card-excerpt">Lorem ipsum dolor sit amet consectetur adipiscing elit.</p></div>
+                  </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                  <div class="insight-card" onclick="location.href='#'">
+                    <div class="insight-card-img-wrap"><img class="insight-card-img" src="images/comingsoon.png" alt="" /><span class="insight-card-img-tag insight-tag tag-mkt-calendar">Market calendar</span></div>
+                    <div class="insight-card-content"><p class="insight-card-date">11 ม.ค. 2569</p><h4 class="insight-card-title">ปฏิทินเศรษฐกิจสำคัญ 11–17 ม.ค. 2569</h4><p class="insight-card-excerpt">Lorem ipsum dolor sit amet consectetur adipiscing elit.</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Weekly views modal -->
+  <div class="week-modal-overlay" id="weeklyModalOverlay" onclick="closeWeeklyModal(event)">
+    <div class="week-modal">
+      <div class="week-modal-header">
+        <h3 class="week-modal-title">มุมมองเพิ่มเติม — สัปดาห์ 11–17 ม.ค. 2569</h3>
+        <button class="week-modal-close" onclick="closeWeeklyModalDirect()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="week-modal-body">
+        <div class="row g-3">
+          <div class="col-6 col-lg-3">
+            <div class="insight-card" onclick="location.href='#'">
+              <div class="insight-card-img-wrap"><img class="insight-card-img" src="images/comingsoon.png" alt="" /><span class="insight-card-img-tag insight-tag tag-hot-issue">Hot issue</span></div>
+              <div class="insight-card-content"><p class="insight-card-date">11 ม.ค. 2569</p><h4 class="insight-card-title">Mapping the Market: กลยุทธ์ลงทุนท่ามกลางความผันผวน</h4><p class="insight-card-excerpt">Lorem ipsum dolor sit amet consectetur.</p></div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="insight-card" onclick="location.href='#'">
+              <div class="insight-card-img-wrap"><img class="insight-card-img" src="images/comingsoon.png" alt="" /><span class="insight-card-img-tag insight-tag tag-buy-list">Buy list</span></div>
+              <div class="insight-card-content"><p class="insight-card-date">12 ม.ค. 2569</p><h4 class="insight-card-title">หุ้นแนะนำประจำสัปดาห์ 11–17 ม.ค. 2569</h4><p class="insight-card-excerpt">Lorem ipsum dolor sit amet consectetur.</p></div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="insight-card" onclick="location.href='#'">
+              <div class="insight-card-img-wrap"><img class="insight-card-img" src="images/comingsoon.png" alt="" /><span class="insight-card-img-tag insight-tag tag-mkt-outlook">Market outlook</span></div>
+              <div class="insight-card-content"><p class="insight-card-date">13 ม.ค. 2569</p><h4 class="insight-card-title">Quarterly Outlook Q1/2026: ตลาดโลกในมุมมอง Yuanta</h4><p class="insight-card-excerpt">Lorem ipsum dolor sit amet consectetur.</p></div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="insight-card" onclick="location.href='#'">
+              <div class="insight-card-img-wrap"><img class="insight-card-img" src="images/comingsoon.png" alt="" /><span class="insight-card-img-tag insight-tag tag-mkt-calendar">Market calendar</span></div>
+              <div class="insight-card-content"><p class="insight-card-date">11 ม.ค. 2569</p><h4 class="insight-card-title">ปฏิทินเศรษฐกิจสำคัญ 11–17 ม.ค. 2569</h4><p class="insight-card-excerpt">Lorem ipsum dolor sit amet consectetur.</p></div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="insight-card" onclick="location.href='#'">
+              <div class="insight-card-img-wrap"><img class="insight-card-img" src="images/comingsoon.png" alt="" /><span class="insight-card-img-tag insight-tag tag-asset-outlook">Asset class outlook</span></div>
+              <div class="insight-card-content"><p class="insight-card-date">14 ม.ค. 2569</p><h4 class="insight-card-title">มุมมองสินทรัพย์สัปดาห์นี้: โอกาสในตราสารหนี้</h4><p class="insight-card-excerpt">Lorem ipsum dolor sit amet consectetur.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter-section">
+    <div class="container">
+      <div class="row align-items-center gy-5">
+        <div class="col-12 col-lg-6">
+          <div class="newsletter-left">
+            <p class="newsletter-label">Exclusive Insights</p>
+            <h2 class="newsletter-title">Unlock Insights &amp;<br>Market Intelligence</h2>
+            <p class="newsletter-desc">รับข้อมูลเชิงลึกด้านการลงทุน บทวิเคราะห์ตลาด และโอกาสการลงทุนพิเศษ<br>ส่งตรงถึงอีเมลของคุณทุกสัปดาห์</p>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="newsletter-right">
+            <form class="newsletter-form" onsubmit="return false;">
+              <input type="email" placeholder="กรอกอีเมลของคุณ" />
+              <button type="submit">Subscribe to insights</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row gy-4 align-items-start">
+        <div class="col-12 col-lg-3">
+          <div class="footer-brand"><img class="footer-logo" src="logo.png" alt="Yuanta Wealth" /></div>
+        </div>
+        <div class="col-12 col-lg-4">
+          <div class="footer-nav-wrap">
+            <ul class="footer-nav-links">
+              <li><a href="#">Services</a></li>
+              <li><a href="insights.html">Insights</a></li>
+              <li><a href="why-us.html">Why us</a></li>
+            </ul>
+            <ul class="footer-nav-links">
+              <li><a href="privileges-events.html">Privileges &amp; Events</a></li>
+              <li><a href="contact-us.html">Contact Us</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-12 col-lg-3">
+          <div class="footer-contact-col">
+            <div class="footer-contact-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+              <a href="tel:020098000">0-2009-8000</a>
+            </div>
+            <div class="footer-contact-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+              <a href="mailto:online@yuanta.co.th">online@yuanta.co.th</a>
+            </div>
+            <div class="footer-social">
+              <a href="https://www.facebook.com/yuantathai" target="_blank"><img src="images/Facebook.png" alt="Facebook" /></a>
+              <a href="https://line.me/R/ti/p/@sxk4157s" target="_blank"><img src="images/Line.png" alt="Line" /></a>
+              <a href="https://www.youtube.com/channel/UCqpfaQS5MRpI_As13qX3-hA" target="_blank"><img src="images/Youtube.png" alt="YouTube" /></a>
+              <a href="https://www.instagram.com/yuantathai" target="_blank"><img src="images/Instagram.png" alt="Instagram" /></a>
+              <a href="https://t.me/Yuantathai" target="_blank"><img src="images/Telegram.png" alt="Telegram" /></a>
+              <a href="https://x.com/yuantathai" target="_blank"><img src="images/X.png" alt="X" /></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-2">
+          <p class="footer-address-text">เลขที่ 127 อาคารเกษร ทาวเวอร์ ชั้น 14-16 ถนนราชดำริ แขวงลุมพินี เขตปทุมวัน กรุงเทพมหานคร 10330</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    (function() {
+      var nav = document.getElementById('navbarMain');
+      if (!nav) return;
+      nav.addEventListener('hide.bs.collapse', function() { nav.classList.add('is-closing'); });
+      nav.addEventListener('hidden.bs.collapse', function() { nav.classList.remove('is-closing'); });
+    })();
+
+    // ── Load experts from HubDB 2238813912 ──
+    (function() {
+      var experts = [
+        { name: 'Danai Aroonkittichai', title: 'Chief Retail Business Office at Yuanta Securities', credentials: 'CFA', photo: 'https://43844850.fs1.hubspotusercontent-na2.net/hubfs/43844850/Wealth/Experts/%E0%B8%84%E0%B8%B8%E0%B8%93%E0%B8%94%E0%B8%99%E0%B8%B1%E0%B8%A2_%E0%B8%84%E0%B8%A3%E0%B8%B6%E0%B9%88%E0%B8%87%E0%B8%9A%E0%B8%99.jpg' },
+        { name: 'Visakorn Kirivan', title: 'Senior Investment Strategist, Fundamental Investment Analyst', credentials: 'CFA, PhD', photo: 'https://43844850.fs1.hubspotusercontent-na2.net/hubfs/43844850/Wealth/Experts/%E0%B8%84%E0%B8%B8%E0%B8%93%E0%B8%A7%E0%B8%B1%E0%B8%A8%E0%B8%81%E0%B8%A3%E0%B8%93%E0%B9%8C_%E0%B8%84%E0%B8%A3%E0%B8%B6%E0%B9%88%E0%B8%87%E0%B8%9A%E0%B8%99.jpg' },
+        { name: 'Natakit Karnkriangkrai', title: 'Investment Strategist with a passion for global investing and portfolio solutions.', credentials: '', photo: 'https://43844850.fs1.hubspotusercontent-na2.net/hubfs/43844850/Wealth/Experts/%E0%B8%84%E0%B8%B8%E0%B8%93%E0%B8%93%E0%B8%B1%E0%B8%90%E0%B8%81%E0%B8%B4%E0%B8%95_%E0%B8%84%E0%B8%A3%E0%B8%B6%E0%B9%88%E0%B8%87%E0%B8%9A%E0%B8%99.jpg' }
+      ];
+      var grid = document.getElementById('expertsGrid');
+      if (!grid) return;
+      experts.forEach(function(e) {
+        var col = document.createElement('div');
+        col.className = 'col-12 col-sm-4';
+        col.innerHTML = '<div class="expert-item d-flex align-items-stretch">'
+          + '<img class="expert-avatar" src="' + e.photo + '" alt="' + e.name + '" />'
+          + '<div class="expert-info">'
+          + '<p class="expert-name">' + e.name + '</p>'
+          + (e.credentials ? '<p class="expert-title" style="color:#3d506e;font-weight:600;margin-bottom:4px;">' + e.credentials + '</p>' : '')
+          + '</div></div>';
+        grid.appendChild(col);
+      });
+    })();
+
+    function shareToFacebook() { window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(location.href), '_blank'); }
+    function shareToX() { window.open('https://x.com/intent/tweet?url=' + encodeURIComponent(location.href), '_blank'); }
+    function copyLink() { navigator.clipboard.writeText(location.href).then(function() { alert('คัดลอกลิงก์แล้ว'); }); }
+    function shareByEmail() { location.href = 'mailto:?subject=Asset Performance — Yuanta Wealth&body=' + encodeURIComponent(location.href); }
+
+    function openWeeklyModal() {
+      document.getElementById('weeklyModalOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeWeeklyModal(e) {
+      if (e.target === document.getElementById('weeklyModalOverlay')) closeWeeklyModalDirect();
+    }
+    function closeWeeklyModalDirect() {
+      document.getElementById('weeklyModalOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeWeeklyModalDirect(); });
+  </script>
+
+  <button id="Anywhere_button_iframe" data-booking-url="https://yuantasecuritiesthailand.setmore.com" data-new-tab="false" style="position:fixed;left:-9999px;top:-9999px;visibility:hidden;" aria-hidden="true"></button>
+  <script id="setmore_script" type="text/javascript" src="https://storage.googleapis.com/fullintegration-live/webComponentAppListing/Container/setmoreIframe.js"></script>
+  <script>
+    document.querySelectorAll('[data-setmore-trigger]').forEach(function(el) {
+      el.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('Anywhere_button_iframe').click();
+      });
+    });
+  </script>
+
+</body>
+</html>
