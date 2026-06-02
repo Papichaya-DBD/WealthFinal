@@ -1,0 +1,32 @@
+{
+  "label": "Marketing Wealth Database Events",
+  "name": "Marketing_Wealth_Database_Events",
+  "useForPages": false,
+  "columns": [
+    {
+      "name": "title",
+      "label": "Title",
+      "type": "TEXT"
+    },
+    {
+      "name": "event_date",
+      "label": "Event Date",
+      "type": "DATE"
+    },
+    {
+      "name": "event_time",
+      "label": "Event Time",
+      "type": "TEXT"
+    },
+    {
+      "name": "location",
+      "label": "Location",
+      "type": "TEXT"
+    },
+    {
+      "name": "slug",
+      "label": "Slug",
+      "type": "TEXT"
+    }
+  ]
+}

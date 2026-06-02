@@ -2002,3 +2002,5 @@ input, textarea, select { font-family: inherit; }
 }
 .view-all:hover { gap: 10px; }
 .view-all img { width: 18px; height: 18px; }
+
+#tab-events { margin-bottom: 65px; }
