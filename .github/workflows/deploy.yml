@@ -19,7 +19,7 @@ jobs:
           node-version: '20'
 
       - name: Install HubSpot CLI
-        run: npm install -g @hubspot/cli@4
+        run: npm install -g @hubspot/cli
 
       - name: Configure HubSpot CLI
         run: |
@@ -30,6 +30,10 @@ jobs:
             echo "    portalId: 43844850"
             echo "    authType: personalaccesskey"
             echo "    personalAccessKey: $HUBSPOT_ACCESS_KEY"
+            echo "    auth:"
+            echo "      tokenInfo:"
+            echo "        accessToken: $HUBSPOT_ACCESS_KEY"
+            echo "        expiresAt: '2099-12-31T00:00:00.000Z'"
           } > hubspot.config.yml
         env:
           HUBSPOT_ACCESS_KEY: ${{ secrets.HUBSPOT_ACCESS_KEY }}
