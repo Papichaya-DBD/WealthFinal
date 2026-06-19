@@ -23,16 +23,15 @@ jobs:
 
       - name: Configure HubSpot CLI
         run: |
-          mkdir -p ~/.hscli
-          cat > ~/.hscli/config.yml << EOF
-          defaultAccount: 43844850
-          accounts:
+          mkdir -p ~/.config/@hubspot/cli
+          cat > ~/.config/@hubspot/cli/config.yml << EOF
+          defaultPortal: "43844850"
+          portals:
             - name: yuanta-wealth
-              accountId: 43844850
+              portalId: 43844850
               authType: personalaccesskey
               personalAccessKey: "${{ secrets.HUBSPOT_ACCESS_KEY }}"
-              accountType: STANDARD
           EOF
 
       - name: Upload to HubSpot
-        run: hs cms upload ./ yuanta-wealth-theme --account yuanta-wealth
+        run: hs cms upload yuanta-wealth-theme yuanta-wealth-theme --account yuanta-wealth
