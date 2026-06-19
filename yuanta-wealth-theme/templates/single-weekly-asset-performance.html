@@ -1,0 +1,503 @@
+<!--
+  templateType: page
+  label: Single Weekly Asset Performance
+  isAvailableForNewContent: true
+  linkedHubDbTableId: 2599723735
+-->
+{% extends "./layouts/base.html" %}
+
+{% block body %}
+
+{% set row = dynamic_page_hubdb_row %}
+{% if row %}
+{% set week = row.week_slug %}
+
+{{ require_css(get_asset_url('../css/main.css')) }}
+
+<style>
+  .insight-page { margin-top: 90px; background: #fff; }
+  .insight-breadcrumb { padding: 30px 0; background: #fff; }
+  .insight-breadcrumb ol { margin: 0; padding: 0; list-style: none; display: flex; align-items: center; gap: 6px; font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; color: #8f9aac; }
+  .insight-breadcrumb li a { color: #8f9aac; text-decoration: none; }
+  .insight-breadcrumb li a:hover { color: #a2603c; }
+  .insight-breadcrumb li.active { color: #a2603c; }
+  .insight-breadcrumb li.sep { color: #ccc; }
+  .article-header { padding: 32px 0 32px; text-align: left; }
+  .article-category-tag { display: inline-block; font-family: 'Cormorant Garamond','Noto Sans Thai',Georgia,serif; font-size: 14px; font-weight: 500; padding: 4px 16px; background: #fef3cd; color: #92600a; border: 1px solid rgba(146,96,10,.15); margin-bottom: 20px; letter-spacing: .03em; }
+  .article-title { font-family: 'Noto Sans Thai', sans-serif; font-size: 35px; font-weight: 700; color: #0c244a; line-height: 1.3; margin-bottom: 16px; padding: 0; }
+  @media (max-width: 991px) { .article-title { font-size: 28px; } }
+  @media (max-width: 767px) {
+    .insight-page { margin-top: 68px; }
+    .article-header { padding: 20px 0 24px; }
+    .article-title { font-size: 22px; }
+    .article-subtitle { font-size: 15px; }
+  }
+  .article-subtitle { font-family: 'Noto Sans Thai', sans-serif; font-size: 18px; font-weight: 700; color: #0c244a; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid rgba(0,0,0,0.1); }
+  .article-date { font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; color: #3D506E; font-weight: 600; }
+  .article-share { display: flex; align-items: center; gap: 8px; margin-bottom: 50px; }
+  .article-share-label { font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; color: #3d506e; margin-right: 4px; }
+  .share-btn { width: 36px; height: 36px; border: 1px solid rgba(0,0,0,.12); background: #fff; border-radius: 4px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background .15s; }
+  .share-btn:hover { background: #f5f5f5; }
+  .share-btn svg { width: 16px; height: 16px; }
+  .article-body { padding: 0 0 64px; }
+  @media (max-width: 767px) { .article-body { padding: 0 0 48px; } }
+
+  /* ── AI Summary ── */
+  .ai-summary-box { background: url('{{ get_asset_url('../images/bgaisummary.jpg') }}') center/cover no-repeat; border: 1px solid #3b537829; padding: 28px 32px; margin-bottom: 40px; }
+  @media (max-width: 767px) { .ai-summary-box { padding: 20px; } }
+  .ai-summary-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .ai-summary-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .ai-summary-icon img { width: 32px; height: 32px; object-fit: contain; }
+  .ai-summary-label { font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; font-weight: 700; color: #0c244a; display: block; margin-bottom: 2px; }
+  .ai-summary-sublabel { font-family: 'Noto Sans Thai', sans-serif; font-size: 12px; color: #8f9aac; margin: 0; }
+  .ai-summary-text { font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; color: #3d506e; line-height: 1.75; }
+  .ai-summary-text p { margin-bottom: 8px; }
+  .ai-summary-text p:last-child { margin-bottom: 0; }
+
+  /* ── Article content ── */
+  .article-content { font-family: 'Noto Sans Thai', sans-serif; font-size: 15px; color: #1a2e44; line-height: 1.75; }
+  .article-content h2 { font-family: 'Noto Sans Thai', sans-serif; font-size: 18px; font-weight: 700; color: #0c244a; margin: 32px 0 16px; padding-bottom: 12px; border-bottom: 2px solid #0c244a; display: inline-block; }
+  .article-content h3 { font-family: 'Noto Sans Thai', sans-serif; font-size: 16px; font-weight: 700; color: #0c244a; margin: 24px 0 12px; }
+  .article-content p { margin-bottom: 14px; }
+  td { padding: 10px 20px !important; }
+  .article-content img { width: 100%; border-radius: 4px; margin: 16px 0; display: block; }
+  .article-content ul, .article-content ol { padding-left: 20px; margin-bottom: 14px; }
+  .article-content li { margin-bottom: 6px; }
+
+  /* ── CTA ── */
+  .article-cta-row { display: grid; grid-template-columns: 3fr 1fr; gap: 16px; margin-bottom: 32px; margin-top: 48px; }
+  .article-cta-left { border: 1.5px solid #0000001A; background: url('{{ get_asset_url('../images/bgoverall.jpg') }}') center/cover no-repeat; padding: 44px 40px; }
+  .article-cta-right { border: 1.5px solid #0000001A; background: url('{{ get_asset_url('../images/bg-seeall.jpg') }}') center/cover no-repeat; padding: 27px 40px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+  .article-cta-title { font-family: 'Noto Sans Thai', sans-serif; font-size: 22px; font-weight: 700; color: #0c244a; margin-bottom: 10px; line-height: 1.3; }
+  .article-cta-sub { font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; color: #3d506e; margin-bottom: 24px; line-height: 1.6; }
+  .article-cta-right-title { font-family: 'Noto Sans Thai', sans-serif; font-size: 22px; font-weight: 700; color: #0c244a; margin-bottom: 24px; line-height: 1.4; text-align: center; }
+  .article-cta-btn { font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; font-weight: 600; background: #0c244a; color: #fff; border: none; padding: 11px 22px; cursor: pointer; white-space: nowrap; transition: background .2s; text-decoration: none; display: inline-block; }
+  .article-cta-btn:hover { background: #1a3a6b; color: #fff; }
+  .article-cta-outline-btn { font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; font-weight: 600; background: #fff; color: #0c244a; border: 1.5px solid #0c244a; padding: 10px 22px; border-radius: 4px; cursor: pointer; white-space: nowrap; transition: all .2s; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+  .article-cta-outline-btn:hover { background: #0c244a; color: #fff; }
+  @media (max-width: 767px) { .article-cta-row { grid-template-columns: 1fr; } .article-cta-left, .article-cta-right { padding: 24px 20px; } .article-cta-right { align-items: flex-start; } .article-cta-right-title { text-align: left; } }
+
+  /* ── Experts ── */
+  .experts-section { margin-bottom: 0; }
+  .experts-title { font-family: 'Noto Sans Thai', sans-serif; font-size: 16px; font-weight: 700; color: #0c244a; margin-bottom: 20px; }
+  .expert-item { display: flex; align-items: stretch; background: #fff; box-shadow: 0 0 1px rgba(102,102,102,.14), 0 4px 16px rgba(102,102,102,.1); border-radius: 4px; overflow: hidden; margin-bottom: 16px; }
+  .expert-avatar { width: 100px; height: 100px; object-fit: cover; flex-shrink: 0; display: block; }
+  .expert-info { padding: 14px 16px; flex: 1; }
+  .expert-name { font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; font-weight: 700; color: #0c244a; margin-bottom: 4px; }
+  .expert-credentials { font-family: 'Noto Sans Thai', sans-serif; font-size: 12px; color: #3d506e; font-weight: 600; margin-bottom: 0; }
+
+  /* ── Table scroll ── */
+  .article-content table { width: 100% !important; table-layout: fixed; border-collapse: collapse; font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; }
+  .article-content table th { padding: 10px 14px; text-align: left; font-weight: 600; word-break: break-word; overflow-wrap: anywhere; }
+  .article-content table td { padding: 10px 14px; border-bottom: 1px solid rgba(0,0,0,.07); vertical-align: top; word-break: break-word; overflow-wrap: anywhere; }
+  .article-content table tr:nth-child(even) td { background: #f9f7f4; }
+
+  /* ── Insight cards / tags ── */
+  .insight-card { background: #fff; display: flex; flex-direction: column; height: 100%; cursor: pointer; transition: box-shadow .2s, transform .18s; box-shadow: 0 0 1px rgba(102,102,102,.14), 0 2px 6px rgba(102,102,102,.08); }
+  .insight-card:hover { box-shadow: 0 4px 18px rgba(0,0,0,.11); transform: translateY(-2px); }
+  .insight-card-img-wrap { position: relative; flex-shrink: 0; }
+  .insight-card-img { width: 100%; height: 160px; object-fit: cover; display: block; }
+  .insight-card-img-tag { position: absolute; top: 8px; left: 8px; }
+  .insight-card-content { padding: 14px; display: flex; flex-direction: column; flex: 1; }
+  .insight-card-date { font-family: 'Noto Sans Thai', sans-serif; font-size: 11px; color: #8f9aac; margin-bottom: 6px; }
+  .insight-card-title { font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; font-weight: 700; color: #0c244a; line-height: 1.45; margin-bottom: 7px; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .insight-card-excerpt { font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; color: #3d506e; line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .insight-tag { font-family: 'Noto Sans Thai', sans-serif; font-size: 11px; font-weight: 600; padding: 2px 9px; white-space: nowrap; display: inline-block; }
+  .tag-hot-issue { background: #EBC7C7; color: #7a1c1c; }
+  .tag-asset-perf { background: #fef3cd; color: #92600a; }
+  .tag-mkt-calendar { background: #b4bbc7; color: #0c244a; }
+  .tag-asset-outlook { background: #D6D1CB; color: #3d2c1e; }
+  .tag-buy-list { background: #CBD4D0; color: #2c4a42; }
+  .tag-mkt-outlook { background: #D1CCDF; color: #3d2260; }
+
+  /* ── Related section ── */
+  .related-section { margin-bottom: 48px; }
+  .related-week-header-row { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(0,0,0,.08); }
+  .related-week-chip { font-family: 'Cormorant Garamond', serif; font-size: 12px; font-weight: 700; background: #3D506E; color: #fff; padding: 3px 10px; border-radius: 3px; flex-shrink: 0; }
+  .related-week-label { font-family: 'Noto Sans Thai', sans-serif; font-size: 15px; font-weight: 700; color: #0c244a; }
+  .weekly-related-wrapper { position: relative; padding: 0 44px; }
+  .weekly-related-swiper { position: relative; overflow: hidden; }
+  .weekly-related-wrapper .swiper-button-prev,
+  .weekly-related-wrapper .swiper-button-next { position: absolute; top: 38%; width: 32px; height: 32px; background: #fff; border: 1px solid rgba(0,0,0,.15); border-radius: 50%; color: #0c244a; margin-top: 0; }
+  .weekly-related-wrapper .swiper-button-prev { left: 0; }
+  .weekly-related-wrapper .swiper-button-next { right: 0; }
+  .weekly-related-wrapper .swiper-button-prev::after,
+  .weekly-related-wrapper .swiper-button-next::after { font-size: 11px; font-weight: 700; }
+  .weekly-related-wrapper .swiper-button-disabled { opacity: 0.35; cursor: default; }
+  @media (max-width: 767px) {
+    .weekly-related-wrapper { padding: 0; }
+    .weekly-related-swiper .swiper-wrapper { display: block; transform: none !important; }
+    .weekly-related-swiper .swiper-button-prev,
+    .weekly-related-swiper .swiper-button-next { display: none; }
+    .weekly-related-swiper .swiper-slide { width: 100% !important; margin-bottom: 10px; }
+    .weekly-related-swiper .insight-card,
+    .week-modal-body .insight-card { flex-direction: row; align-items: stretch; }
+    .weekly-related-swiper .insight-card-img-wrap,
+    .week-modal-body .insight-card-img-wrap { width: 110px; min-height: 90px; flex-shrink: 0; order: 2; }
+    .weekly-related-swiper .insight-card-img,
+    .week-modal-body .insight-card-img { width: 110px; height: 100%; object-fit: contain; }
+    .weekly-related-swiper .insight-card-img-tag { top: 6px; left: auto; right: 0; }
+    .week-modal-body .insight-card-img-tag { top: 6px; left: auto; right: 0; }
+    .weekly-related-swiper .insight-card-content,
+    .week-modal-body .insight-card-content { order: 1; flex: 1; min-width: 0; }
+    .week-modal-body .col-6 { width: 100%; }
+  }
+
+  /* ── Week modal ── */
+  .week-modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,.55); z-index: 1050; align-items: center; justify-content: center; padding: 16px; }
+  .week-modal-overlay.open { display: flex; }
+  .week-modal { background: #fff; width: 100%; max-width: 1100px; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; }
+  .week-modal-body { overflow-y: auto; -webkit-overflow-scrolling: touch; flex: 1; padding: 24px 28px 32px; }
+  .week-modal-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 28px; border-bottom: 1px solid rgba(0,0,0,.08); position: sticky; top: 0; background: #fff; z-index: 1; }
+  .week-modal-title { font-family: 'Noto Sans Thai', sans-serif; font-size: 16px; font-weight: 700; color: #0c244a; margin: 0; }
+  .week-modal-close { width: 32px; height: 32px; border: none; background: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #3d506e; transition: background .15s; }
+  .week-modal-close:hover { background: #f0f0f0; }
+</style>
+
+<div class="insight-page">
+
+  <!-- BREADCRUMB -->
+  <div class="insight-breadcrumb">
+    <div class="container">
+      <ol>
+        <li><a href="/">Home</a></li>
+        <li class="sep">/</li>
+        <li><a href="/wealth-insights">Insights</a></li>
+        <li class="sep">/</li>
+        <li class="active">Asset performance</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ARTICLE HEADER -->
+  <section class="article-header">
+    <div class="container">
+      <div class="col-12 col-lg-9 mx-auto">
+        <span class="article-category-tag">Asset performance</span>
+        <h1 class="article-title">{{ row.main_title }}</h1>
+        <p class="article-subtitle">{{ row.page_subtitle }}</p>
+        <p class="article-date">{{ row.page_date|datetimeformat("%d %B %Y") }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARTICLE BODY -->
+  <section class="article-body">
+    <div class="container">
+      <div class="col-12 col-lg-9 mx-auto">
+
+        <!-- AI Summary -->
+        <div class="ai-summary-box">
+          <div class="ai-summary-header">
+            <div class="ai-summary-icon">
+              <img src="{{ get_asset_url('../images/ai-icon.png') }}" alt="AI" />
+            </div>
+            <div>
+              <span class="ai-summary-label">AI Summary</span>
+              <p class="ai-summary-sublabel">บทสรุปจาก AI อ้างอิงโดยบทวิเคราะห์</p>
+            </div>
+          </div>
+          <div class="ai-summary-text">{{ row.ai_summary }}</div>
+        </div>
+
+        <!-- Body content -->
+        <div class="article-content">{{ row.body }}</div>
+
+        <!-- CTA -->
+        <div class="article-cta-row">
+          <div class="article-cta-left">
+            <p class="article-cta-title">ต้องการดูภาพรวมทั้งสัปดาห์?</p>
+            <p class="article-cta-sub">เนื้อหานี้เป็นส่วนหนึ่งของบทวิเคราะห์ฉบับเต็มที่ครอบคลุมเนื้อหาทุก asset class</p>
+            <a class="article-cta-btn" href="/wealth-weekly-report?week={{ week }}" target="_blank">ดูมุมมองเพิ่มเติม</a>
+          </div>
+          <div class="article-cta-right">
+            <p class="article-cta-right-title">ดูมุมมอง<br>บทวิเคราะห์อื่นในสัปดาห์นี้</p>
+            <button class="article-cta-outline-btn" onclick="openWeeklyModal()">บทวิเคราะห์ประจำสัปดาห์ &gt;</button>
+          </div>
+        </div>
+
+        <!-- Experts -->
+        {% set experts = hubdb_table_rows(2238813912, "orderBy=order") %}
+        {% if experts %}
+        <div class="experts-section">
+          <p class="experts-title">บทวิเคราะห์โดย</p>
+          <div class="row g-3">
+            {% for expert in experts %}
+            <div class="col-12 col-sm-4">
+              <div class="expert-item">
+                {% if expert.photo %}
+                <img class="expert-avatar" src="{{ expert.photo.url }}" alt="{{ expert.name }}" />
+                {% endif %}
+                <div class="expert-info">
+                  <p class="expert-name">{{ expert.name }}</p>
+                  {% if expert.credentials %}
+                  <p class="expert-credentials">{{ expert.credentials }}</p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Share buttons -->
+        <div class="article-share">
+          <span class="article-share-label">แชร์</span>
+          <button class="share-btn" onclick="shareToFacebook()" title="Facebook">
+            <svg viewBox="0 0 20 20" fill="none"><path d="M11 10.5h2l.5-2.5H11V6.5c0-.7.35-1.5 1.5-1.5H13.5V2.5A13 13 0 0011.5 2.5C9.14 2.5 8 3.9 8 6v2H5.5v2.5H8V18h3v-7.5z" fill="#1877F2"/></svg>
+          </button>
+          <button class="share-btn" onclick="shareToX()" title="X">
+            <svg viewBox="0 0 20 20" fill="none"><path d="M15.5 3h-2.1l-3.4 4.3L6.4 3H2l5.7 7.3L2.1 17H4.2l3.7-4.6 3.7 4.6H16l-6-7.7L15.5 3z" fill="#000"/></svg>
+          </button>
+          <button class="share-btn" onclick="copyLink()" title="คัดลอก">
+            <svg viewBox="0 0 20 20" fill="none"><path d="M8.5 11.5a4 4 0 005.66 0l2-2a4 4 0 00-5.66-5.66l-1 1" stroke="#555" stroke-width="1.5" stroke-linecap="round"/><path d="M11.5 8.5a4 4 0 00-5.66 0l-2 2a4 4 0 005.66 5.66l1-1" stroke="#555" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+          <button class="share-btn" onclick="shareByEmail()" title="อีเมล">
+            <svg viewBox="0 0 20 20" fill="none"><rect x="2" y="4" width="16" height="12" rx="2" stroke="#555" stroke-width="1.5"/><path d="M2 7l8 5 8-5" stroke="#555" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+
+        <!-- Related section -->
+        <div class="related-section" id="relatedSection" style="display:none;">
+          <div class="related-week-header-row">
+            <span class="related-week-chip">Weekly</span>
+            <span class="related-week-label">{{ row.page_subtitle }}</span>
+          </div>
+          <div class="weekly-related-wrapper">
+            <div class="swiper weekly-related-swiper">
+              <div class="swiper-wrapper" id="relatedSwiperWrapper"></div>
+            </div>
+            <div class="swiper-button-prev weekly-prev"></div>
+            <div class="swiper-button-next weekly-next"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</div>
+
+{% else %}
+
+<section style="padding: 80px 0; text-align: center;">
+  <div class="container">
+    <p style="color: #3d506e; font-size: 16px;">ไม่พบบทวิเคราะห์ที่ระบุ</p>
+    <a href="/wealth-insights" style="color: #a2603c;">← กลับไปหน้า Insights</a>
+  </div>
+</section>
+
+{% endif %}
+
+<!-- WEEK MODAL -->
+<div class="week-modal-overlay" id="weeklyModalOverlay" onclick="closeWeeklyModal(event)">
+  <div class="week-modal">
+    <div class="week-modal-header">
+      <h3 class="week-modal-title">มุมมองเพิ่มเติมสัปดาห์เดียวกัน</h3>
+      <button class="week-modal-close" onclick="closeWeeklyModalDirect()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="week-modal-body">
+      <div class="row g-3" id="weeklyModalGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- NEWSLETTER -->
+<section class="newsletter-section">
+  <div class="container">
+    <div class="row align-items-center gy-5">
+      <div class="col-12 col-lg-6">
+        <p class="newsletter-label">Exclusive Insights</p>
+        <h2 class="newsletter-title">Unlock Insights &amp;<br>Market Intelligence</h2>
+        <p class="newsletter-desc">รับข้อมูลเชิงลึกด้านการลงทุน บทวิเคราะห์ตลาด และโอกาสการลงทุนพิเศษ ส่งตรงถึงอีเมลของคุณทุกสัปดาห์</p>
+      </div>
+      <div class="col-12 col-lg-6">
+        <form class="newsletter-form" id="newsletter-form">
+          <input type="email" id="newsletter-email" placeholder="กรอกอีเมลของคุณ" required />
+          <button type="submit">Subscribe to insights</button>
+        </form>
+        <p id="newsletter-msg" style="display:none; margin-top:12px; font-size:14px; color:rgba(255,255,255,0.8);"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock body %}
+
+{% block scripts %}
+<script>
+  // ── Config ──
+  var WEEK_SLUG    = '{{ week }}';
+  var PORTAL       = '43844850';
+  var EXCLUDE_TABLE = '2599723735';
+  var FALLBACK_IMG = '{{ get_asset_url('../images/comingsoon.png') }}';
+  var THUMB = {
+    '2599182038': '{{ get_asset_url('../images/thumb-hot-issue.jpg') }}',
+    '2599723735': '{{ get_asset_url('../images/thumb-asset-performance.jpg') }}',
+    '2612300495': '{{ get_asset_url('../images/thumb-buy-list.jpg') }}',
+    '2610619077': '{{ get_asset_url('../images/thumb-market-calendar.jpg') }}',
+  };
+  var WEEKLY_TABLES = [
+    {id:'2599182038', label:'Hot issue',        cls:'tag-hot-issue',   path:'/wealth-single-weekly-hotissue/'},
+    {id:'2599723735', label:'Asset performance',cls:'tag-asset-perf',  path:'/wealth-single-weekly-asset-performance/'},
+    {id:'2612300495', label:'Buy list',         cls:'tag-buy-list',    path:'/wealth-single-weekly-buy-list/'},
+    {id:'2610619077', label:'Market calendar',  cls:'tag-mkt-calendar',path:'/wealth-single-weekly-market-calendar/'},
+  ];
+  var RELATED_TABLES = WEEKLY_TABLES.filter(function(t) { return t.id !== EXCLUDE_TABLE; });
+
+  function thaiDateM(ms) {
+    var d = new Date(Number(ms));
+    var m = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+    return d.getDate() + ' ' + m[d.getMonth()] + ' ' + (d.getFullYear() + 543);
+  }
+
+  // ── Table scroll wrapper ──
+  function _wrapTableScroll(root) {
+    if (!root) return;
+    root.querySelectorAll('table').forEach(function(tbl) {
+      if (tbl.parentNode.classList && tbl.parentNode.classList.contains('tbl-scroll-inner')) return;
+      var inner = document.createElement('div'); inner.className = 'tbl-scroll-inner';
+      tbl.parentNode.insertBefore(inner, tbl); inner.appendChild(tbl);
+      var wrap = document.createElement('div'); inner.parentNode.insertBefore(wrap, inner); wrap.appendChild(inner);
+      var nav = document.createElement('div'); nav.className = 'tbl-scroll-nav';
+      nav.innerHTML = '<button class="tbl-scroll-btn" onclick="this.parentNode.previousElementSibling.scrollBy({left:-140,behavior:\'smooth\'})">&#8249;</button>'
+        + '<span>เลื่อนดูเพิ่มเติม</span>'
+        + '<button class="tbl-scroll-btn" onclick="this.parentNode.previousElementSibling.scrollBy({left:140,behavior:\'smooth\'})">&#8250;</button>';
+      wrap.appendChild(nav);
+      function checkNav() { nav.style.display = inner.scrollWidth > inner.clientWidth ? 'flex' : 'none'; }
+      requestAnimationFrame(checkNav); window.addEventListener('resize', checkNav);
+      var isDragging = false, startX, scrollLeft;
+      inner.style.cursor = 'grab';
+      inner.addEventListener('mousedown', function(e) { isDragging = true; startX = e.pageX - inner.offsetLeft; scrollLeft = inner.scrollLeft; inner.style.cursor = 'grabbing'; inner.style.userSelect = 'none'; });
+      inner.addEventListener('mouseleave', function() { isDragging = false; inner.style.cursor = 'grab'; });
+      inner.addEventListener('mouseup', function() { isDragging = false; inner.style.cursor = 'grab'; inner.style.userSelect = ''; });
+      inner.addEventListener('mousemove', function(e) { if (!isDragging) return; e.preventDefault(); inner.scrollLeft = scrollLeft - (e.pageX - inner.offsetLeft - startX); });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.article-content table').forEach(function(tbl) {
+      tbl.style.width = '100%'; tbl.style.tableLayout = 'fixed';
+      tbl.querySelectorAll('col, th, td').forEach(function(el) { el.style.width = ''; el.removeAttribute('width'); });
+    });
+    if (WEEK_SLUG) loadRelated(WEEK_SLUG);
+  });
+
+  // ── Related articles ──
+  function loadRelated(week) {
+    Promise.all(RELATED_TABLES.map(function(t) {
+      return fetch('https://api.hubapi.com/cms/v3/hubdb/tables/' + t.id
+        + '/rows?portalId=' + PORTAL + '&week_slug__eq=' + encodeURIComponent(week) + '&limit=1')
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          var rows = d.results || [];
+          return rows.length ? Object.assign({}, rows[0], {_table: t}) : null;
+        })
+        .catch(function() { return null; });
+    })).then(function(articles) {
+      var valid = articles.filter(Boolean);
+      if (!valid.length) return;
+      var wrapper = document.getElementById('relatedSwiperWrapper');
+      var section = document.getElementById('relatedSection');
+      if (!wrapper || !section) return;
+      wrapper.innerHTML = valid.map(function(a) {
+        var t = a._table;
+        var src = THUMB[t.id] || FALLBACK_IMG;
+        var url = t.path + (a.values.week_slug || '');
+        return '<div class="swiper-slide">'
+          + '<div class="insight-card" onclick="location.href=\'' + url + '\'">'
+          + '<div class="insight-card-img-wrap">'
+          + '<img class="insight-card-img" src="' + src + '" alt="" />'
+          + '<span class="insight-card-img-tag insight-tag ' + t.cls + '">' + t.label + '</span>'
+          + '</div>'
+          + '<div class="insight-card-content">'
+          + '<p class="insight-card-date">' + (a.values.page_date ? thaiDateM(a.values.page_date) : '') + '</p>'
+          + '<h4 class="insight-card-title">' + (a.values.main_title || '') + '</h4>'
+          + '<p class="insight-card-excerpt">' + (a.values.description || '') + '</p>'
+          + '</div></div></div>';
+      }).join('');
+      section.style.display = '';
+      new Swiper('.weekly-related-swiper', {
+        slidesPerView: 4,
+        spaceBetween: 16,
+        watchOverflow: false,
+        navigation: { prevEl: '.weekly-prev', nextEl: '.weekly-next', disabledClass: 'swiper-button-disabled' },
+        breakpoints: {
+          0:   { enabled: false },
+          768: { enabled: true, slidesPerView: 2, spaceBetween: 14 },
+          992: { enabled: true, slidesPerView: 4, spaceBetween: 16 }
+        }
+      });
+    });
+  }
+
+  // ── Week modal ──
+  function openWeeklyModal() {
+    document.getElementById('weeklyModalOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    var grid = document.getElementById('weeklyModalGrid');
+    grid.innerHTML = '<p style="color:#8f9aac;font-size:14px;font-family:\'Noto Sans Thai\',sans-serif;padding:8px 0;">กำลังโหลด...</p>';
+    var tables = RELATED_TABLES;
+    Promise.all(tables.map(function(t) {
+      return fetch('https://api.hubapi.com/cms/v3/hubdb/tables/' + t.id + '/rows?portalId=' + PORTAL + '&week_slug__eq=' + encodeURIComponent(WEEK_SLUG) + '&limit=1')
+        .then(function(r) { return r.json(); })
+        .then(function(d) { var rows = d.results || []; return rows.length ? Object.assign({}, rows[0], {_t: t}) : null; })
+        .catch(function() { return null; });
+    })).then(function(arts) {
+      var valid = arts.filter(Boolean);
+      if (!valid.length) { grid.innerHTML = '<p style="color:#8f9aac;font-size:14px;font-family:\'Noto Sans Thai\',sans-serif;padding:8px 0;">ไม่พบบทความในสัปดาห์เดียวกัน</p>'; return; }
+      grid.innerHTML = valid.map(function(a) {
+        var t = a._t, src = THUMB[t.id] || FALLBACK_IMG;
+        var url = t.path + (a.values.week_slug || '');
+        return '<div class="col-6 col-lg-3"><div class="insight-card" onclick="location.href=\'' + url + '\'">'
+          + '<div class="insight-card-img-wrap"><img class="insight-card-img" src="' + src + '" alt="" />'
+          + '<span class="insight-card-img-tag insight-tag ' + t.cls + '">' + t.label + '</span></div>'
+          + '<div class="insight-card-content"><p class="insight-card-date">' + (a.values.page_date ? thaiDateM(a.values.page_date) : '') + '</p>'
+          + '<h4 class="insight-card-title">' + (a.values.main_title || '') + '</h4>'
+          + '<p class="insight-card-excerpt">' + (a.values.description || '') + '</p>'
+          + '</div></div></div>';
+      }).join('');
+    });
+  }
+  function closeWeeklyModal(e) { if (e.target === document.getElementById('weeklyModalOverlay')) closeWeeklyModalDirect(); }
+  function closeWeeklyModalDirect() { document.getElementById('weeklyModalOverlay').classList.remove('open'); document.body.style.overflow = ''; }
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeWeeklyModalDirect(); });
+
+  // ── Share ──
+  function shareToFacebook() { window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(location.href), '_blank'); }
+  function shareToX() { window.open('https://x.com/intent/tweet?url=' + encodeURIComponent(location.href), '_blank'); }
+  function copyLink() { navigator.clipboard.writeText(location.href).then(function() { alert('คัดลอกลิงก์แล้ว'); }); }
+  function shareByEmail() { location.href = 'mailto:?subject=Asset Performance — Yuanta Wealth&body=' + encodeURIComponent(location.href); }
+
+  // ── Newsletter ──
+  document.getElementById('newsletter-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var email = document.getElementById('newsletter-email').value;
+    var msg = document.getElementById('newsletter-msg');
+    fetch('https://api.hsforms.com/submissions/v3/integration/submit/43844850/366d7ed2-7a14-44f0-8a7c-dffcba0cd288', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fields: [{ name: 'email', value: email }], context: { pageUri: window.location.href, pageName: document.title } })
+    }).then(function(r) {
+      msg.style.display = 'block';
+      if (r.ok) { msg.textContent = 'ขอบคุณ! เราจะส่ง Insights ให้คุณเร็วๆ นี้'; document.getElementById('newsletter-form').reset(); }
+      else { msg.textContent = 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง'; }
+    }).catch(function() { msg.style.display = 'block'; msg.textContent = 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง'; });
+  });
+
+  new Swiper('.weekly-related-swiper', {
+    slidesPerView: 4,
+    spaceBetween: 16,
+    watchOverflow: false,
+    navigation: { prevEl: '.weekly-prev', nextEl: '.weekly-next', disabledClass: 'swiper-button-disabled' },
+    breakpoints: {
+      0:   { enabled: false },
+      768: { enabled: true, slidesPerView: 2, spaceBetween: 14 },
+      992: { enabled: true, slidesPerView: 4, spaceBetween: 16 }
+    }
+  });
+</script>
+{% endblock scripts %}

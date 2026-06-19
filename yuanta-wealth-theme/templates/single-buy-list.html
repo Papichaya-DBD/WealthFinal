@@ -1,0 +1,951 @@
+<!--
+  templateType: page
+  label: Single Weekly Buy List
+  isAvailableForNewContent: true
+  linkedHubDbTableId: 2612300495
+-->
+{% extends "./layouts/base.html" %}
+
+{% block body %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+{{ require_css(get_asset_url('../css/main.css')) }}
+
+<style>
+
+  .insight-page { margin-top: 90px; background: #fff; overflow-x: hidden; }
+
+  .insight-breadcrumb { padding: 30px 0; background: #fff; }
+  .insight-breadcrumb ol { margin:0; padding:0; list-style:none; display:flex; align-items:center; gap:6px; font-family:'Noto Sans Thai',sans-serif; font-size:13px; color:#8f9aac; }
+  .insight-breadcrumb li a { color:#8f9aac; text-decoration:none; }
+  .insight-breadcrumb li a:hover { color:#a2603c; }
+  .insight-breadcrumb li.active { color:#a2603c; }
+  .insight-breadcrumb li.sep { color:#ccc; }
+
+  .article-header { padding:32px 0; text-align:left; }
+  .article-category-tag { display:inline-block; font-family:'Cormorant Garamond','Noto Sans Thai',Georgia,serif; font-size:13px; font-weight:500; padding:4px 14px; background:#CBD4D0; color:#2c4a42; border:1px solid rgba(44,74,66,.15); margin-bottom:18px; letter-spacing:.03em; }
+  .article-title { font-family:'Noto Sans Thai',sans-serif; font-size:32px; font-weight:700; color:#0c244a; line-height:1.3; margin-bottom:12px; }
+  .article-subtitle { font-family:'Noto Sans Thai',sans-serif; font-size:17px; font-weight:700; color:#0c244a; margin-bottom:0; padding-bottom:16px; border-bottom:1px solid rgba(0,0,0,.1); }
+  .article-meta-row { display:flex; align-items:center; justify-content:space-between; margin-top:16px; }
+  .article-date { font-family:'Noto Sans Thai',sans-serif; font-size:14px; color:#3D506E; font-weight:600; }
+  .article-share { display:flex; align-items:center; gap:8px; }
+  .article-share-label { font-family:'Noto Sans Thai',sans-serif; font-size:14px; color:#3d506e; margin-right:4px; }
+  .share-btn { width:36px; height:36px; border:1px solid rgba(0,0,0,.12); background:#fff; border-radius:4px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:background .15s; }
+  .share-btn:hover { background:#f5f5f5; }
+  .share-btn svg { width:16px; height:16px; }
+  @media (max-width:767px) {
+    .insight-page { margin-top:68px; }
+    .article-header { padding:20px 0; }
+    .article-title { font-size:22px; }
+    .article-meta-row { flex-direction:column; align-items:flex-start; gap:12px; }
+  }
+
+  .article-body { padding:0 0 64px; }
+
+  .cio-box { background:#f8f7f3; border:1px solid #e2ddd4; padding:24px 28px 20px; margin-bottom:32px; }
+  .cio-box-title { font-family:'Noto Sans Thai',sans-serif; font-size:17px; font-weight:700; color:#0c244a; margin-bottom:14px; }
+  .cio-box ul { list-style:none; padding:0; margin:0; }
+  .cio-box ul li { font-family:'Noto Sans Thai',sans-serif; font-size:14px; color:#3d506e; line-height:1.8; padding-left:16px; position:relative; margin-bottom:8px; }
+  .cio-box ul li:last-child { margin-bottom:0; }
+  .cio-box ul li::before { content:'•'; position:absolute; left:0; color:#3d506e; }
+
+  .pm-header { background:#f5f7fa; padding:24px 24px 0; }
+  .pm-title { font-family:'Noto Sans Thai',sans-serif; font-size:24px; font-weight:700; color:#0c244a; margin-bottom:4px; }
+  .pm-tabs { display:flex; gap:0; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
+  .pm-tabs::-webkit-scrollbar { display:none; }
+  .pm-tab { font-family:'Noto Sans Thai',sans-serif; font-size:14px; font-weight:500; padding:10px 24px; border:none; background:transparent; color:#8f9aac; cursor:pointer; border-bottom:2px solid transparent; transition:all .15s; white-space:nowrap; }
+  .pm-tab.active { color:#0c244a; font-weight:700; border-bottom-color:#0c244a; }
+  .pm-tab:hover:not(.active) { color:#3d506e; }
+  .pm-content { background:#fff; box-shadow:0 0 1px rgba(102,102,102,.14), 0 2px 8px rgba(102,102,102,.08); padding:24px 24px 0; margin-bottom:0; }
+
+  .pm-layout { display:grid; grid-template-columns:300px 1fr; gap:24px; align-items:start; }
+  @media (max-width:900px) { .pm-layout { grid-template-columns:1fr; } }
+
+  .donut-wrap { display:flex; justify-content:center; margin-bottom:16px; }
+  .donut-wrap svg circle { transition: stroke-dasharray 0.8s cubic-bezier(0.4,0,0.2,1), stroke-dashoffset 0.8s cubic-bezier(0.4,0,0.2,1); }
+  .donut-legend { display:flex; flex-direction:column; gap:8px; margin-bottom:12px; }
+  .donut-legend-row { display:flex; align-items:center; gap:8px; font-family:'Noto Sans Thai',sans-serif; font-size:13px; color:#3d506e; }
+  .donut-dot { width:12px; height:12px; border-radius:2px; flex-shrink:0; }
+  .donut-note { font-family:'Noto Sans Thai',sans-serif; font-size:11px; color:#8f9aac; line-height:1.6; }
+
+  .portfolio-card { box-shadow:0 0 1px rgba(102,102,102,.14), 0 2px 8px rgba(102,102,102,.08); margin-bottom:16px; overflow:hidden; }
+  .portfolio-card:last-child { margin-bottom:0; }
+  #pc-core { background:#E7E9ED; }
+  #pc-satellite { background:#F9F7F4; }
+  .pc-header { background:#0c244a; color:#fff; padding:14px 20px; display:flex; justify-content:space-between; align-items:flex-start; }
+  .pc-name { font-family:'Noto Sans Thai',sans-serif; font-size:17px; font-weight:700; }
+  .pc-pct { font-family:'Noto Sans Thai',sans-serif; font-size:20px; font-weight:700; }
+  .pc-sub { font-family:'Noto Sans Thai',sans-serif; font-size:12px; color:rgba(255,255,255,.7); margin-top:3px; }
+
+  .asset-item { background:#fff; box-shadow:0 0 1px rgba(102,102,102,.14), 0 2px 8px rgba(102,102,102,.08); margin:12px; padding:20px; }
+  .asset-row-labels { display:flex; justify-content:space-between; margin-bottom:4px; }
+  .asset-lbl { font-family:'Noto Sans Thai',sans-serif; font-size:11px; color:#8f9aac; }
+  .asset-row-name { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; }
+  .asset-name { font-family:'Noto Sans Thai',sans-serif; font-size:16px; font-weight:700; color:#0c244a; }
+  .asset-name-sub { font-family:'Noto Sans Thai',sans-serif; font-size:14px; color:#000; font-weight:700; margin-bottom:10px; }
+  .asset-pct { font-family:'Noto Sans Thai',sans-serif; font-size:16px; font-weight:700; color:#0c244a; }
+  .asset-divider { height:1px; background:#e8ecf2; margin-bottom:10px; }
+  .asset-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:4px; margin-bottom:12px; }
+  .stat-lbl { font-family:'Noto Sans Thai',sans-serif; font-size:11px; color:#8f9aac; margin-bottom:2px; }
+  .stat-val { font-family:'Noto Sans Thai',sans-serif; font-size:16px; font-weight:700; color:#0c244a; }
+  .fund-heading { font-family:'Noto Sans Thai',sans-serif; font-size:12px; color:#3d506e; font-weight:600; margin-bottom:8px; }
+  .fund-tags { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
+  .ftag { font-family:'Noto Sans Thai',sans-serif; font-size:13px; font-weight:600; color:#615FFF; background:#c6d2ff5c; border:1px solid #c5c4ff; padding:6px 10px; cursor:pointer; display:inline-flex; align-items:center; gap:5px; transition:all .15s; white-space:nowrap; }
+  .ftag:hover { background:#dddcff; border-color:#615FFF; }
+  .ftag svg { width:12px; height:12px; flex-shrink:0; }
+  .ftag.dr { color:#D08700; background:#fff8e6; border-color:#f5d980; }
+  .ftag.dr:hover { background:#ffefc0; border-color:#D08700; }
+  .ftag.etf { color:#0084D1; background:#e6f4ff; border-color:#99d1f5; }
+  .ftag.etf:hover { background:#cce8ff; border-color:#0084D1; }
+  .legend-row { display:flex; gap:16px; flex-wrap:wrap; }
+  .legend-itm { display:flex; align-items:center; gap:5px; font-family:'Noto Sans Thai',sans-serif; font-size:11px; color:#8f9aac; }
+  .ldot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+  .ldot.mf { background:#615FFF; }
+  .ldot.dr { background:#D08700; }
+  .ldot.etf { background:#0084D1; }
+
+  .perf-bar { display:flex; align-items:stretch; margin-top:20px; margin-bottom:0; }
+  .perf-sec { display:flex; align-items:center; flex:1; }
+  .perf-lbl-box { padding:12px 18px; text-align:center; display:flex; align-items:center; justify-content:center; align-self:stretch; min-width:80px; }
+  .perf-lbl { font-family:'Noto Sans Thai',sans-serif; font-size:12px; font-weight:700; color:#0c244a; }
+  .perf-items { display:flex; flex:1; }
+  .perf-item { flex:1; padding:16px 14px; }
+  .perf-val { font-family:'Noto Sans Thai',sans-serif; font-size:22px; font-weight:700; color:#27ae60; margin-bottom:4px; }
+  .perf-val.neutral { color:#0c244a; }
+  .perf-val.neg { color:#c0392b; }
+  .perf-name { font-family:'Noto Sans Thai',sans-serif; font-size:11px; color:#8f9aac; display:flex; align-items:center; gap:4px; }
+  .info-icon { width:13px; height:13px; flex-shrink:0; color:#b0bac8; cursor:pointer; }
+  .info-tip { position:relative; display:inline-flex; align-items:center; }
+  .info-tip::after { content:attr(data-tip); position:absolute; top:calc(100% + 6px); left:50%; transform:translateX(-50%); background:#1a2e4a; color:#fff; font-size:11px; font-family:'Noto Sans Thai',sans-serif; font-weight:400; line-height:1.6; padding:8px 12px; border-radius:8px; width:210px; pointer-events:none; opacity:0; transition:opacity .15s; z-index:200; text-align:left; white-space:normal; }
+  .info-tip:hover::after { opacity:1; }
+  .info-tip:hover .info-icon { color:#3b5278; }
+  .invest-btn-wrap { padding:50px 0; display:flex; justify-content:center; }
+  .invest-btn { font-family:'Noto Sans Thai',sans-serif; font-size:14px; font-weight:600; background:#0c244a; color:#fff; border:none; padding:12px 32px; cursor:pointer; transition:background .2s; text-decoration:none; display:inline-block; }
+  .invest-btn:hover { background:#1a3a6b; color:#fff; }
+  .perf-divider { width:1px; background:#e2e8f0; }
+  @media (max-width:767px) {
+    .perf-bar { flex-direction:column; }
+    .perf-sec { flex-direction:column; align-items:flex-start; }
+    .perf-lbl-box { min-width:unset; align-self:stretch; }
+    .perf-items { flex-wrap:wrap; }
+    .perf-item { min-width:50%; border-right:none; }
+    .perf-divider { height:1px; width:100%; }
+  }
+
+  .source-text { font-family:'Noto Sans Thai',sans-serif; font-size:11px; color:#8f9aac; line-height:1.6; margin:16px 0 40px; }
+
+  .article-cta-row { display: grid; grid-template-columns: 3fr 1fr; gap: 16px; margin-bottom: 32px; }
+  .article-cta-left { border: 1.5px solid #0000001A; background: url('{{ get_asset_url('../images/bgoverall.jpg') }}') center/cover no-repeat; padding: 44px 40px; }
+  .article-cta-right { border: 1.5px solid #0000001A; background: url('{{ get_asset_url('../images/bg-seeall.jpg') }}') center/cover no-repeat; padding: 27px 40px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+  .article-cta-title { font-family: 'Noto Sans Thai', sans-serif; font-size: 22px; font-weight: 700; color: #0c244a; margin-bottom: 10px; line-height: 1.3; }
+  .article-cta-sub { font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; color: #3d506e; margin-bottom: 24px; line-height: 1.6; }
+  .article-cta-btn { font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; font-weight: 600; background: #0c244a; color: #fff; border: none; padding: 11px 22px; border-radius: 4px; cursor: pointer; white-space: nowrap; transition: background .2s; text-decoration: none; display: inline-block; }
+  .article-cta-btn:hover { background: #1a3a6b; color: #fff; }
+  .article-cta-right-title { font-family: 'Noto Sans Thai', sans-serif; font-size: 22px; font-weight: 700; color: #0c244a; margin-bottom: 24px; line-height: 1.4; text-align: center; }
+  .article-cta-outline-btn { font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; font-weight: 600; background: #fff; color: #0c244a; border: 1.5px solid #0c244a; padding: 10px 22px; border-radius: 4px; cursor: pointer; white-space: nowrap; transition: all .2s; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+  .article-cta-outline-btn:hover { background: #0c244a; color: #fff; }
+  @media (max-width: 767px) { .article-cta-row { grid-template-columns: 1fr; } .article-cta-left, .article-cta-right { padding: 24px 20px; } .article-cta-right { align-items: flex-start; } .article-cta-right-title { text-align: left; } }
+
+  .experts-section { margin-bottom: 48px; border-top: 1px solid rgba(0,0,0,.08); padding-top: 32px; }
+  .experts-title { font-family: 'Noto Sans Thai', sans-serif; font-size: 16px; font-weight: 700; color: #0c244a; margin-bottom: 20px; }
+  .expert-item { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; background: #fff; border-radius: 4px; overflow: hidden; padding: 0; }
+  .expert-avatar { width: 100px; height: 100px; border-radius: 0; object-fit: cover; flex-shrink: 0; display: block; }
+  .expert-info { padding: 14px 16px; flex: 1; }
+  .expert-name { font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; font-weight: 700; color: #0c244a; margin-bottom: 4px; }
+  .expert-title { font-family: 'Noto Sans Thai', sans-serif; font-size: 12px; color: #8f9aac; line-height: 1.5; }
+
+  .bottom-share-row { display: flex; align-items: center; gap: 8px; padding: 20px 0 32px; }
+
+  .related-section { padding:40px 0; margin-bottom: 48px; }
+  .related-week-header-row { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(0,0,0,.08); }
+  .related-week-chip { font-size: 12px; font-weight: 700; background: #0c244a; color: #fff; padding: 3px 10px; border-radius: 3px; flex-shrink: 0; }
+  .related-week-label { font-family: 'Noto Sans Thai', sans-serif; font-size: 15px; font-weight: 700; color: #0c244a; }
+  .weekly-related-wrapper { position: relative; padding: 0 44px; }
+  .weekly-related-swiper { position: relative; overflow: hidden; padding: 8px 0; margin: -8px 0; }
+  .weekly-related-wrapper .swiper-button-prev,
+  .weekly-related-wrapper .swiper-button-next { position: absolute; top: 38%; width: 32px; height: 32px; background: #fff; border: 1px solid rgba(0,0,0,.15); border-radius: 50%; color: #0c244a; margin-top: 0; }
+  .weekly-related-wrapper .swiper-button-prev { left: 0; }
+  .weekly-related-wrapper .swiper-button-next { right: 0; }
+  .weekly-related-wrapper .swiper-button-prev::after,
+  .weekly-related-wrapper .swiper-button-next::after { font-size: 11px; font-weight: 700; }
+  .weekly-related-wrapper .swiper-button-disabled { opacity: 0.35; cursor: default; }
+  @media (max-width: 767px) {
+    .weekly-related-wrapper { padding: 0; }
+    .weekly-related-swiper .swiper-wrapper { display: block; transform: none !important; }
+    .weekly-related-swiper .swiper-button-prev,
+    .weekly-related-swiper .swiper-button-next { display: none; }
+    .weekly-related-swiper .swiper-slide { width: 100% !important; margin-bottom: 10px; }
+    .weekly-related-swiper .insight-card { flex-direction: row; align-items: stretch; }
+    .weekly-related-swiper .insight-card-img-wrap { width: 110px; min-height: 90px; flex-shrink: 0; order: 2; }
+    .weekly-related-swiper .insight-card-img { width: 110px; height: 100%; object-fit: contain; }
+    .weekly-related-swiper .insight-card-img-tag { top: 6px; left: auto; right: 0; }
+    .weekly-related-swiper .insight-card-content { order: 1; flex: 1; min-width: 0; }
+  }
+  .insight-card { background: #fff; display: flex; flex-direction: column; height: 100%; cursor: pointer; transition: box-shadow .2s, transform .18s; box-shadow: 0 0 1px rgba(102,102,102,.14), 0 2px 6px rgba(102,102,102,.08); }
+  .insight-card:hover { box-shadow: 0 4px 18px rgba(0,0,0,.11); transform: translateY(-2px); }
+  .insight-card-img-wrap { position: relative; flex-shrink: 0; }
+  .insight-card-img { width: 100%; height: 115px; object-fit: cover; display: block; }
+  .insight-card-img-tag { position: absolute; top: 8px; left: 8px; }
+  .insight-card-content { padding: 14px; display: flex; flex-direction: column; flex: 1; }
+  .insight-card-date { font-family: 'Noto Sans Thai', sans-serif; font-size: 11px; color: #8f9aac; margin-bottom: 6px; }
+  .insight-card-title { font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; font-weight: 700; color: #0c244a; line-height: 1.45; margin-bottom: 7px; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .insight-card-excerpt { font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; color: #3d506e; line-height: 1.55; flex: 1; display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .insight-tag { font-family: 'Noto Sans Thai', sans-serif; font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 3px; white-space: nowrap; display: inline-block; }
+  .tag-hot-issue     { background: #EBC7C7; color: #7a1c1c; }
+  .tag-buy-list      { background: #CBD4D0; color: #2c4a42; }
+  .tag-asset-perf    { background: #fef3cd; color: #92600a; }
+  .tag-mkt-calendar  { background: #b4bbc7; color: #0c244a; }
+  .tag-asset-outlook { background: #D6D1CB; color: #3d2c1e; }
+  .tag-mkt-outlook   { background: #D1CCDF; color: #3d2260; }
+
+  .fund-overlay { position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:1040; opacity:0; pointer-events:none; transition:opacity .3s; }
+  .fund-overlay.open { opacity:1; pointer-events:all; }
+  .fund-drawer { position:fixed; top:0; right:0; bottom:0; width:520px; max-width:100vw; background:#fff; z-index:1050; transform:translateX(100%); transition:transform .35s cubic-bezier(.25,.46,.45,.94); display:flex; flex-direction:column; overflow:hidden; box-shadow:-4px 0 32px rgba(0,0,0,.15); }
+  .fund-drawer.open { transform:translateX(0); }
+  @media (max-width:600px) { .fund-drawer { width:100vw; } }
+  .fd-head { padding:20px 24px 16px; border-bottom:1px solid #e8ecf2; flex-shrink:0; display:flex; justify-content:space-between; align-items:flex-start; }
+  .fd-name { font-family:'Noto Sans Thai',sans-serif; font-size:22px; font-weight:700; color:#0c244a; margin-bottom:6px; }
+  .fd-type-badge { display:inline-flex; align-items:center; gap:6px; font-family:'Noto Sans Thai',sans-serif; font-size:13px; color:#1a3a6b; background:#e8f0fb; padding:3px 10px; }
+  .fd-type-badge.dr { color:#7a3e00; background:#fef3e6; }
+  .fd-type-badge.etf { color:#155724; background:#d4edda; }
+  .fd-close { width:32px; height:32px; border:1px solid #e2e8f0; background:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; margin-left:12px; }
+  .fd-close:hover { background:#f5f5f5; }
+  .fd-body { overflow-y:auto; flex:1; padding:24px; }
+  .fd-ai-box { background: url('{{ get_asset_url('../images/bgaisummary.jpg') }}') center/cover no-repeat; border:1px solid #3b537829; padding:20px 24px; margin-bottom:24px; }
+  .fd-ai-header { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+  .fd-ai-icon { width:32px; height:32px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .fd-ai-icon img { width:32px; height:32px; object-fit:contain; }
+  .fd-ai-lbl { font-family:'Noto Sans Thai',sans-serif; font-size:14px; font-weight:700; color:#0c244a; display:block; margin-bottom:2px; }
+  .fd-ai-sublbl { font-family:'Noto Sans Thai',sans-serif; font-size:12px; color:#8f9aac; margin:0; }
+  .fd-ai-text { font-family:'Noto Sans Thai',sans-serif; font-size:13px; color:#3d506e; line-height:1.75; }
+  .fd-ai-text p { margin-bottom:8px; }
+  .fd-ai-text p:last-child { margin-bottom:0; }
+  .fd-section-title { font-family:'Noto Sans Thai',sans-serif; font-size:15px; font-weight:700; color:#0c244a; margin-bottom:12px; padding-bottom:8px; border-bottom:2px solid #0c244a; display:inline-block; }
+  .fd-highlights { margin-bottom:0; }
+  .fd-highlights ul { list-style:none; padding:0; margin:0; }
+  .fd-highlights ul li { font-family:'Noto Sans Thai',sans-serif; font-size:13px; color:#3d506e; line-height:1.75; padding-left:14px; position:relative; margin-bottom:6px; }
+  .fd-highlights ul li::before { content:'•'; position:absolute; left:0; color:#1a3a6b; }
+  .fd-highlights span { font-size:14px; }
+  .tbl-scroll-inner { overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+  .tbl-scroll-inner::-webkit-scrollbar { display:none; }
+  .tbl-scroll-inner table { min-width:620px; border-collapse:collapse; font-family:'Noto Sans Thai',sans-serif; font-size:13px; }
+  .tbl-scroll-inner table th { background:#a2603c; color:#fff; font-weight:600; padding:10px 16px; text-align:center; white-space:nowrap; letter-spacing:.02em; }
+  .tbl-scroll-inner table td { padding:10px 16px; border-bottom:1px solid #e8ecf2; color:#3d506e; vertical-align:middle; white-space:nowrap; text-align:center; }
+  .tbl-scroll-inner table tr:last-child td { border-bottom:none; }
+  .tbl-scroll-inner table tr:nth-child(even) td { background:#f8f6f3; }
+  .tbl-scroll-inner table tr:hover td { background:#f0ede8; }
+  .tbl-scroll-nav { display:flex; align-items:center; justify-content:center; gap:10px; padding:10px 0 4px; }
+  .tbl-scroll-nav span { font-family:'Noto Sans Thai',sans-serif; font-size:12px; color:#8f9aac; }
+  .tbl-scroll-btn { background:none; border:none; padding:3px 12px; cursor:pointer; color:#8f9aac; font-size:16px; line-height:1.4; transition:color .15s; }
+  .tbl-scroll-btn:hover { color:#3d506e; }
+  .fd-cta { background: url('{{ get_asset_url('../images/bginvest.jpg') }}') center/cover no-repeat; padding:28px 24px; text-align:center; }
+  .fd-cta-title { font-family:'Noto Sans Thai',sans-serif; font-size:16px; font-weight:700; color:#fff; margin-bottom:8px; line-height:1.4; }
+  .fd-cta-desc { font-family:'Noto Sans Thai',sans-serif; font-size:13px; color:rgba(255,255,255,0.75); margin-bottom:20px; line-height:1.6; }
+  .fd-cta-btn { font-family:'Noto Sans Thai',sans-serif; font-size:14px; font-weight:600; background:#a2603c; color:#fff; border:none; padding:11px 28px; cursor:pointer; transition:background .2s; }
+  .fd-cta-btn:hover { background:#c07844; }
+
+  /* ── Week modal ── */
+  .week-modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,.55); z-index: 1050; align-items: center; justify-content: center; padding: 16px; }
+  .week-modal-overlay.open { display: flex; }
+  .week-modal { background: #fff; width: 100%; max-width: 1100px; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; }
+  .week-modal-body { overflow-y: auto; -webkit-overflow-scrolling: touch; flex: 1; padding: 24px 28px 32px; }
+  .week-modal-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 28px; border-bottom: 1px solid rgba(0,0,0,.08); position: sticky; top: 0; background: #fff; z-index: 1; }
+  .week-modal-title { font-family: 'Noto Sans Thai', sans-serif; font-size: 16px; font-weight: 700; color: #0c244a; margin: 0; }
+  .week-modal-close { width: 32px; height: 32px; border: none; background: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #3d506e; transition: background .15s; }
+  .week-modal-close:hover { background: #f0f0f0; }
+  @media (max-width: 767px) {
+    .week-modal-body .insight-card { flex-direction: row; align-items: stretch; }
+    .week-modal-body .insight-card-img-wrap { width: 110px; min-height: 90px; flex-shrink: 0; order: 2; }
+    .week-modal-body .insight-card-img { width: 110px; height: 100%; object-fit: contain; }
+    .week-modal-body .insight-card-img-tag { top: 6px; left: auto; right: 0; }
+    .week-modal-body .insight-card-content { order: 1; flex: 1; min-width: 0; }
+    .week-modal-body .col-6 { width: 100%; }
+  }
+
+</style>
+
+  <div class="insight-page">
+
+    <!-- BREADCRUMB -->
+    <div class="insight-breadcrumb">
+      <div class="container">
+        <div class="col-12 col-lg-9 mx-auto">
+        <ol>
+          <li><a href="https://landing.yuanta.co.th/wealth-home">Home</a></li>
+          <li class="sep">/</li>
+          <li><a href="/wealth-insights">Insights</a></li>
+          <li class="sep">/</li>
+          <li class="active">Weekly Buy List</li>
+        </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- ARTICLE HEADER -->
+    <section class="article-header">
+      <div class="container">
+        <div class="row g-5">
+          <div class="col-12 col-lg-9 mx-auto">
+            <span class="article-category-tag">Buy list</span>
+            <h1 class="article-title">Weekly Buy List</h1>
+            <p class="article-subtitle">ปรับพอร์ตล่าสุด</p>
+            <div class="article-meta-row">
+              <p class="article-date"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ARTICLE BODY -->
+    <section class="article-body">
+      <div class="container">
+        <div class="row g-5">
+          <div class="col-12 col-lg-9 mx-auto">
+
+            <div class="cio-box">
+              <p class="cio-box-title">Yuanta CIO Office</p>
+              <ul></ul>
+            </div>
+
+            <div class="pm-header">
+              <p class="pm-title">Portfolio models</p>
+              <div class="pm-tabs">
+                <button class="pm-tab active" onclick="switchPmTab(this,'defender')">Defender (30/70)</button>
+                <button class="pm-tab" onclick="switchPmTab(this,'flexible')">Flexible (60/40)</button>
+                <button class="pm-tab" onclick="switchPmTab(this,'growth')">Growth (70/30)</button>
+              </div>
+            </div>
+            <div class="pm-content">
+              <div class="pm-layout">
+
+                <div class="donut-col">
+                  <div class="donut-wrap">
+                    <svg viewBox="0 0 200 200" width="200" height="200">
+                      <circle cx="100" cy="100" r="80" fill="none" stroke="#0c244a" stroke-width="34" stroke-dasharray="0 502.65" transform="rotate(-90 100 100)"/>
+                      <circle cx="100" cy="100" r="80" fill="none" stroke="#a2603c" stroke-width="34" stroke-dasharray="0 502.65" stroke-dashoffset="0" transform="rotate(-90 100 100)"/>
+                      <text x="100" y="72" text-anchor="middle" font-family="'Noto Sans Thai',sans-serif" font-size="11" fill="#8f9aac">Core</text>
+                      <text x="100" y="97" text-anchor="middle" font-family="'Noto Sans Thai',sans-serif" font-size="22" font-weight="700" fill="#0c244a">78%</text>
+                      <text x="100" y="118" text-anchor="middle" font-family="'Noto Sans Thai',sans-serif" font-size="11" fill="#a2603c">Satellite</text>
+                      <text x="100" y="143" text-anchor="middle" font-family="'Noto Sans Thai',sans-serif" font-size="22" font-weight="700" fill="#a2603c">22%</text>
+                    </svg>
+                  </div>
+                  <div class="donut-legend">
+                    <div class="donut-legend-row"><div class="donut-dot" style="background:#0c244a;"></div><span><strong>Core portfolio</strong> 78%</span></div>
+                    <div class="donut-legend-row"><div class="donut-dot" style="background:#a2603c;"></div><span><strong>Satellite portfolio</strong> 22%</span></div>
+                  </div>
+                  <p class="donut-note">*นักลงทุนไม่จำเป็นต้องลงทุนทุกสินทรัพย์ใน Portfolio โดย Yuanta CIO แนะนำให้จัดสัดส่วนให้เหมาะสมและเลือกสินทรัพย์ตามความเสี่ยงที่รับได้</p>
+                </div>
+
+                <div class="cards-col">
+                  <div class="portfolio-card" id="pc-core"></div>
+                  <div class="portfolio-card" id="pc-satellite"></div>
+                </div>
+
+              </div>
+
+              <div class="invest-btn-wrap">
+                <a href="#" class="invest-btn" onclick="openMeetingModal(); return false;">สนใจลงทุน</a>
+              </div>
+
+            </div>
+
+            <!-- PERFORMANCE BAR -->
+            <div class="perf-bar">
+              <div class="perf-sec">
+                <div class="perf-lbl-box"><span class="perf-lbl">ผลตอบแทน</span></div>
+                <div class="perf-items">
+                  <div class="perf-item"><div class="perf-val">-</div><div class="perf-name">Portfolio LT Return <span class="info-tip" data-tip="คาดการณ์อัตราผลตอบแทนเฉลี่ยของพอร์ตการลงทุนในระยะยาว (5-10 ปีขึ้นไป)"><svg class="info-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v5M8 5v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span></div></div>
+                  <div class="perf-item"><div class="perf-val">-</div><div class="perf-name">Core Return <span class="info-tip" data-tip="คาดการณ์ผลตอบแทนของพอร์ตหลัก (Core portfolio) ที่เน้นการลงทุนระยะยาว เพื่อสร้างความมั่นคง"><svg class="info-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v5M8 5v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span></div></div>
+                  <div class="perf-item"><div class="perf-val">-</div><div class="perf-name">Satellite Return <span class="info-tip" data-tip="คาดการณ์ผลตอบแทนของพอร์ตเสริม (Satellite portfolio) ที่เน้นการเพิ่มโอกาส รับผลตอบแทนส่วนเพิ่ม"><svg class="info-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v5M8 5v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span></div></div>
+                </div>
+              </div>
+              <div class="perf-divider"></div>
+              <div class="perf-sec">
+                <div class="perf-lbl-box"><span class="perf-lbl">ความเสี่ยง</span></div>
+                <div class="perf-items">
+                  <div class="perf-item"><div class="perf-val neutral">-</div><div class="perf-name">Portfolio Risk (SD) <span class="info-tip" data-tip="ความเสี่ยงคาดการณ์ของพอร์ตโฟลิโอ วัดจากส่วนเบี่ยงเบนมาตรฐาน (Standard Deviation) ยิ่งสูงแสดงถึงความผันผวนที่มากขึ้น"><svg class="info-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v5M8 5v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span></div></div>
+                  <div class="perf-item"><div class="perf-val neg">-</div><div class="perf-name">Portfolio VaR (95%) <span class="info-tip" data-tip="มูลค่าความเสียหายสูงสุดที่คาดว่าจะเกิดขึ้น ณ ระดับความเชื่อมั่น 95% สื่อถึงมีโอกาส 5% ที่ขาดทุนเกินกว่าค่านี้"><svg class="info-icon" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v5M8 5v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span></div></div>
+                </div>
+              </div>
+            </div>
+
+            <p class="source-text"></p>
+
+            <div class="article-cta-row">
+              <div class="article-cta-left">
+                <p class="article-cta-title">ต้องการดูภาพรวมทั้งสัปดาห์?</p>
+                <p class="article-cta-sub">เนื้อหานี้เป็นส่วนหนึ่งของบทวิเคราะห์ฉบับเต็มที่ครอบคลุมเนื้อหาทุก asset class</p>
+                <a class="article-cta-btn" id="ctaPdfBtn" href="#" target="_blank">ดูมุมมองเพิ่มเติม</a>
+              </div>
+              <div class="article-cta-right">
+                <p class="article-cta-right-title">ดูมุมมอง<br>บทวิเคราะห์อื่นในเดือนนี้</p>
+                <button class="article-cta-outline-btn" onclick="openMonthlyModal()">บทวิเคราะห์ประจำเดือน &gt;</button>
+              </div>
+            </div>
+
+            <div class="experts-section" id="expertsSection">
+              <p class="experts-title">บทวิเคราะห์โดย</p>
+              <div class="row g-3" id="expertsGrid"></div>
+            </div>
+
+            <div class="bottom-share-row">
+              <span class="article-share-label">แชร์</span>
+              <button class="share-btn" onclick="shareToFacebook()" title="Facebook">
+                <svg viewBox="0 0 20 20" fill="none"><path d="M11 10.5h2l.5-2.5H11V6.5c0-.7.35-1.5 1.5-1.5H13.5V2.5A13 13 0 0011.5 2.5C9.14 2.5 8 3.9 8 6v2H5.5v2.5H8V18h3v-7.5z" fill="#1877F2"/></svg>
+              </button>
+              <button class="share-btn" onclick="shareToX()" title="X">
+                <svg viewBox="0 0 20 20" fill="none"><path d="M15.5 3h-2.1l-3.4 4.3L6.4 3H2l5.7 7.3L2.1 17H4.2l3.7-4.6 3.7 4.6H16l-6-7.7L15.5 3z" fill="#000"/></svg>
+              </button>
+              <button class="share-btn" onclick="copyLink()" title="คัดลอก">
+                <svg viewBox="0 0 20 20" fill="none"><path d="M8.5 11.5a4 4 0 005.66 0l2-2a4 4 0 00-5.66-5.66l-1 1" stroke="#555" stroke-width="1.5" stroke-linecap="round"/><path d="M11.5 8.5a4 4 0 00-5.66 0l-2 2a4 4 0 005.66 5.66l1-1" stroke="#555" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </button>
+              <button class="share-btn" onclick="shareByEmail()" title="อีเมล">
+                <svg viewBox="0 0 20 20" fill="none"><rect x="2" y="4" width="16" height="12" rx="2" stroke="#555" stroke-width="1.5"/><path d="M2 7l8 5 8-5" stroke="#555" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+
+            <div class="related-section" id="relatedSection" style="display:none;">
+              <div class="related-week-header-row">
+                <span class="related-week-chip">Weekly</span>
+                <span class="related-week-label" id="relatedWeekLabel">บทวิเคราะห์รายสัปดาห์เดียวกัน</span>
+              </div>
+              <div class="weekly-related-wrapper">
+                <div class="swiper weekly-related-swiper">
+                  <div class="swiper-wrapper" id="relatedSwiperWrapper"></div>
+                </div>
+                <div class="swiper-button-prev weekly-prev"></div>
+                <div class="swiper-button-next weekly-next"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- MONTHLY MODAL -->
+  <div class="week-modal-overlay" id="monthlyModalOverlay" onclick="closeMonthlyModal(event)">
+    <div class="week-modal">
+      <div class="week-modal-header">
+        <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
+          <span class="related-week-chip">Monthly</span>
+          <span class="related-week-label">บทวิเคราะห์รายเดือนเดียวกัน</span>
+        </div>
+        <button class="week-modal-close" onclick="closeMonthlyModalDirect()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="week-modal-body">
+        <p style="color:#8f9aac;font-size:14px;font-family:'Noto Sans Thai',sans-serif;padding:8px 0;">ยังไม่มีบทวิเคราะห์ประจำเดือนนี้</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK MODAL -->
+  <div class="week-modal-overlay" id="weeklyModalOverlay" onclick="closeWeeklyModal(event)">
+    <div class="week-modal">
+      <div class="week-modal-header">
+        <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
+          <span class="related-week-chip">Weekly</span>
+          <span class="related-week-label" id="modalWeekLabel">บทวิเคราะห์รายสัปดาห์เดียวกัน</span>
+        </div>
+        <button class="week-modal-close" onclick="closeWeeklyModalDirect()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="week-modal-body">
+        <div class="row g-3" id="weeklyModalGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter-section">
+    <div class="container">
+      <div class="row align-items-center gy-5">
+        <div class="col-12 col-lg-6">
+          <div class="newsletter-left">
+            <p class="newsletter-label">Exclusive Insights</p>
+            <h2 class="newsletter-title">Unlock Insights &amp;<br>Market Intelligence</h2>
+            <p class="newsletter-desc">รับข้อมูลเชิงลึกด้านการลงทุน บทวิเคราะห์ตลาด และโอกาสการลงทุนพิเศษ<br>ส่งตรงถึงอีเมลของคุณทุกสัปดาห์</p>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="newsletter-right">
+            <form class="newsletter-form" onsubmit="return false;">
+              <input type="email" placeholder="กรอกอีเมลของคุณ" />
+              <button type="submit">Subscribe to insights</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FUND DRAWER -->
+  <div class="fund-overlay" id="fundOverlay" onclick="closeDrawer()"></div>
+  <div class="fund-drawer" id="fundDrawer">
+    <div class="fd-head">
+      <div>
+        <div class="fd-name" id="fdName"></div>
+        <span class="fd-type-badge" id="fdType"><svg width="8" height="8"><circle cx="4" cy="4" r="4" fill="currentColor"/></svg> Mutual fund</span>
+      </div>
+      <button class="fd-close" onclick="closeDrawer()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="fd-body">
+      <div class="fd-ai-box" id="fdAiBox">
+        <div class="fd-ai-header">
+          <div class="fd-ai-icon"><img src="{{ get_asset_url('../images/ai-icon.png') }}" alt="AI" /></div>
+          <div>
+            <span class="fd-ai-lbl">AI Summary</span>
+            <p class="fd-ai-sublbl">บทสรุปจาก AI อ้างอิงโดยบทวิเคราะห์</p>
+          </div>
+        </div>
+        <div class="fd-ai-text" id="fdAiText"></div>
+      </div>
+      <div class="fd-highlights" id="fdContentWrap">
+        <div id="fdHighlights"></div>
+      </div>
+      <div class="fd-cta">
+        <p class="fd-cta-title">ปรึกษาแผนการลงทุนกับผู้เชี่ยวชาญ</p>
+        <p class="fd-cta-desc">นัดหมายพูดคุยแผนการลงทุน เพื่อรับคำแนะนำด้านการลงทุน<br>ที่เหมาะกับเป้าหมายและแผนการเงินของท่าน</p>
+        <button class="fd-cta-btn" onclick="openMeetingModal()">นัดหมาย</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── Experts ──
+    (function() {
+      var experts = [
+        { name: 'Danai Aroonkittichai', title: 'Chief Retail Business Office at Yuanta Securities', credentials: 'CFA', photo: 'https://43844850.fs1.hubspotusercontent-na2.net/hubfs/43844850/Wealth/Experts/%E0%B8%84%E0%B8%B8%E0%B8%93%E0%B8%94%E0%B8%99%E0%B8%B1%E0%B8%A2_%E0%B8%84%E0%B8%A3%E0%B8%B6%E0%B9%88%E0%B8%87%E0%B8%9A%E0%B8%99.jpg' },
+        { name: 'Visakorn Kirivan', title: 'Senior Investment Strategist, Fundamental Investment Analyst', credentials: 'CFA, PhD', photo: 'https://43844850.fs1.hubspotusercontent-na2.net/hubfs/43844850/Wealth/Experts/%E0%B8%84%E0%B8%B8%E0%B8%93%E0%B8%A7%E0%B8%B1%E0%B8%A8%E0%B8%81%E0%B8%A3%E0%B8%93%E0%B9%8C_%E0%B8%84%E0%B8%A3%E0%B8%B6%E0%B9%88%E0%B8%87%E0%B8%9A%E0%B8%99.jpg' },
+        { name: 'Natakit Karnkriangkrai', title: 'Investment Strategist with a passion for global investing and portfolio solutions.', credentials: '', photo: 'https://43844850.fs1.hubspotusercontent-na2.net/hubfs/43844850/Wealth/Experts/%E0%B8%84%E0%B8%B8%E0%B8%93%E0%B8%93%E0%B8%B1%E0%B8%90%E0%B8%81%E0%B8%B4%E0%B8%95_%E0%B8%84%E0%B8%A3%E0%B8%B6%E0%B9%88%E0%B8%87%E0%B8%9A%E0%B8%99.jpg' }
+      ];
+      var grid = document.getElementById('expertsGrid');
+      if (!grid) return;
+      experts.forEach(function(e) {
+        var col = document.createElement('div');
+        col.className = 'col-12 col-sm-4';
+        col.innerHTML = '<div class="expert-item d-flex align-items-stretch">'
+          + '<img class="expert-avatar" src="' + e.photo + '" alt="' + e.name + '" />'
+          + '<div class="expert-info">'
+          + '<p class="expert-name">' + e.name + '</p>'
+          + (e.credentials ? '<p class="expert-title" style="color:#3d506e;font-weight:600;margin-bottom:4px;">' + e.credentials + '</p>' : '')
+          + '</div></div>';
+        grid.appendChild(col);
+      });
+    })();
+
+    // ── HubDB config ──
+    var PORTAL           = '43844850';
+    var BUYLIST_TABLE    = '2612300495';
+    var FUNDDETAIL_TABLE = '2612173498';
+    var CIRC = 502.65;
+
+    var models      = {};
+    var activeModel = 'defender';
+    var fundCache   = {};
+
+    var RELATED_TABLES = [
+      {id:'2599182038', type:'hot-issue',        label:'Hot issue',        cls:'tag-hot-issue',    path:'/wealth-single-weekly-hotissue/'},
+      {id:'2599723735', type:'asset-performance', label:'Asset performance',cls:'tag-asset-perf',   path:'/wealth-single-weekly-asset-performance/'},
+      {id:'2610619077', type:'market-calendar',   label:'Market calendar',  cls:'tag-mkt-calendar', path:'/wealth-single-weekly-market-calendar/'},
+    ];
+
+    var FALLBACK_IMG = '{{ get_asset_url("../images/comingsoon.png") }}';
+    var THUMB = {
+      '2599182038': '{{ get_asset_url("../images/thumb-hot-issue.jpg") }}',
+      '2599723735': '{{ get_asset_url("../images/thumb-asset-performance.jpg") }}',
+      '2612300495': '{{ get_asset_url("../images/thumb-buy-list.jpg") }}',
+      '2610619077': '{{ get_asset_url("../images/thumb-market-calendar.jpg") }}',
+    };
+
+    function thaiDate(epochMs) {
+      var d = new Date(epochMs);
+      var months = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน',
+                    'กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+      return d.getDate() + ' ' + months[d.getMonth()] + ' ' + (d.getFullYear() + 543);
+    }
+
+    function parseFunds(str) {
+      if (!str || !str.trim()) return [];
+      return str.split(',').map(function(f) {
+        var parts = f.trim().split(':');
+        return { ticker: parts[0].trim(), type: (parts[1] || 'mf').trim() };
+      }).filter(function(f) { return f.ticker; });
+    }
+
+    function fundTagsHtml(fundsStr) {
+      var funds = parseFunds(fundsStr);
+      if (!funds.length) return '';
+      var typesPresent = {};
+      var tags = funds.map(function(f) {
+        typesPresent[f.type] = true;
+        var cls = f.type === 'dr' ? ' dr' : f.type === 'etf' ? ' etf' : '';
+        return '<button class="ftag' + cls + '" onclick="openDrawer(\'' + f.ticker + '\')">'
+          + f.ticker
+          + ' <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 4l4 4-4 4"/></svg></button>';
+      }).join('');
+      var leg = [];
+      if (typesPresent['mf'])  leg.push('<span class="legend-itm"><span class="ldot mf"></span> Mutual fund</span>');
+      if (typesPresent['dr'])  leg.push('<span class="legend-itm"><span class="ldot dr"></span> DR</span>');
+      if (typesPresent['etf']) leg.push('<span class="legend-itm"><span class="ldot etf"></span> ETF/Offshore</span>');
+      return '<div class="fund-heading">สินทรัพย์แนะนำ</div>'
+        + '<div class="fund-tags">' + tags + '</div>'
+        + '<div class="legend-row">' + leg.join('') + '</div>';
+    }
+
+    function assetItemHtml(name, sub, pct, lt, t12, eps, fundsStr, isLast) {
+      var border = isLast ? ' style="border-bottom:none;"' : '';
+      var hasStats = (lt && lt !== '-') || (t12 && t12 !== '-') || (eps && eps !== '-');
+      var hasDivider = sub || hasStats;
+      var subHtml = sub ? '<div class="asset-name-sub">' + sub + '</div>' : '';
+      var statsHtml = hasStats
+        ? '<div class="asset-stats">'
+          + '<div><div class="stat-lbl">LT Return</div><div class="stat-val">' + (lt && lt !== '-' ? lt + '%' : '-') + '</div></div>'
+          + '<div><div class="stat-lbl">12M Target</div><div class="stat-val">' + (t12 || '-') + '</div></div>'
+          + '<div><div class="stat-lbl">12M EPS GR.</div><div class="stat-val">' + (eps && eps !== '-' ? eps + '%' : '-') + '</div></div>'
+          + '</div>'
+        : '';
+      return '<div class="asset-item"' + border + '>'
+        + '<div class="asset-row-labels"><span class="asset-lbl">Asset class</span><span class="asset-lbl">สัดส่วน</span></div>'
+        + '<div class="asset-row-name"><span class="asset-name">' + name + '</span><span class="asset-pct">' + pct + '%</span></div>'
+        + (hasDivider ? '<div class="asset-divider"></div>' : '')
+        + subHtml
+        + statsHtml
+        + (fundsStr ? fundTagsHtml(fundsStr) : '')
+        + '</div>';
+    }
+
+    function updateDonut(corePct, satPct) {
+      var coreArc = (corePct / 100 * CIRC).toFixed(2);
+      var satArc  = (satPct  / 100 * CIRC).toFixed(2);
+      var svg = document.querySelector('.donut-wrap svg');
+      if (!svg) return;
+      var circles = svg.querySelectorAll('circle');
+      circles[0].setAttribute('stroke-dasharray', coreArc + ' ' + CIRC);
+      circles[1].setAttribute('stroke-dasharray', satArc + ' ' + CIRC);
+      circles[1].setAttribute('stroke-dashoffset', '-' + coreArc);
+      var texts = svg.querySelectorAll('text');
+      texts[1].textContent = corePct + '%';
+      texts[3].textContent = satPct + '%';
+      var legSpans = document.querySelectorAll('.donut-legend-row span');
+      if (legSpans[0]) legSpans[0].innerHTML = '<strong>Core portfolio</strong> ' + corePct + '%';
+      if (legSpans[1]) legSpans[1].innerHTML = '<strong>Satellite portfolio</strong> ' + satPct + '%';
+    }
+
+    function renderPage(v) {
+      var titleEl = document.querySelector('.article-title');
+      if (titleEl && v.main_title) titleEl.textContent = v.main_title;
+      ['relatedWeekLabel','modalWeekLabel'].forEach(function(id){ var el=document.getElementById(id); if(el && v.page_subtitle) el.textContent=v.page_subtitle; });
+      var subEl = document.querySelector('.article-subtitle');
+      if (subEl && v.page_subtitle) subEl.textContent = v.page_subtitle;
+      var dateEl = document.querySelector('.article-date');
+      if (dateEl && v.page_date) dateEl.textContent = thaiDate(v.page_date);
+
+      var cioBox = document.querySelector('.cio-box');
+      if (cioBox && v.cio_content) {
+        cioBox.innerHTML = '<p class="cio-box-title">Yuanta CIO Office</p>' + v.cio_content;
+      }
+
+      var corePct = v.core_pct != null ? v.core_pct : 78;
+      var satPct  = v.satellite_pct != null ? v.satellite_pct : 22;
+      if (!renderPage._firstDone) {
+        renderPage._firstDone = true;
+        requestAnimationFrame(function() { requestAnimationFrame(function() { updateDonut(corePct, satPct); }); });
+      } else {
+        updateDonut(corePct, satPct);
+      }
+
+      var coreCard = document.getElementById('pc-core');
+      if (coreCard) {
+        coreCard.innerHTML =
+          '<div class="pc-header">'
+          + '<div><div class="pc-name">Core portfolio</div><div class="pc-sub">ผลตอบแทนระยะยาว ลงทุนสม่ำเสมอ และปรับสมดุลพอร์ต</div></div>'
+          + '<div class="pc-pct">' + corePct + '%</div>'
+          + '</div>'
+          + assetItemHtml('Global Fixed Income', '', v.gfi_weight || 0, v.gfi_lt_return, v.gfi_target_12m, v.gfi_eps_12m, v.gfi_funds, false)
+          + assetItemHtml('Global Equity', '', v.geq_weight || 0, v.geq_lt_return, v.geq_target_12m, v.geq_eps_12m, v.geq_funds, true);
+      }
+
+      var satCard = document.getElementById('pc-satellite');
+      if (satCard) {
+        var satItems = [];
+        for (var i = 1; i <= 8; i++) {
+          var sName = v['sat_' + i + '_name'];
+          if (!sName) continue;
+          satItems.push({
+            name:  sName,
+            sub:   v['sat_' + i + '_sub']        || '',
+            wt:    v['sat_' + i + '_weight']      || 0,
+            lt:    v['sat_' + i + '_lt_return']   || '',
+            t12:   v['sat_' + i + '_target_12m']  || '',
+            eps:   v['sat_' + i + '_eps_12m']     || '',
+            funds: v['sat_' + i + '_funds']       || ''
+          });
+        }
+        var satHtml = '<div class="pc-header" style="background:#a2603c;">'
+          + '<div><div class="pc-name">Satellite portfolio</div><div class="pc-sub">ผลตอบแทนระยะสั้น เน้นเลือกสินทรัพย์ และจับจังหวะตลาด</div></div>'
+          + '<div class="pc-pct">' + satPct + '%</div>'
+          + '</div>';
+        satItems.forEach(function(s, idx) {
+          satHtml += assetItemHtml(s.name, s.sub, s.wt, s.lt, s.t12, s.eps, s.funds, idx === satItems.length - 1);
+        });
+        satCard.innerHTML = satHtml;
+      }
+
+      var perfDefs = [
+        { val: v.perf_lt_return,   cls: 'perf-val' },
+        { val: v.perf_core_return, cls: 'perf-val' },
+        { val: v.perf_sat_return,  cls: 'perf-val' },
+        { val: v.perf_risk_sd,     cls: 'perf-val neutral' },
+        { val: v.perf_var_95,      cls: 'perf-val neg' }
+      ];
+      document.querySelectorAll('.perf-val').forEach(function(el, i) {
+        if (!perfDefs[i]) return;
+        if (!perfDefs[i].val) { el.textContent = '-'; el.className = 'perf-val neutral'; return; }
+        el.textContent = perfDefs[i].val;
+        el.className   = perfDefs[i].cls;
+      });
+
+      var srcEl = document.querySelector('.source-text');
+      if (srcEl && v.source_text) srcEl.textContent = v.source_text;
+    }
+
+    function switchPmTab(el, mode) {
+      document.querySelectorAll('.pm-tab').forEach(function(t) { t.classList.remove('active'); });
+      el.classList.add('active');
+      activeModel = mode;
+      if (models[mode]) renderPage(models[mode]);
+    }
+
+    function updateTabs() {
+      var firstVisible = null;
+      document.querySelectorAll('.pm-tab').forEach(function(btn) {
+        var m = btn.getAttribute('onclick').match(/'(\w+)'\)/);
+        var mode = m ? m[1] : null;
+        if (!mode) return;
+        if (models[mode]) {
+          btn.style.display = '';
+          if (!firstVisible) firstVisible = { el: btn, mode: mode };
+        } else {
+          btn.style.display = 'none';
+        }
+      });
+      if (firstVisible) {
+        document.querySelectorAll('.pm-tab').forEach(function(t) { t.classList.remove('active'); });
+        firstVisible.el.classList.add('active');
+        activeModel = firstVisible.mode;
+        renderPage(models[firstVisible.mode]);
+      }
+    }
+
+    // ── Init: fetch all 3 model rows by week slug ──
+    var BL_WEEK_SLUG = '';
+    (function() {
+      var week = new URLSearchParams(location.search).get('week')
+        || location.pathname.split('/').filter(Boolean).pop();
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(week)) { {% if not is_in_editor %}location.replace('/wealth-insights');{% endif %} return; }
+      BL_WEEK_SLUG = week;
+      var pdfBtn = document.getElementById('ctaPdfBtn');
+      if (pdfBtn) pdfBtn.href = '/wealth-weekly-report?week=' + encodeURIComponent(week);
+      var url = 'https://api.hubapi.com/cms/v3/hubdb/tables/' + BUYLIST_TABLE
+        + '/rows?portalId=' + PORTAL + '&week_slug__eq=' + encodeURIComponent(week);
+      fetch(url)
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (!data.results || !data.results.length) return;
+          data.results.forEach(function(row) {
+            var v = row.values;
+            var key = v.model && v.model.name ? v.model.name : 'defender';
+            models[key] = v;
+          });
+          updateTabs();
+          loadRelated(week);
+        })
+        .catch(function(err) { console.error('BuyList HubDB error:', err); });
+    })();
+
+    // ── Related articles ──
+    function loadRelated(week) {
+      Promise.all(RELATED_TABLES.map(function(t) {
+        return fetch('https://api.hubapi.com/cms/v3/hubdb/tables/' + t.id
+          + '/rows?portalId=' + PORTAL + '&week_slug__eq=' + encodeURIComponent(week) + '&limit=1')
+          .then(function(r) { return r.json(); })
+          .then(function(d) {
+            var rows = d.results || [];
+            return rows.length ? Object.assign({}, rows[0], {_table: t}) : null;
+          })
+          .catch(function() { return null; });
+      })).then(function(articles) {
+        var valid = articles.filter(Boolean);
+        if (!valid.length) return;
+        var wrapper = document.getElementById('relatedSwiperWrapper');
+        var section = document.getElementById('relatedSection');
+        if (!wrapper || !section) return;
+        wrapper.innerHTML = valid.map(function(a) {
+          var t = a._table;
+          var src = THUMB[t.id] || FALLBACK_IMG;
+          var url = t.path + (a.values.week_slug || '');
+          return '<div class="swiper-slide">'
+            + '<div class="insight-card" onclick="location.href=\'' + url + '\'">'
+            + '<div class="insight-card-img-wrap">'
+            + '<img class="insight-card-img" src="' + src + '" alt="" />'
+            + '<span class="insight-card-img-tag insight-tag ' + t.cls + '">' + t.label + '</span>'
+            + '</div>'
+            + '<div class="insight-card-content">'
+            + '<p class="insight-card-date">' + (a.values.page_date ? thaiDate(a.values.page_date) : '') + '</p>'
+            + '<h4 class="insight-card-title">' + (a.values.main_title || '') + '</h4>'
+            + '<p class="insight-card-excerpt">' + (a.values.description || '') + '</p>'
+            + '</div></div></div>';
+        }).join('');
+        section.style.display = '';
+        new Swiper('.weekly-related-swiper', {
+          slidesPerView: 4,
+          spaceBetween: 16,
+          watchOverflow: false,
+          navigation: { prevEl: '.weekly-prev', nextEl: '.weekly-next', disabledClass: 'swiper-button-disabled' },
+          breakpoints: {
+            0:   { enabled: false },
+            768: { enabled: true, slidesPerView: 2, spaceBetween: 14 },
+            992: { enabled: true, slidesPerView: 4, spaceBetween: 16 }
+          }
+        });
+      });
+    }
+
+    // ── Fund drawer ──
+    function openDrawer(ticker) {
+      document.getElementById('fundOverlay').classList.add('open');
+      document.getElementById('fundDrawer').classList.add('open');
+      document.body.style.overflow = 'hidden';
+      if (fundCache[ticker]) { _renderDrawer(fundCache[ticker]); return; }
+      document.getElementById('fdName').textContent = ticker;
+      document.getElementById('fdAiText').innerHTML = '<p>กำลังโหลด...</p>';
+      document.getElementById('fdHighlights').innerHTML = '';
+      var url = 'https://api.hubapi.com/cms/v3/hubdb/tables/' + FUNDDETAIL_TABLE
+        + '/rows?portalId=' + PORTAL + '&ticker__eq=' + encodeURIComponent(ticker);
+      fetch(url)
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          var v = data.results && data.results.length ? data.results[0].values : null;
+          if (!v) v = { ticker: ticker, fund_name: ticker, fund_type: { name: 'mf' }, ai_summary: '', content: '' };
+          fundCache[ticker] = v;
+          _renderDrawer(v);
+        })
+        .catch(function() {
+          _renderDrawer({ ticker: ticker, fund_name: ticker, fund_type: { name: 'mf' }, ai_summary: '', content: '' });
+        });
+    }
+
+    function _renderDrawer(v) {
+      var typeMap = { mf: 'Mutual fund', dr: 'DR', etf: 'ETF/Offshore' };
+      var typeName = v.fund_type && v.fund_type.name ? v.fund_type.name : 'mf';
+      document.getElementById('fdName').textContent = v.fund_name || v.ticker || '';
+      var badge = document.getElementById('fdType');
+      badge.innerHTML = '<svg width="8" height="8"><circle cx="4" cy="4" r="4" fill="currentColor"/></svg> ' + (typeMap[typeName] || typeName);
+      badge.className = 'fd-type-badge' + (typeName === 'dr' ? ' dr' : typeName === 'etf' ? ' etf' : '');
+      var aiBox = document.getElementById('fdAiBox');
+      var aiText = v.ai_summary && v.ai_summary.trim();
+      aiBox.style.display = aiText ? '' : 'none';
+      document.getElementById('fdAiText').innerHTML = aiText || '';
+      var contentWrap = document.getElementById('fdContentWrap');
+      var content = v.content && v.content.trim();
+      contentWrap.style.display = content ? '' : 'none';
+      document.getElementById('fdHighlights').innerHTML = content || '';
+      _wrapTableScroll();
+    }
+
+    function _wrapTableScroll(root) {
+      var container = root || document.getElementById('fdHighlights');
+      if (!container) return;
+      container.querySelectorAll('table').forEach(function(tbl) {
+        if (tbl.parentNode.classList && tbl.parentNode.classList.contains('tbl-scroll-inner')) return;
+        var inner = document.createElement('div');
+        inner.className = 'tbl-scroll-inner';
+        tbl.parentNode.insertBefore(inner, tbl);
+        inner.appendChild(tbl);
+        var wrap = document.createElement('div');
+        inner.parentNode.insertBefore(wrap, inner);
+        wrap.appendChild(inner);
+        var nav = document.createElement('div');
+        nav.className = 'tbl-scroll-nav';
+        nav.innerHTML = '<button class="tbl-scroll-btn" onclick="this.parentNode.previousElementSibling.scrollBy({left:-140,behavior:\'smooth\'})">&#8249;</button>'
+          + '<span>เลื่อนดูเพิ่มเติม</span>'
+          + '<button class="tbl-scroll-btn" onclick="this.parentNode.previousElementSibling.scrollBy({left:140,behavior:\'smooth\'})">&#8250;</button>';
+        wrap.appendChild(nav);
+        // Show nav only when table actually overflows
+        function checkNav() { nav.style.display = inner.scrollWidth > inner.clientWidth ? 'flex' : 'none'; }
+        requestAnimationFrame(checkNav);
+        window.addEventListener('resize', checkNav);
+        // Mouse drag scroll (desktop)
+        var isDragging = false, startX, scrollLeft;
+        inner.style.cursor = 'grab';
+        inner.addEventListener('mousedown', function(e) {
+          isDragging = true; startX = e.pageX - inner.offsetLeft; scrollLeft = inner.scrollLeft;
+          inner.style.cursor = 'grabbing'; inner.style.userSelect = 'none';
+        });
+        inner.addEventListener('mouseleave', function() { isDragging = false; inner.style.cursor = 'grab'; });
+        inner.addEventListener('mouseup', function() { isDragging = false; inner.style.cursor = 'grab'; inner.style.userSelect = ''; });
+        inner.addEventListener('mousemove', function(e) {
+          if (!isDragging) return;
+          e.preventDefault();
+          inner.scrollLeft = scrollLeft - (e.pageX - inner.offsetLeft - startX);
+        });
+      });
+    }
+
+    function closeDrawer() {
+      document.getElementById('fundOverlay').classList.remove('open');
+      document.getElementById('fundDrawer').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // ── Week modal ──
+    function openWeeklyModal() {
+      document.getElementById('weeklyModalOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+      var grid = document.getElementById('weeklyModalGrid');
+      grid.innerHTML = '<p style="color:#8f9aac;font-size:14px;font-family:\'Noto Sans Thai\',sans-serif;padding:8px 0;">กำลังโหลด...</p>';
+      var tables = RELATED_TABLES;
+      Promise.all(tables.map(function(t) {
+        return fetch('https://api.hubapi.com/cms/v3/hubdb/tables/' + t.id + '/rows?portalId=' + PORTAL + '&week_slug__eq=' + encodeURIComponent(BL_WEEK_SLUG) + '&limit=1')
+          .then(function(r) { return r.json(); })
+          .then(function(d) { var rows = d.results || []; return rows.length ? Object.assign({}, rows[0], {_t: t}) : null; })
+          .catch(function() { return null; });
+      })).then(function(arts) {
+        var valid = arts.filter(Boolean);
+        if (!valid.length) { grid.innerHTML = '<p style="color:#8f9aac;font-size:14px;font-family:\'Noto Sans Thai\',sans-serif;padding:8px 0;">ไม่พบบทความในสัปดาห์เดียวกัน</p>'; return; }
+        grid.innerHTML = valid.map(function(a) {
+          var t = a._t, src = THUMB[t.id] || FALLBACK_IMG;
+          var url = t.path + (a.values.week_slug || '');
+          return '<div class="col-6 col-lg-3"><div class="insight-card" onclick="location.href=\'' + url + '\'">'
+            + '<div class="insight-card-img-wrap"><img class="insight-card-img" src="' + src + '" alt="" />'
+            + '<span class="insight-card-img-tag insight-tag ' + t.cls + '">' + t.label + '</span></div>'
+            + '<div class="insight-card-content"><p class="insight-card-date">' + (a.values.page_date ? thaiDate(a.values.page_date) : '') + '</p>'
+            + '<h4 class="insight-card-title">' + (a.values.main_title || '') + '</h4>'
+            + '<p class="insight-card-excerpt">' + (a.values.description || '') + '</p>'
+            + '</div></div></div>';
+        }).join('');
+      });
+    }
+    function closeWeeklyModal(e) { if (e.target === document.getElementById('weeklyModalOverlay')) closeWeeklyModalDirect(); }
+    function closeWeeklyModalDirect() { document.getElementById('weeklyModalOverlay').classList.remove('open'); document.body.style.overflow = ''; }
+    function openMonthlyModal() { document.getElementById('monthlyModalOverlay').classList.add('open'); document.body.style.overflow = 'hidden'; }
+    function closeMonthlyModal(e) { if (e.target === document.getElementById('monthlyModalOverlay')) closeMonthlyModalDirect(); }
+    function closeMonthlyModalDirect() { document.getElementById('monthlyModalOverlay').classList.remove('open'); document.body.style.overflow = ''; }
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { closeWeeklyModalDirect(); closeMonthlyModalDirect(); } });
+
+    function shareToFacebook() { window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(location.href), '_blank'); }
+    function shareToX() { window.open('https://x.com/intent/tweet?url=' + encodeURIComponent(location.href), '_blank'); }
+    function copyLink() { navigator.clipboard.writeText(location.href).then(function() { alert('คัดลอกลิงก์แล้ว'); }); }
+    function shareByEmail() { location.href = 'mailto:?subject=Weekly Buy List — Yuanta Wealth&body=' + encodeURIComponent(location.href); }
+  </script>
+
+{% endblock %}

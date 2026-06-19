@@ -1,0 +1,109 @@
+<!--
+  templateType: page
+  label: Weekly PDF Viewer
+  isAvailableForNewContent: true
+-->
+{#
+  Table: Marketing_Wealth_Weekly_PDF  ID: 2681727733
+  URL: /wealth-weekly-report?week={week_slug}
+#}
+
+{% set week_slug = request.query_dict.week %}
+{% set rows = hubdb_table_rows(2681727733, "week_slug__eq=" ~ week_slug ~ "&limit=1") %}
+{% set row = rows[0] %}
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Weekly Report – Yuanta Wealth</title>
+  {{ standard_header_includes }}
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet"/>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Noto Sans Thai', sans-serif; background: #0c244a; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+
+    .popup-card {
+      background: #fff;
+      width: 100%;
+      max-width: 440px;
+      margin: 24px;
+      padding: 48px 40px;
+      text-align: center;
+      box-shadow: 0 8px 40px rgba(0,0,0,.35);
+    }
+    .popup-logo { height: 40px; width: auto; margin-bottom: 32px; }
+    .popup-spinner {
+      width: 48px; height: 48px;
+      border: 3px solid rgba(12,36,74,.1);
+      border-top-color: #0c244a;
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      margin: 0 auto 24px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .popup-label { font-family: 'Cormorant Garamond', serif; font-size: 14px; font-weight: 600; color: #8f9aac; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 12px; }
+    .popup-title { font-size: 18px; font-weight: 700; color: #0c244a; line-height: 1.5; margin-bottom: 8px; }
+    .popup-sub { font-size: 15px; color: #8f9aac; }
+
+    /* error state */
+    .popup-error-icon { color: #c0392b; margin-bottom: 20px; }
+    .popup-error-title { font-size: 20px; font-weight: 700; color: #0c244a; margin-bottom: 10px; }
+    .popup-error-desc { font-size: 15px; color: #8f9aac; line-height: 1.7; }
+    .popup-countdown { font-size: 14px; color: #b4bbc7; margin-top: 24px; }
+  </style>
+</head>
+<body>
+
+{% if row %}
+<div class="popup-card" id="loadCard">
+  <img class="popup-logo" src="https://landing.yuanta.co.th/hubfs/Logo-1.png" alt="Yuanta Wealth"/>
+  <div class="popup-spinner"></div>
+  <p class="popup-label">Weekly Report</p>
+  <p class="popup-title">{{ row.title }}</p>
+  <p class="popup-sub">กำลังเปิดเอกสาร…</p>
+</div>
+{% else %}
+<div class="popup-card" id="errorCard">
+  <img class="popup-logo" src="https://landing.yuanta.co.th/hubfs/Logo-1.png" alt="Yuanta Wealth"/>
+  <div class="popup-error-icon">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+  </div>
+  <p class="popup-error-title">ไม่มีบทวิเคราะห์</p>
+  <p class="popup-error-desc">ยังไม่มีบทวิเคราะห์สำหรับสัปดาห์นี้<br>กำลังกลับไปหน้าหลัก…</p>
+  <p class="popup-countdown" id="countdown"></p>
+</div>
+{% endif %}
+
+<div id="page-meta" data-pdf="{{ row.pdf_url.url if row else '' }}"></div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', function() {
+    var pdfUrl = document.getElementById('page-meta').dataset.pdf;
+
+    if (pdfUrl) {
+      setTimeout(function() {
+        window.location.href = pdfUrl;
+      }, 3000);
+    } else {
+      var secs = 8;
+      var el = document.getElementById('countdown');
+      function tick() {
+        if (el) el.textContent = secs + '…';
+        if (secs <= 0) {
+          if (document.referrer) { window.location.href = document.referrer; }
+          else { history.back(); }
+          return;
+        }
+        secs--;
+        setTimeout(tick, 1000);
+      }
+      tick();
+    }
+  });
+</script>
+
+{{ standard_footer_includes }}
+</body>
+</html>

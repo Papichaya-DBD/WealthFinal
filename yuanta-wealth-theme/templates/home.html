@@ -1,0 +1,805 @@
+<!--
+  templateType: page
+  label: Home
+  isAvailableForNewContent: true
+-->
+{% extends "./layouts/base.html" %}
+
+{% block body %}
+
+  <!-- HERO BANNER -->
+  <div class="hero-banner">
+    <div class="swiper hero-swiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <div class="hero-bg" style="background-image: url('https://landing.yuanta.co.th/hubfs/homebanner.jpg');"></div>
+        </div>
+        <div class="swiper-slide">
+          <div class="hero-bg" style="background-image: url('https://landing.yuanta.co.th/hubfs/contactbanner.png');"></div>
+        </div>
+        <div class="swiper-slide">
+          <div class="hero-bg" style="background-image: url('https://landing.yuanta.co.th/hubfs/privilegesbanner.png');"></div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content-fixed">
+      <div class="container">
+        <div class="hero-home-inner">
+          <h1 class="hero-title">{% module "hero_title" path="@hubspot/text", label="Hero Title", value="Yuanta Securities" %}</h1>
+          <h3 class="hero-label">{% module "hero_subtitle" path="@hubspot/text", label="Hero Subtitle", value="Wealth Management" %}</h3>
+          <p>{% module "hero_desc" path="@hubspot/text", label="Hero Description", value="บริการจัดการความมั่งคั่งอย่างครบวงจร ด้วยทีมผู้เชี่ยวชาญที่มีประสบการณ์ระดับสากล" %}</p>
+          <a href="#" class="btn btn-primary" onclick="openMeetingModal(); return false;">Book a meeting</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-pagination-wrap">
+    <div class="swiper-pagination hero-pagination"></div>
+  </div>
+
+  <!-- INSIGHTS (Dynamic Weekly) -->
+  <style>
+    /* ── Category tag chip ── */
+    .insight-tag {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 9px;
+      white-space: nowrap;
+      display: inline-block;
+    }
+    .tag-hot-issue     { background: #EBC7C7; color: #7a1c1c; }
+    .tag-buy-list      { background: #CBD4D0; color: #2c4a42; }
+    .tag-asset-perf    { background: #fef3cd; color: #92600a; }
+    .tag-mkt-calendar  { background: #b4bbc7; color: #0c244a; }
+
+    /* ── Week header ── */
+    .home-week-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .home-week-header::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(0,0,0,.12);
+    }
+    .home-week-section-left { display: flex; align-items: center; gap: 12px; }
+    .home-week-chip {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      font-weight: 600;
+      background: #3D506E;
+      color: #fff;
+      padding: 3px 10px;
+      white-space: nowrap;
+    }
+    .home-week-label {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #0c244a;
+    }
+
+    /* ── Featured + list layout ── */
+    .home-week-featured-layout {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 0;
+    }
+    .home-featured-card {
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid rgba(0,0,0,.07);
+      box-shadow: 0 0 1px rgba(102,102,102,.14), 0 2px 8px rgba(102,102,102,.08);
+    }
+    .home-featured-card-img-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+    .home-featured-card-img-wrap img {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      display: block;
+    }
+    .home-featured-card-tag {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+    }
+    .home-featured-card-content {
+      padding: 24px 28px 28px;
+      background: #fff;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .home-featured-card-date {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 12px;
+      color: #8f9aac;
+      margin-bottom: 10px;
+    }
+    .home-featured-card-title {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #0c244a;
+      line-height: 1.45;
+      margin-bottom: 10px;
+    }
+    .home-featured-card-excerpt {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 14px;
+      color: #3d506e;
+      line-height: 1.65;
+      margin-bottom: 20px;
+      flex: 1;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .home-read-more {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: #a2603c;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      text-decoration: none;
+      padding-top: 16px;
+      border-top: 1px solid rgba(0,0,0,.1);
+      transition: gap .15s;
+    }
+    .home-read-more:hover { gap: 9px; color: #a2603c; }
+
+    /* ── Article list (right side) ── */
+    .home-article-list {
+      display: flex;
+      flex-direction: column;
+      margin-left: 18px;
+    }
+    .home-week-nav-row {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 20px 4px;
+    }
+    .home-week-nav-btn {
+      width: 32px; height: 32px;
+      border: 1.5px solid rgba(0,0,0,.18);
+      background: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background .15s;
+      flex-shrink: 0;
+    }
+    .home-week-nav-btn::after {
+      content: '';
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-top: 2px solid #0c244a;
+      border-right: 2px solid #0c244a;
+    }
+    .home-week-nav-btn.wk-prev::after { transform: rotate(-135deg) translateX(-1px); }
+    .home-week-nav-btn.wk-next::after { transform: rotate(45deg) translateX(-1px); }
+    .home-week-nav-btn:hover:not(:disabled) { background: #f0f0f0; }
+    .home-week-nav-btn:disabled { opacity: .3; cursor: default; }
+    .home-article-list-item {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      padding: 18px 20px;
+      border-bottom: 1px solid rgba(0,0,0,.07);
+      cursor: pointer;
+      transition: background .15s;
+      flex: 1;
+    }
+    .home-article-list-item:last-of-type { border-bottom: none; }
+    .home-article-list-item:hover { background: #fafafa; }
+    .home-article-list-text {
+      flex: 1;
+      min-width: 0;
+      padding-right: 14px;
+    }
+    .home-article-list-date {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 11px;
+      color: #8f9aac;
+      margin-bottom: 5px;
+    }
+    .home-article-list-title {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #0c244a;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .home-article-list-thumb-wrap {
+      position: relative;
+      flex-shrink: 0;
+      width: 180px;
+      height: 120px;
+    }
+    .home-article-list-thumb-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .home-article-list-thumb-tag {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      border: 1px solid rgba(0,0,0,.12);
+      letter-spacing: .03em;
+    }
+
+    /* ── Mobile cards ── */
+    .home-week-carousel {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .home-week-carousel-track-wrap {
+      flex: 1;
+      overflow: hidden;
+      min-width: 0;
+      padding: 8px 0;
+      margin: -8px 0;
+    }
+    .home-week-carousel-track {
+      display: flex;
+      gap: 16px;
+      transition: transform .35s ease;
+    }
+    .home-week-carousel-track .col-card {
+      flex: 0 0 calc(25% - 12px);
+      min-width: 0;
+    }
+    .home-carousel-nav {
+      width: 36px;
+      height: 36px;
+      border: 1.5px solid rgba(0,0,0,.15);
+      background: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background .15s, opacity .15s;
+      flex-shrink: 0;
+      color: #0c244a;
+      z-index: 1;
+    }
+    .home-carousel-nav:hover { background: #f0f0f0; }
+    .home-carousel-nav.prev { margin-right: 12px; }
+    .home-carousel-nav.next { margin-left: 12px; }
+    .home-carousel-nav:disabled { opacity: .3; cursor: default; }
+    .home-insight-card {
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      cursor: pointer;
+      transition: box-shadow .2s, transform .18s;
+      box-shadow: 0 0 1px rgba(102,102,102,.14), 0 2px 6px rgba(102,102,102,.08);
+    }
+    .home-insight-card:hover {
+      box-shadow: 0 4px 18px rgba(0,0,0,.11);
+      transform: translateY(-2px);
+    }
+    .home-insight-card-img-wrap { position: relative; flex-shrink: 0; }
+    .home-insight-card-img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      display: block;
+    }
+    .home-insight-card-img-tag { position: absolute; top: 8px; left: 8px; }
+    .home-insight-card-content {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .home-insight-card-date {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 11px;
+      color: #8f9aac;
+      margin-bottom: 6px;
+    }
+    .home-insight-card-title {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #0c244a;
+      line-height: 1.45;
+      margin-bottom: 7px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .home-insight-card-excerpt {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 13px;
+      color: #3d506e;
+      line-height: 1.55;
+      flex: 1;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* ── Toggle desktop/mobile ── */
+    .home-d-lg-grid { display: grid; }
+    .home-d-lg-none { display: flex !important; }
+    @media (min-width: 992px) {
+      .home-d-lg-grid { display: grid !important; }
+      .home-d-lg-none { display: none !important; }
+    }
+    @media (max-width: 991px) {
+      .home-week-featured-layout { grid-template-columns: 1fr; }
+      .home-week-carousel-track .col-card { flex: 0 0 calc(50% - 8px); }
+      .home-featured-card-content { padding: 18px 20px 20px; }
+      .home-featured-card-title { font-size: 16px; }
+    }
+    @media (max-width: 767px) {
+      .home-week-label { font-size: 16px; }
+      .home-article-list { border-left: none; border-top: 1px solid rgba(0,0,0,.08); }
+      .home-featured-card-img-wrap img { min-height: 200px; }
+      .home-week-carousel-track .col-card { flex: 0 0 100%; }
+      .home-carousel-nav { width: 30px; height: 30px; }
+    }
+  </style>
+
+  <section class="insights-section">
+    <div class="container">
+      <div class="section-header-center">
+        <h2 class="section-title">Insights</h2>
+      </div>
+      <div id="homeInsightsContainer" style="min-height:320px;">
+        <div id="homeInsightsLoading" style="text-align:center;padding:60px 0;color:#8f9aac;font-family:'Noto Sans Thai',sans-serif;font-size:15px;">
+          กำลังโหลดบทวิเคราะห์...
+        </div>
+      </div>
+      <div class="section-view-all-center">
+        <a href="/insights" class="view-all">
+          ดูบทวิเคราะห์ทั้งหมด
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-sep" />
+
+  <!-- EXCLUSIVE EVENTS -->
+  {% set home_events = hubdb_table_rows(2514745078, "category__eq=events&is_published__eq=true&orderBy=event_date&limit=8") %}
+  <section class="events-section">
+    <div class="container">
+      <div class="section-header-center">
+        <h2 class="section-title">Exclusive Events</h2>
+      </div>
+      <div class="swiper events-swiper">
+        <div class="swiper-wrapper">
+          {% if home_events %}
+            {% for event in home_events %}
+            <div class="swiper-slide">
+              <div class="event-card" style="cursor:pointer;" onclick="location.href='/wealth-single-events?slug={{ event.slug }}'">
+                {% if event.image %}
+                <img class="event-img" src="{{ event.image.url }}" alt="{{ event.title }}" />
+                {% else %}
+                <img class="event-img" src="{{ get_asset_url('../images/comingsoon.png') }}" alt="{{ event.title }}" />
+                {% endif %}
+                <div class="event-card-content">
+                  <h3 class="event-title">{{ event.title }}</h3>
+                  <div class="event-meta">
+                    <p class="event-datetime">
+                      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="3" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 1v4M11 1v4M2 7h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                      <span class="event-date-text">{{ event.event_date|datetimeformat("%d %b %Y") }}</span>
+                      {% if event.event_time %}<span class="event-date-sep"></span><span class="event-time">{{ event.event_time }}</span>{% endif %}
+                    </p>
+                    {% if event.location %}
+                    <p class="event-location">
+                      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 14s5-4.686 5-8a5 5 0 10-10 0c0 3.314 5 8 5 8z" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="6" r="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+                      <span>{{ event.location }}</span>
+                    </p>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+      <div class="events-view-all">
+        <a href="/wealth-privilegesandevents" class="view-all">
+          ดูเพิ่มเติม
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BOOK A MEETING -->
+  <section class="cta-section" style="background-image: url('{{ get_asset_url('../images/consult-banner.jpg') }}');">
+    <div class="cta-overlay"></div>
+    <div class="cta-content">
+      <div class="container">
+        <div class="row align-items-center gy-4">
+          <div class="col-12 col-lg-8">
+            <div class="cta-text">
+              <p class="section-label" style="color: var(--color-brand-soft);">Private Consultation</p>
+              <p class="cta-main-text">ขอคำแนะนำจากผู้เชี่ยวชาญด้านการเงิน ติดต่อเราเพื่อเริ่มต้นสร้างอนาคตทางการเงินที่ดียิ่งขึ้น</p>
+            </div>
+          </div>
+          <div class="col-12 col-lg-4 d-flex justify-content-lg-end">
+            <a href="#" class="btn btn-primary" onclick="openMeetingModal(); return false;">Book a meeting</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OUR EXPERTS -->
+  <section class="experts-section">
+    <div class="container" style="position:relative;z-index:1;">
+      <div class="section-header experts-section-header">
+        <div class="section-header-left">
+          <h2 class="section-title">Expert</h2>
+        </div>
+        <a href="/wealth-whyus" class="view-all">
+          ดูเพิ่มเติม
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <div class="swiper experts-swiper experts-grid-wrap">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <div class="expert-card">
+              <div class="expert-photo-wrap">
+                <img class="expert-photo" src="https://landing.yuanta.co.th/hubfs/%E0%B8%84%E0%B8%B8%E0%B8%93%E0%B8%94%E0%B8%99%E0%B8%B1%E0%B8%A2_%E0%B8%84%E0%B8%A3%E0%B8%B6%E0%B9%88%E0%B8%87%E0%B8%9A%E0%B8%99.jpg" alt="Danai Aroonkittichai" />
+              </div>
+              <div class="expert-card-body">
+                <p class="expert-name">Danai Aroonkittichai</p>
+                <p class="expert-role">CFA</p>
+                <div class="expert-divider-strip"></div>
+                <p class="expert-title-th">Chief Retail Business Office at Yuanta Securities</p>
+              </div>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="expert-card">
+              <div class="expert-photo-wrap">
+                <img class="expert-photo" src="https://landing.yuanta.co.th/hubfs/%E0%B8%84%E0%B8%B8%E0%B8%93%E0%B8%A7%E0%B8%B1%E0%B8%A8%E0%B8%81%E0%B8%A3%E0%B8%93%E0%B9%8C_%E0%B8%84%E0%B8%A3%E0%B8%B6%E0%B9%88%E0%B8%87%E0%B8%9A%E0%B8%99.jpg" alt="Visakorn Kirivan" />
+              </div>
+              <div class="expert-card-body">
+                <p class="expert-name">Visakorn Kirivan</p>
+                <p class="expert-role">CFA, PhD</p>
+                <div class="expert-divider-strip"></div>
+                <p class="expert-title-th">Senior Investment Strategist, Fundamental Investment Analyst</p>
+              </div>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div class="expert-card">
+              <div class="expert-photo-wrap">
+                <img class="expert-photo" src="https://landing.yuanta.co.th/hubfs/%E0%B8%84%E0%B8%B8%E0%B8%93%E0%B8%93%E0%B8%B1%E0%B8%90%E0%B8%81%E0%B8%B4%E0%B8%95_%E0%B8%84%E0%B8%A3%E0%B8%B6%E0%B9%88%E0%B8%87%E0%B8%9A%E0%B8%99.jpg" alt="Natakit Karnkriangkrai" />
+              </div>
+              <div class="expert-card-body">
+                <p class="expert-name">Natakit Karnkriangkrai</p>
+                <p class="expert-role">&nbsp;</p>
+                <div class="expert-divider-strip"></div>
+                <p class="expert-title-th">Investment Strategist with a passion for global investing and portfolio solutions.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter-section">
+    <div class="container">
+      <div class="row align-items-center gy-5">
+        <div class="col-12 col-lg-6">
+          <p class="newsletter-label">Exclusive Insights</p>
+          <h2 class="newsletter-title">Unlock Insights &amp;<br>Market Intelligence</h2>
+          <p class="newsletter-desc">รับข้อมูลเชิงลึกด้านการลงทุน บทวิเคราะห์ตลาด และโอกาสการลงทุนพิเศษ ส่งตรงถึงอีเมลของคุณทุกสัปดาห์</p>
+        </div>
+        <div class="col-12 col-lg-6">
+          <form class="newsletter-form" id="newsletter-form">
+            <input type="email" id="newsletter-email" placeholder="กรอกอีเมลของคุณ" required />
+            <button type="submit">Subscribe to insights</button>
+          </form>
+          <p id="newsletter-msg" style="display:none; margin-top:12px; font-size:14px; color:rgba(255,255,255,0.8);"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+{% endblock body %}
+
+{% block scripts %}
+<script>
+  // ── Home Insights: fetch latest weekly from HubDB ──
+  (function() {
+    var PORTAL_ID = '43844850';
+    var HOME_FALLBACK_IMG = 'https://landing.yuanta.co.th/hubfs/yuanta-wealth-theme/images/comingsoon.png';
+    var THUMB = {
+      '2599182038': '{{ get_asset_url('../images/thumb-hot-issue.jpg') }}',
+      '2599723735': '{{ get_asset_url('../images/thumb-asset-performance.jpg') }}',
+      '2612300495': '{{ get_asset_url('../images/thumb-buy-list.jpg') }}',
+      '2610619077': '{{ get_asset_url('../images/thumb-market-calendar.jpg') }}',
+    };
+    var WEEKLY_TABLES = [
+      {id:'2599182038', type:'hot-issue',        label:'Hot issue',        cls:'tag-hot-issue',    path:'/wealth-single-weekly-hotissue/'},
+      {id:'2599723735', type:'asset-performance', label:'Asset performance',cls:'tag-asset-perf',   path:'/wealth-single-weekly-asset-performance/'},
+      {id:'2612300495', type:'buy-list',          label:'Buy list',         cls:'tag-buy-list',     path:'/wealth-single-weekly-buy-list/'},
+      {id:'2610619077', type:'market-calendar',   label:'Market calendar',  cls:'tag-mkt-calendar', path:'/wealth-single-weekly-market-calendar/'},
+    ];
+    var SVG_ARROW = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var SVG_PREV  = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>';
+    var SVG_NEXT  = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>';
+
+    var THAI_MONTHS = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+    function thaiDate(ms) {
+      if (!ms) return '';
+      var d = new Date(Number(ms));
+      return d.getDate() + ' ' + THAI_MONTHS[d.getMonth()] + ' ' + (d.getFullYear() + 543);
+    }
+    function thaiDateRange(articles) {
+      var first = articles[0] || {};
+      var v = first.values || {};
+      var start = Number(v.week_start_date || 0);
+      var end   = Number(v.week_end_date   || 0);
+      if (!start) {
+        var dates = articles.map(function(a){ return Number(a.values.page_date || 0); }).filter(Boolean);
+        if (!dates.length) return '';
+        start = Math.min.apply(null, dates);
+        end   = Math.max.apply(null, dates);
+      }
+      var dS = new Date(start), dE = new Date(end || start);
+      var y  = dE.getFullYear() + 543;
+      if (dS.getMonth() === dE.getMonth()) {
+        return dS.getDate() + '–' + dE.getDate() + ' ' + THAI_MONTHS[dE.getMonth()] + ' ' + y;
+      }
+      return dS.getDate() + ' ' + THAI_MONTHS[dS.getMonth()] + '–' + dE.getDate() + ' ' + THAI_MONTHS[dE.getMonth()] + ' ' + y;
+    }
+    function imgUrl(a) {
+      return (a._table && THUMB[a._table.id]) || HOME_FALLBACK_IMG;
+    }
+    function articleUrl(a) {
+      var slug = a.values.week_slug || a.path || '';
+      return a._table.path + slug;
+    }
+    function mobileCardHtml(a) {
+      var t = a._table, url = articleUrl(a);
+      return '<div class="home-insight-card" onclick="location.href=\'' + url + '\'">'
+        + '<div class="home-insight-card-img-wrap">'
+        + '<img class="home-insight-card-img" src="' + imgUrl(a) + '" alt="" onerror="this.onerror=null;this.src=HOME_FALLBACK_IMG" />'
+        + '<span class="home-insight-card-img-tag insight-tag ' + t.cls + '">' + t.label + '</span>'
+        + '</div><div class="home-insight-card-content">'
+        + '<p class="home-insight-card-date">' + thaiDate(a.values.page_date) + '</p>'
+        + '<h4 class="home-insight-card-title">' + (a.values.main_title || '') + '</h4>'
+        + '<p class="home-insight-card-excerpt">' + (a.values.description || '') + '</p>'
+        + '</div></div>';
+    }
+
+    function renderHomeWeek(articles) {
+      var container = document.getElementById('homeInsightsContainer');
+      if (!container) return;
+      var sorted = articles.slice().sort(function(a,b){ return (b.values.page_date||0)-(a.values.page_date||0); });
+      var feat = sorted[0];
+      var ft = feat._table;
+      var featUrl = articleUrl(feat);
+
+      var listHtml = sorted.slice(1,4).map(function(a) {
+        var t = a._table, url = articleUrl(a);
+        return '<div class="home-article-list-item" onclick="location.href=\'' + url + '\'">'
+          + '<div class="home-article-list-text">'
+          + '<p class="home-article-list-date">' + thaiDate(a.values.page_date) + '</p>'
+          + '<h4 class="home-article-list-title">' + (a.values.main_title || '') + '</h4>'
+          + '</div>'
+          + '<div class="home-article-list-thumb-wrap">'
+          + '<img src="' + imgUrl(a) + '" alt="" onerror="this.onerror=null;this.src=HOME_FALLBACK_IMG" />'
+          + '<span class="home-article-list-thumb-tag insight-tag ' + t.cls + '">' + t.label + '</span>'
+          + '</div></div>';
+      }).join('');
+
+      var mobileCards = sorted.map(function(a){
+        return '<div class="col-card">' + mobileCardHtml(a) + '</div>';
+      }).join('');
+
+      var headerHtml = '<div class="home-week-header">'
+        + '<div class="home-week-section-left">'
+        + '<span class="home-week-chip">Weekly</span>'
+        + '<span class="home-week-label">' + thaiDateRange(articles) + '</span>'
+        + '</div></div>';
+
+      container.innerHTML = headerHtml
+        + '<div class="home-week-featured-layout home-d-lg-grid">'
+        + '<div class="home-featured-card" onclick="location.href=\'' + featUrl + '\'">'
+        + '<div class="home-featured-card-img-wrap">'
+        + '<img src="' + imgUrl(feat) + '" alt="" onerror="this.onerror=null;this.src=HOME_FALLBACK_IMG" />'
+        + '<span class="home-featured-card-tag insight-tag ' + ft.cls + '">' + ft.label + '</span>'
+        + '</div>'
+        + '<div class="home-featured-card-content">'
+        + '<p class="home-featured-card-date">' + thaiDate(feat.values.page_date) + '</p>'
+        + '<h2 class="home-featured-card-title">' + (feat.values.main_title || '') + '</h2>'
+        + '<p class="home-featured-card-excerpt">' + (feat.values.description || '') + '</p>'
+        + '<a href="' + featUrl + '" class="home-read-more" onclick="event.stopPropagation()">อ่านเพิ่มเติม ' + SVG_ARROW + '</a>'
+        + '</div></div>'
+        + '<div class="home-article-list">' + listHtml + '</div>'
+        + '</div>'
+        + '<div class="home-week-carousel home-d-lg-none" id="homeWeekCarousel">'
+        + '<button class="home-carousel-nav prev" id="homeCarouselPrev" disabled>' + SVG_PREV + '</button>'
+        + '<div class="home-week-carousel-track-wrap"><div class="home-week-carousel-track" id="homeCarouselTrack">' + mobileCards + '</div></div>'
+        + '<button class="home-carousel-nav next" id="homeCarouselNext">' + SVG_NEXT + '</button>'
+        + '</div>';
+
+      // Init mobile carousel
+      var track   = document.getElementById('homeCarouselTrack');
+      var prevBtn = document.getElementById('homeCarouselPrev');
+      var nextBtn = document.getElementById('homeCarouselNext');
+      var cards   = track ? track.querySelectorAll('.col-card') : [];
+      var total   = cards.length;
+      var current = 0;
+      function getPerPage() {
+        if (window.innerWidth <= 767) return 1;
+        if (window.innerWidth <= 991) return 2;
+        return 4;
+      }
+      function updateCarousel() {
+        var perPage = getPerPage();
+        var pages   = Math.ceil(total / perPage);
+        if (current >= pages) current = pages - 1;
+        if (current < 0)      current = 0;
+        var wrapWidth = track.parentElement.offsetWidth;
+        var gap = 16;
+        var cardWidth = (wrapWidth - gap * (perPage - 1)) / perPage;
+        var offset = current * (cardWidth + gap) * perPage;
+        track.style.transform = 'translateX(-' + offset + 'px)';
+        prevBtn.disabled = current === 0;
+        nextBtn.disabled = current >= pages - 1;
+        var showNav = pages > 1;
+        prevBtn.style.visibility = showNav ? '' : 'hidden';
+        nextBtn.style.visibility = showNav ? '' : 'hidden';
+      }
+      if (prevBtn && nextBtn && track) {
+        prevBtn.addEventListener('click', function() { if (current > 0) { current--; updateCarousel(); } });
+        nextBtn.addEventListener('click', function() {
+          var pages = Math.ceil(total / getPerPage());
+          if (current < pages - 1) { current++; updateCarousel(); }
+        });
+        updateCarousel();
+        window.addEventListener('resize', function() { current = 0; updateCarousel(); });
+      }
+    }
+
+    Promise.all(WEEKLY_TABLES.map(function(t) {
+      return fetch('https://api.hubapi.com/cms/v3/hubdb/tables/' + t.id + '/rows?portalId=' + PORTAL_ID + '&orderBy=-page_date&limit=20')
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          return (d.results || [])
+            .filter(function(r){ return r.values; })
+            .map(function(r){ r._table = t; return r; });
+        })
+        .catch(function(){ return []; });
+    })).then(function(results) {
+      var loading = document.getElementById('homeInsightsLoading');
+      if (loading) loading.style.display = 'none';
+      var allArticles = [].concat.apply([], results);
+      if (!allArticles.length) return;
+
+      // deduplicate buy-list and hot-issue (multiple rows per week)
+      var seenPerType = {};
+      allArticles = allArticles.filter(function(a) {
+        var type = a._table.type;
+        if (type !== 'buy-list' && type !== 'hot-issue') return true;
+        var slug = a.values.week_slug || a.path || '';
+        var key = type + '|' + slug;
+        if (seenPerType[key]) return false;
+        seenPerType[key] = true;
+        return true;
+      });
+
+      // group by week slug, pick the latest week
+      var weekMap = {};
+      allArticles.forEach(function(a) {
+        var slug = a.values.week_slug || a.path || '';
+        if (slug) {
+          if (!weekMap[slug]) weekMap[slug] = [];
+          weekMap[slug].push(a);
+        }
+      });
+      var slugs = Object.keys(weekMap).sort().reverse();
+      if (slugs.length) renderHomeWeek(weekMap[slugs[0]]);
+    }).catch(function() {
+      var loading = document.getElementById('homeInsightsLoading');
+      if (loading) loading.style.display = 'none';
+    });
+  })();
+</script>
+<script>
+  document.getElementById('newsletter-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var email = document.getElementById('newsletter-email').value;
+    var msg = document.getElementById('newsletter-msg');
+    fetch('https://api.hsforms.com/submissions/v3/integration/submit/43844850/366d7ed2-7a14-44f0-8a7c-dffcba0cd288', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        fields: [{ name: 'email', value: email }],
+        context: { pageUri: window.location.href, pageName: document.title }
+      })
+    }).then(function(r) {
+      msg.style.display = 'block';
+      if (r.ok) {
+        msg.textContent = 'ขอบคุณ! เราจะส่ง Insights ให้คุณเร็วๆ นี้';
+        document.getElementById('newsletter-form').reset();
+      } else {
+        msg.textContent = 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง';
+      }
+    }).catch(function() {
+      msg.style.display = 'block';
+      msg.textContent = 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง';
+    });
+  });
+</script>
+<script>
+  new Swiper('.hero-swiper', {
+    slidesPerView: 1,
+    spaceBetween: 0,
+    loop: true,
+    grabCursor: true,
+    autoplay: { delay: 10000, disableOnInteraction: false },
+    pagination: { el: '.hero-pagination', clickable: true }
+  });
+
+  var eventSlideCount = document.querySelectorAll('.events-swiper .swiper-slide').length;
+  new Swiper('.events-swiper', {
+    slidesPerView: 1.15,
+    slidesPerGroup: 1,
+    spaceBetween: 24,
+    pagination: { el: '.events-swiper .swiper-pagination', clickable: true },
+    breakpoints: {
+      576: { slidesPerView: 2.15, slidesPerGroup: 2 },
+      992: { slidesPerView: 3, slidesPerGroup: 3 },
+      1200: { slidesPerView: 4, slidesPerGroup: 4 }
+    }
+  });
+  if (eventSlideCount <= 4) {
+    var el = document.querySelector('.events-swiper .swiper-pagination');
+    if (el) el.style.display = 'none';
+  }
+</script>
+{% endblock scripts %}

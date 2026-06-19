@@ -1,0 +1,1194 @@
+<!--
+  templateType: page
+  label: Insights Listing
+  isAvailableForNewContent: true
+-->
+{% extends "./layouts/base.html" %}
+
+{% block body %}
+
+  <style>
+
+    /* ── Filter bar ── */
+    .insights-filter-bar {
+      background: #fff;
+      padding: 40px 0;
+      position: sticky;
+      top: 60px;
+      z-index: 100;
+    }
+    .filter-bar-inner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .filter-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      flex: 1;
+    }
+    .filter-pills::-webkit-scrollbar { display: none; }
+    .filter-pill {
+      font-family: 'Cormorant Garamond', 'Noto Sans Thai', Georgia, serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: #3d506e;
+      background: #f0f0f0;
+      border: 1.5px solid transparent;
+      padding: 5px 14px;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all .18s;
+      flex-shrink: 0;
+    }
+    .filter-pill:hover { background: #e5e0d8; color: #0c244a; }
+    .filter-pill.active {
+      background: #0c244a;
+      color: #fff;
+      border-color: #0c244a;
+    }
+    .filter-pills { flex-wrap: nowrap; }
+
+    /* ── Content area ── */
+    .insights-content {
+      background: #ffffff;
+      padding: 40px 0 80px;
+    }
+
+    /* ── Category tag chip ── */
+    .insight-tag {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 9px;
+      white-space: nowrap;
+      display: inline-block;
+    }
+    .tag-hot-issue     { background: #EBC7C7; color: #7a1c1c; }
+    .tag-buy-list      { background: #CBD4D0; color: #2c4a42; }
+    .tag-asset-perf    { background: #fef3cd; color: #92600a; }
+    .tag-mkt-calendar  { background: #b4bbc7; color: #0c244a; }
+    .tag-asset-outlook { background: #D6D1CB; color: #3d2c1e; }
+    .tag-mkt-outlook   { background: #D1CCDF; color: #3d2260; }
+
+    .insight-date {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 12px;
+      color: #3D506E;
+    }
+
+    /* ── Week section ── */
+    .week-section { margin-bottom: 48px; }
+    .week-section-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .week-section-left { order: 1; }
+    .week-section-header::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(0,0,0,.12);
+      order: 2;
+    }
+    .week-see-all { order: 3; }
+    .week-section-left { display: flex; align-items: center; gap: 12px; }
+    .week-chip {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      font-weight: 600;
+      background: #3D506E;
+      color: #fff;
+      padding: 3px 10px;
+      white-space: nowrap;
+    }
+    .week-label {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #0c244a;
+    }
+    .week-see-all {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 13px;
+      color: #a2603c;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: gap .15s;
+      flex-shrink: 0;
+    }
+    .week-see-all:hover { gap: 7px; color: #a2603c; }
+
+    /* ── Featured + list layout (first week) ── */
+    .week-featured-layout {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 0;
+    }
+    .featured-card {
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid rgba(0,0,0,.07);
+      box-shadow: 0 0 1px rgba(102,102,102,.14), 0 2px 8px rgba(102,102,102,.08);
+    }
+    .featured-card-img-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+    .featured-card-img-wrap img {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      display: block;
+    }
+    .featured-card-tag {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+    }
+    .featured-card-content {
+      padding: 24px 28px 28px;
+      background: #fff;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .featured-card-date {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 12px;
+      color: #3D506E;
+      margin-bottom: 10px;
+    }
+    .featured-card-title {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #0c244a;
+      line-height: 1.45;
+      margin-bottom: 10px;
+    }
+    .featured-card-excerpt {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 14px;
+      color: #3d506e;
+      line-height: 1.65;
+      margin-bottom: 20px;
+      flex: 1;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .featured-card-content .read-more {
+      padding-top: 16px;
+      border-top: 1px solid rgba(0,0,0,.1);
+      width: 100%;
+      justify-content: flex-end;
+    }
+
+    /* ── Article list (right side) ── */
+    .article-list {
+      display: flex;
+      flex-direction: column;
+      margin-left: 18px;
+    }
+    .article-list-item {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      padding: 18px 20px;
+      border-bottom: 1px solid rgba(0,0,0,.07);
+      cursor: pointer;
+      transition: background .15s;
+      flex: 1;
+    }
+    .article-list-item:last-of-type { border-bottom: none; }
+    .article-list-item:nth-last-child(2) { border-bottom: none; }
+    .article-list-item:hover { background: #fafafa; }
+    /* ── Hero article-list nav ── */
+    .week-nav-row {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px 8px;
+    }
+    .week-nav-btn {
+      width: 32px; height: 32px;
+      border: 1.5px solid rgba(0,0,0,.18);
+      background: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background .15s;
+      flex-shrink: 0;
+      padding: 0;
+    }
+    .week-nav-btn::after {
+      content: '';
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-top: 2px solid #0c244a;
+      border-right: 2px solid #0c244a;
+    }
+    .week-nav-btn.wk-prev::after { transform: rotate(-135deg) translateX(-1px); }
+    .week-nav-btn.wk-next::after { transform: rotate(45deg) translateX(-1px); }
+    .week-nav-btn:hover:not(:disabled) { background: #f0f0f0; }
+    .week-nav-btn:disabled { opacity: .3; cursor: default; }
+    .article-list-text {
+      flex: 1;
+      min-width: 0;
+      padding-right: 14px;
+    }
+    .article-list-date {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 11px;
+      color: #3D506E;
+      margin-bottom: 5px;
+    }
+    .article-list-title {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #0c244a;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .article-list-thumb-wrap {
+      position: relative;
+      flex-shrink: 0;
+      width: 180px;
+      height: 120px;
+    }
+    .article-list-thumb-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .article-list-thumb-tag {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      border: 1px solid rgba(0,0,0,.12);
+      letter-spacing: .03em;
+    }
+    .article-list-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 12px 20px;
+      gap: 8px;
+    }
+    .list-nav-btn {
+      width: 32px;
+      height: 32px;
+      border: 1px solid rgba(0,0,0,.15);
+      background: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background .15s;
+      color: #3d506e;
+    }
+    .list-nav-btn:hover { background: #f0f0f0; }
+    .list-nav-btn:disabled { opacity: .35; cursor: default; }
+
+    /* ── Week carousel ── */
+    .week-carousel {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .week-carousel-track-wrap {
+      flex: 1;
+      overflow: hidden;
+      min-width: 0;
+      padding: 8px 0;
+      margin: -8px 0;
+    }
+    .week-carousel-track {
+      display: flex;
+      gap: 16px;
+      transition: transform .35s ease;
+    }
+    .week-carousel-track .col-card {
+      flex: 0 0 calc(25% - 12px);
+      min-width: 0;
+    }
+    .carousel-nav {
+      width: 36px;
+      height: 36px;
+      border: 1.5px solid rgba(0,0,0,.2);
+      background: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background .15s, opacity .15s;
+      flex-shrink: 0;
+      z-index: 1;
+      padding: 0;
+      overflow: visible;
+    }
+    .carousel-nav::after {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-top: 2px solid #0c244a;
+      border-right: 2px solid #0c244a;
+      flex-shrink: 0;
+    }
+    .carousel-nav.prev::after { transform: rotate(-135deg) translateX(-1px); }
+    .carousel-nav.next::after { transform: rotate(45deg) translateX(-1px); }
+    .carousel-nav:hover { background: #f0f0f0; }
+    .carousel-nav.prev { margin-right: 12px; }
+    .carousel-nav.next { margin-left: 12px; }
+    .carousel-nav:disabled { opacity: .3; cursor: default; }
+
+    /* ── Featured article ── */
+    .featured-article {
+      background: #fff;
+      margin-bottom: 16px;
+      cursor: pointer;
+      transition: box-shadow .2s;
+      box-shadow: 0 0 1px rgba(102,102,102,.12), 0 2px 8px rgba(102,102,102,.08);
+    }
+    .featured-article:hover { box-shadow: 0 4px 24px rgba(0,0,0,.11); }
+    .featured-article-img {
+      width: 100%;
+      height: 100%;
+      min-height: 260px;
+      object-fit: cover;
+    }
+    .featured-article-content {
+      padding: 32px 36px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100%;
+    }
+    .featured-article-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .featured-article-title {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #0c244a;
+      line-height: 1.45;
+      margin-bottom: 10px;
+    }
+    .featured-article-excerpt {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 14px;
+      color: #3d506e;
+      line-height: 1.65;
+      margin-bottom: 18px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .read-more {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: #a2603c;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      text-decoration: none;
+      transition: gap .15s;
+    }
+    .read-more:hover { gap: 9px; color: #a2603c; }
+
+    /* ── Article card ── */
+    .insight-card {
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      cursor: pointer;
+      transition: box-shadow .2s, transform .18s;
+      box-shadow: 0 0 1px rgba(102,102,102,.14), 0 2px 6px rgba(102,102,102,.08);
+    }
+    .insight-card:hover {
+      box-shadow: 0 4px 18px rgba(0,0,0,.11);
+      transform: translateY(-2px);
+    }
+    .insight-card-img-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+    .insight-card-img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      display: block;
+    }
+    .insight-card-img-tag {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+    }
+    .insight-card-content {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .insight-card-date {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 11px;
+      color: #3D506E;
+      margin-bottom: 6px;
+    }
+    .insight-card-title {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #0c244a;
+      line-height: 1.45;
+      margin-bottom: 7px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .insight-card-excerpt {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 13px;
+      color: #3d506e;
+      line-height: 1.55;
+      flex: 1;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* ── No results ── */
+    .insights-empty {
+      text-align: center;
+      padding: 60px 0;
+      color: #3D506E;
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 15px;
+    }
+
+
+    /* ── Week modal ── */
+    .week-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      z-index: 1050;
+      overflow-y: auto;
+      padding: 40px 0;
+    }
+    .week-modal-overlay.open { display: flex; align-items: flex-start; justify-content: center; }
+    .week-modal {
+      background: #fff;
+      width: 100%;
+      max-width: 1200px;
+      margin: auto;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .week-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 28px;
+      border-bottom: 1px solid rgba(0,0,0,.08);
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 1;
+    }
+    .week-modal-title {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #0c244a;
+      margin: 0;
+    }
+    .week-modal-close {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #3d506e;
+      border-radius: 50%;
+      transition: background .15s;
+      flex-shrink: 0;
+    }
+    .week-modal-close:hover { background: #f0f0f0; }
+    .week-modal-body { padding: 24px 28px 32px; }
+    @keyframes sheetUp {
+      from { transform: translateY(100%); }
+      to   { transform: translateY(0); }
+    }
+    .week-modal-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 24px;
+      border-bottom: 1px solid rgba(0,0,0,.07);
+      cursor: pointer;
+    }
+    .week-modal-item:last-child { border-bottom: none; }
+    .week-modal-item:hover { background: #f9f9f9; }
+    .week-modal-item-text { flex: 1; min-width: 0; }
+    .week-modal-item-chip {
+      display: inline-block;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 9px;
+      white-space: nowrap;
+      margin-bottom: 5px;
+    }
+    .week-modal-item-title {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 1.45;
+      color: #0c244a;
+      margin: 0 0 4px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .week-modal-item-date {
+      font-family: 'Noto Sans Thai', sans-serif;
+      font-size: 12px;
+      color: #7a8ca0;
+      margin: 0;
+    }
+    .week-modal-item-img {
+      width: 72px;
+      height: 56px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 991px) {
+      .featured-card-content { padding: 18px 20px 20px; }
+      .featured-card-title { font-size: 16px; }
+      .week-carousel-track .col-card { flex: 0 0 calc(50% - 8px); }
+    }
+
+    @media (max-width: 767px) {
+      .insights-content { padding: 24px 0 60px; }
+      .insights-filter-bar { padding: 16px 0; }
+
+      .week-label { font-size: 16px; }
+      .week-section { margin-bottom: 32px; }
+
+      /* Featured layout: stack vertically on mobile */
+      .week-featured-layout { grid-template-columns: 1fr; }
+      .article-list { border-left: none; border-top: 1px solid rgba(0,0,0,.08); }
+      .featured-card-img-wrap img { min-height: 200px; }
+
+      /* Carousel: edge-to-edge native scroll */
+      .carousel-nav { display: none; }
+      .week-carousel-track-wrap {
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding: 8px 0;
+        margin: -8px -40px -8px 0;
+      }
+      .week-carousel-track-wrap::-webkit-scrollbar { display: none; }
+      .week-carousel-track {
+        transform: none !important;
+        gap: 12px;
+      }
+      .week-carousel-track .col-card {
+        flex: 0 0 244px;
+        max-width: calc(100vw - 56px);
+        scroll-snap-align: start;
+      }
+      .week-carousel-track::after { content: ''; flex: 0 0 24px; }
+
+      .insight-card-img { height: 130px; }
+      .article-list-item { padding: 14px 16px; }
+      .article-list-thumb-wrap { width: 80px; }
+
+      /* Modal → bottom sheet on mobile */
+      .week-modal-overlay { overflow-y: visible; padding: 0; }
+      .week-modal-overlay.open { align-items: flex-end; }
+      .week-modal {
+        border-radius: 20px 20px 0 0;
+        max-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        animation: sheetUp .25s ease;
+        max-width: 100%;
+        margin: 0;
+      }
+      .week-modal-header { padding: 20px 24px 16px; border-bottom: none; position: static; }
+      .week-modal-body { overflow-y: auto; flex: 1; padding: 0; }
+
+
+    }
+
+    @media (max-width: 576px) {
+      .week-carousel-track-wrap { margin-right: -20px; }
+    }
+
+    /* Toggle desktop/mobile layouts */
+    .d-lg-grid { display: grid; }
+    .d-lg-none { display: flex !important; }
+    @media (min-width: 992px) {
+      .d-lg-grid { display: grid !important; }
+      .d-lg-none { display: none !important; }
+    }
+</style>
+
+  <!-- HERO -->
+  <section class="hero" style="background-image: url('https://landing.yuanta.co.th/hubfs/privilegesbanner.png');">
+    <div class="hero-overlay"></div>
+    <div class="hero-inner hero-content" style="width:100%;">
+      <div class="container">
+        <div style="text-align:center; width:100%;">
+          <h1 class="hero-title">Insights</h1>
+          <p class="hero-subtitle">บทวิเคราะห์และมุมมองการลงทุนจากผู้เชี่ยวชาญ Yuanta Wealth Management</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FILTER BAR -->
+  <div class="insights-filter-bar">
+    <div class="container">
+      <div class="filter-bar-inner">
+        <div class="filter-pills" id="filterPills">
+          <button class="filter-pill active" data-filter="all">All</button>
+          <button class="filter-pill" data-filter="hot-issue">Hot issue</button>
+          <button class="filter-pill" data-filter="buy-list">Buy list</button>
+          <button class="filter-pill" data-filter="asset-performance">Asset performance</button>
+          <button class="filter-pill" data-filter="market-calendar">Market calendar</button>
+          <button class="filter-pill" data-filter="asset-outlook">Asset class outlook</button>
+          <button class="filter-pill" data-filter="market-outlook">Market outlook</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <section class="insights-content">
+    <div class="container" id="insightsContainer">
+
+      <!-- Loading state -->
+      <div id="insightsLoading" style="text-align:center;padding:60px 0;color:#8f9aac;font-family:'Noto Sans Thai',sans-serif;font-size:15px;">
+        กำลังโหลดบทวิเคราะห์...
+      </div>
+
+      <!-- Dynamic week sections injected by JS below -->
+
+
+      <div id="insightsEmpty" class="insights-empty" style="display:none;">
+        ไม่พบบทความที่ตรงกับเงื่อนไขที่เลือก
+      </div>
+
+    </div>
+  </section>
+
+  <!-- WEEK MODAL -->
+  <div class="week-modal-overlay" id="weekModalOverlay" onclick="closeWeekModal(event)">
+    <div class="week-modal" id="weekModal">
+      <div class="week-modal-header">
+        <h3 class="week-modal-title" id="weekModalTitle"></h3>
+        <button class="week-modal-close" onclick="closeWeekModalDirect()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="week-modal-body">
+        <div id="weekModalGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter-section">
+    <div class="container">
+      <div class="row align-items-center gy-5">
+        <div class="col-12 col-lg-6">
+          <div class="newsletter-left">
+            <p class="newsletter-label">Exclusive Insights</p>
+            <h2 class="newsletter-title">Unlock Insights &amp;<br>Market Intelligence</h2>
+            <p class="newsletter-desc">รับข้อมูลเชิงลึกด้านการลงทุน บทวิเคราะห์ตลาด และโอกาสการลงทุนพิเศษ<br>ส่งตรงถึงอีเมลของคุณทุกสัปดาห์</p>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="newsletter-right">
+            <form class="newsletter-form" onsubmit="return false;">
+              <input type="email" placeholder="กรอกอีเมลของคุณ" />
+              <button type="submit">Subscribe to insights</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <script>
+    (function() {
+      var nav = document.getElementById('navbarMain');
+      if (!nav) return;
+      nav.addEventListener('hide.bs.collapse', function() { nav.classList.add('is-closing'); });
+      nav.addEventListener('hidden.bs.collapse', function() { nav.classList.remove('is-closing'); });
+    })();
+
+    // ── HubDB config ──
+    var PORTAL_ID = '43844850';
+    var FALLBACK_IMG = "data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%204%203%27%3E%3Crect%20width%3D%274%27%20height%3D%273%27%20fill%3D%27%23c8cdd5%27/%3E%3Cpath%20transform%3D%27translate%281.5%2C1%29%20scale%280.042%29%27%20fill%3D%27rgba%28255%2C255%2C255%2C.7%29%27%20d%3D%27M21%2019V5c0-1.1-.9-2-2-2H5c-1.1%200-2%20.9-2%202v14c0%201.1.9%202%202%202h14c1.1%200%202-.9%202-2zM8.5%2013.5l2.5%203.01L14.5%2012l4.5%206H5l3.5-4.5z%27/%3E%3C/svg%3E";
+    var THUMB = {
+      '2599182038': '{{ get_asset_url('../images/thumb-hot-issue.jpg') }}',
+      '2599723735': '{{ get_asset_url('../images/thumb-asset-performance.jpg') }}',
+      '2612300495': '{{ get_asset_url('../images/thumb-buy-list.jpg') }}',
+      '2610619077': '{{ get_asset_url('../images/thumb-market-calendar.jpg') }}',
+    };
+    var WEEKLY_TABLES = [
+      {id:'2599182038', type:'hot-issue',        label:'Hot issue',        cls:'tag-hot-issue',    path:'/wealth-single-weekly-hotissue/'},
+      {id:'2599723735', type:'asset-performance', label:'Asset performance',cls:'tag-asset-perf',   path:'/wealth-single-weekly-asset-performance/'},
+      {id:'2612300495', type:'buy-list',          label:'Buy list',         cls:'tag-buy-list',     path:'/wealth-single-weekly-buy-list/'},
+      {id:'2610619077', type:'market-calendar',   label:'Market calendar',  cls:'tag-mkt-calendar', path:'/wealth-single-weekly-market-calendar/'},
+    ];
+
+    var SVG_ARROW = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var SVG_PREV  = '';
+    var SVG_NEXT  = '';
+
+    // ── Thai date helpers ──
+    var THAI_MONTHS = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+    function thaiDate(ms) {
+      if (!ms) return '';
+      var d = new Date(Number(ms));
+      return d.getDate() + ' ' + THAI_MONTHS[d.getMonth()] + ' ' + (d.getFullYear() + 543);
+    }
+    function thaiDateRange(articles) {
+      var first = articles[0] || {};
+      var v = (first.values) || {};
+      var start = Number(v.week_start_date || 0);
+      var end   = Number(v.week_end_date   || 0);
+      if (!start) {
+        var dates = articles.map(function(a){ return Number(a.values.page_date || 0); }).filter(Boolean);
+        if (!dates.length) return '';
+        start = Math.min.apply(null, dates);
+        end   = Math.max.apply(null, dates);
+      }
+      var dS = new Date(start), dE = new Date(end || start);
+      var y  = dE.getFullYear() + 543;
+      if (dS.getMonth() === dE.getMonth()) {
+        return dS.getDate() + '–' + dE.getDate() + ' ' + THAI_MONTHS[dE.getMonth()] + ' ' + y;
+      }
+      return dS.getDate() + ' ' + THAI_MONTHS[dS.getMonth()] + '–' + dE.getDate() + ' ' + THAI_MONTHS[dE.getMonth()] + ' ' + y;
+    }
+    function imgUrl(a) {
+      return (a._table && THUMB[a._table.id]) || FALLBACK_IMG;
+    }
+    function articleUrl(a) {
+      var slug = a.values.week_slug || a.path || '';
+      return a._table.path + slug;
+    }
+
+    // ── Card / week HTML builders ──
+    function cardHtml(a) {
+      var t = a._table, url = articleUrl(a);
+      return '<div class="insight-card" onclick="location.href=\'' + url + '\'">'
+        + '<div class="insight-card-img-wrap">'
+        + '<img class="insight-card-img" src="' + imgUrl(a) + '" alt="" onerror="this.onerror=null;this.src=FALLBACK_IMG" />'
+        + '<span class="insight-card-img-tag insight-tag ' + t.cls + '">' + t.label + '</span>'
+        + '</div><div class="insight-card-content">'
+        + '<p class="insight-card-date">' + thaiDate(a.values.page_date) + '</p>'
+        + '<h4 class="insight-card-title">' + (a.values.main_title || '') + '</h4>'
+        + '<p class="insight-card-excerpt">' + (a.values.description || '') + '</p>'
+        + '</div></div>';
+    }
+    function weekHeaderHtml(articles) {
+      return '<div class="week-section-header">'
+        + '<div class="week-section-left">'
+        + '<span class="week-chip">Weekly</span>'
+        + '<span class="week-label">' + thaiDateRange(articles) + '</span>'
+        + '</div>'
+        + '<a href="#" class="week-see-all">ดูทั้งหมด ' + SVG_ARROW + '</a>'
+        + '</div>';
+    }
+
+    function renderHeroWeek(articles) {
+      var div = document.createElement('div');
+      div.className = 'week-section';
+      var sorted = articles.slice().sort(function(a,b){ return (b.values.page_date||0)-(a.values.page_date||0); });
+      var feat = sorted[0];
+      var ft = feat._table;
+      var featUrl = articleUrl(feat);
+
+      var listHtml = sorted.slice(1).map(function(a) {
+        var t = a._table, url = articleUrl(a);
+        return '<div class="article-list-item" data-category="' + t.type + '" onclick="location.href=\'' + url + '\'">'
+          + '<div class="article-list-text">'
+          + '<p class="article-list-date">' + thaiDate(a.values.page_date) + '</p>'
+          + '<h4 class="article-list-title">' + (a.values.main_title || '') + '</h4>'
+          + '</div>'
+          + '<div class="article-list-thumb-wrap">'
+          + '<img src="' + imgUrl(a) + '" alt="" onerror="this.onerror=null;this.src=FALLBACK_IMG" />'
+          + '<span class="article-list-thumb-tag insight-tag ' + t.cls + '">' + t.label + '</span>'
+          + '</div></div>';
+      }).join('');
+
+      var mobileCards = sorted.map(function(a){
+        return '<div class="col-card" data-category="' + a._table.type + '">' + cardHtml(a) + '</div>';
+      }).join('');
+
+      div.innerHTML = weekHeaderHtml(articles)
+        + '<div class="week-featured-layout d-none d-lg-grid">'
+        + '<div class="featured-card" data-category="' + ft.type + '" onclick="location.href=\'' + featUrl + '\'">'
+        + '<div class="featured-card-img-wrap">'
+        + '<img src="' + imgUrl(feat) + '" alt="" onerror="this.onerror=null;this.src=FALLBACK_IMG" />'
+        + '<span class="featured-card-tag insight-tag ' + ft.cls + '">' + ft.label + '</span>'
+        + '</div>'
+        + '<div class="featured-card-content">'
+        + '<p class="featured-card-date">' + thaiDate(feat.values.page_date) + '</p>'
+        + '<h2 class="featured-card-title">' + (feat.values.main_title || '') + '</h2>'
+        + '<p class="featured-card-excerpt">' + (feat.values.description || '') + '</p>'
+        + '<a href="' + featUrl + '" class="read-more" onclick="event.stopPropagation()">อ่านเพิ่มเติม ' + SVG_ARROW + '</a>'
+        + '</div></div>'
+        + '<div class="article-list">' + listHtml
+        + '<div class="week-nav-row">'
+        + '<button class="week-nav-btn wk-prev" disabled></button>'
+        + '<button class="week-nav-btn wk-next"></button>'
+        + '</div></div>'
+        + '</div>'
+        + '<div class="week-carousel d-lg-none" data-perpage="4">'
+        + '<button class="carousel-nav prev" disabled>' + SVG_PREV + '</button>'
+        + '<div class="week-carousel-track-wrap"><div class="week-carousel-track">' + mobileCards + '</div></div>'
+        + '<button class="carousel-nav next">' + SVG_NEXT + '</button>'
+        + '</div>';
+
+      // Article-list pagination (3 items per page)
+      var listItems = Array.prototype.slice.call(div.querySelectorAll('.article-list-item'));
+      var liTotal = listItems.length;
+      var liPerPage = 3;
+      var liPages = Math.ceil(liTotal / liPerPage) || 1;
+      var liCur = 0;
+      var prevBtn = div.querySelector('.wk-prev');
+      var nextBtn = div.querySelector('.wk-next');
+
+      function updateListPage() {
+        for (var i = 0; i < liTotal; i++) {
+          listItems[i].style.display = (i >= liCur * liPerPage && i < (liCur + 1) * liPerPage) ? '' : 'none';
+          listItems[i].style.borderBottom = '';
+        }
+        var lastIdx = Math.min((liCur + 1) * liPerPage - 1, liTotal - 1);
+        if (listItems[lastIdx]) listItems[lastIdx].style.borderBottom = 'none';
+        if (prevBtn) prevBtn.disabled = liCur === 0;
+        if (nextBtn) nextBtn.disabled = liCur >= liPages - 1;
+      }
+
+      if (prevBtn) prevBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (liCur > 0) { liCur--; updateListPage(); }
+      });
+      if (nextBtn) nextBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (liCur < liPages - 1) { liCur++; updateListPage(); }
+      });
+
+      updateListPage();
+      return div;
+    }
+
+    function renderCarouselWeek(articles) {
+      var div = document.createElement('div');
+      div.className = 'week-section';
+      var sorted = articles.slice().sort(function(a,b){ return (b.values.page_date||0)-(a.values.page_date||0); });
+      var cards = sorted.map(function(a){
+        return '<div class="col-card" data-category="' + a._table.type + '">' + cardHtml(a) + '</div>';
+      }).join('');
+      div.innerHTML = weekHeaderHtml(articles)
+        + '<div class="week-carousel" data-perpage="4">'
+        + '<button class="carousel-nav prev" disabled>' + SVG_PREV + '</button>'
+        + '<div class="week-carousel-track-wrap"><div class="week-carousel-track">' + cards + '</div></div>'
+        + '<button class="carousel-nav next">' + SVG_NEXT + '</button>'
+        + '</div>';
+      return div;
+    }
+
+    // ── Carousel init ──
+    function initCarousels() {
+      document.querySelectorAll('.week-carousel').forEach(function(carousel) {
+        var track   = carousel.querySelector('.week-carousel-track');
+        var cards   = carousel.querySelectorAll('.col-card');
+        var prevBtn = carousel.querySelector('.carousel-nav.prev');
+        var nextBtn = carousel.querySelector('.carousel-nav.next');
+        var total   = cards.length;
+        var current = 0;
+        function getPerPage() {
+          if (window.innerWidth <= 767) return 1;
+          if (window.innerWidth <= 991) return 2;
+          return 4;
+        }
+        function updateCarousel() {
+          var perPage = getPerPage();
+          var pages   = Math.ceil(total / perPage);
+          if (current >= pages) current = pages - 1;
+          if (current < 0)      current = 0;
+          var wrapWidth = carousel.querySelector('.week-carousel-track-wrap').offsetWidth;
+          var gap       = 16;
+          var cardWidth = (wrapWidth - gap * (perPage - 1)) / perPage;
+          var offset    = current * (cardWidth + gap) * perPage;
+          track.style.transform = 'translateX(-' + offset + 'px)';
+          var showNav = total > perPage;
+          prevBtn.style.display = showNav ? '' : 'none';
+          nextBtn.style.display = showNav ? '' : 'none';
+          prevBtn.disabled = !showNav || current === 0;
+          nextBtn.disabled = !showNav || current >= pages - 1;
+        }
+        prevBtn.addEventListener('click', function() { if (current > 0) { current--; updateCarousel(); } });
+        nextBtn.addEventListener('click', function() {
+          var pages = Math.ceil(total / getPerPage());
+          if (current < pages - 1) { current++; updateCarousel(); }
+        });
+        updateCarousel();
+        window.addEventListener('resize', function() { current = 0; updateCarousel(); });
+      });
+    }
+
+    // ── Week modal ──
+    function openWeekModal(weekEl) {
+      var label = weekEl.querySelector('.week-label').textContent;
+      document.getElementById('weekModalTitle').textContent = label;
+      var grid = document.getElementById('weekModalGrid');
+      grid.innerHTML = '';
+      if (window.innerWidth >= 768) {
+        // Desktop: card grid
+        grid.className = 'row g-3';
+        weekEl.querySelectorAll('.col-card').forEach(function(col) {
+          var inner = col.querySelector('.insight-card');
+          if (!inner) return;
+          var wrap = document.createElement('div');
+          wrap.className = 'col-6 col-lg-3';
+          wrap.appendChild(inner.cloneNode(true));
+          grid.appendChild(wrap);
+        });
+      } else {
+        // Mobile: bottom sheet list
+        grid.className = '';
+        weekEl.querySelectorAll('.col-card').forEach(function(col) {
+          var card = col.querySelector('.insight-card');
+          if (!card) return;
+          var tagEl   = card.querySelector('.insight-card-img-tag');
+          var titleEl = card.querySelector('.insight-card-title');
+          var dateEl  = card.querySelector('.insight-card-date');
+          var imgEl   = card.querySelector('.insight-card-img');
+          var m   = (card.getAttribute('onclick') || '').match(/location\.href='([^']+)'/);
+          var url = m ? m[1] : '#';
+          var tagCls = tagEl ? Array.prototype.slice.call(tagEl.classList)
+            .filter(function(c){ return c.indexOf('tag-') === 0; }).join(' ') : '';
+          var item = document.createElement('div');
+          item.className = 'week-modal-item';
+          item.onclick = function() { location.href = url; };
+          item.innerHTML = '<div class="week-modal-item-text">'
+            + '<span class="week-modal-item-chip ' + tagCls + '">' + (tagEl ? tagEl.textContent.trim() : '') + '</span>'
+            + '<p class="week-modal-item-title">' + (titleEl ? titleEl.textContent : '') + '</p>'
+            + '<p class="week-modal-item-date">' + (dateEl ? dateEl.textContent : '') + '</p>'
+            + '</div>'
+            + '<img class="week-modal-item-img" src="' + (imgEl ? imgEl.src : '') + '" alt="" />';
+          grid.appendChild(item);
+        });
+      }
+      document.getElementById('weekModalOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeWeekModal(e) {
+      if (e.target === document.getElementById('weekModalOverlay')) closeWeekModalDirect();
+    }
+    function closeWeekModalDirect() {
+      document.getElementById('weekModalOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeWeekModalDirect(); });
+
+    function initWeekModal() {
+      document.querySelectorAll('.week-see-all').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          openWeekModal(this.closest('.week-section'));
+        });
+      });
+    }
+
+    // ── Filter ──
+    var allArticlesData = [];
+    var activeFilter = '';
+    var filterGrid = null;
+
+    function applyFilter() {
+      var weekSections = document.querySelectorAll('.week-section');
+      var empty = document.getElementById('insightsEmpty');
+      var container = document.getElementById('insightsContainer');
+
+      if (!activeFilter) {
+        weekSections.forEach(function(w){ w.style.display = ''; });
+        if (filterGrid) filterGrid.style.display = 'none';
+        if (empty) empty.style.display = 'none';
+      } else {
+        weekSections.forEach(function(w){ w.style.display = 'none'; });
+
+        if (!filterGrid) {
+          filterGrid = document.createElement('div');
+          filterGrid.id = 'filterResultsGrid';
+          container.insertBefore(filterGrid, empty);
+        }
+        filterGrid.style.display = '';
+
+        var matching = allArticlesData.filter(function(a) {
+          return a._table.type === activeFilter;
+        }).sort(function(a, b) { return (b.values.page_date || 0) - (a.values.page_date || 0); });
+
+        var weekGroups = {}, weekOrder = [];
+        matching.forEach(function(a) {
+          var slug = a.values.week_slug || '';
+          if (!weekGroups[slug]) { weekGroups[slug] = []; weekOrder.push(slug); }
+          weekGroups[slug].push(a);
+        });
+        filterGrid.innerHTML = weekOrder.map(function(slug) {
+          var arts = weekGroups[slug];
+          return '<div class="week-section">'
+            + '<div class="week-section-header"><div class="week-section-left">'
+            + '<span class="week-chip">Weekly</span>'
+            + '<span class="week-label">' + thaiDateRange(arts) + '</span>'
+            + '</div></div>'
+            + '<div class="row g-3">'
+            + arts.map(function(a) {
+                return '<div class="col-12 col-md-4 col-lg-3">' + cardHtml(a) + '</div>';
+              }).join('')
+            + '</div></div>';
+        }).join('');
+
+        if (empty) empty.style.display = matching.length ? 'none' : '';
+      }
+    }
+
+    document.querySelectorAll('.filter-pill').forEach(function(pill) {
+      pill.addEventListener('click', function() {
+        var filter = this.dataset.filter;
+        document.querySelectorAll('.filter-pill').forEach(function(p){ p.classList.remove('active'); });
+        if (filter === 'all' || filter === activeFilter) {
+          activeFilter = '';
+          document.querySelector('[data-filter="all"]').classList.add('active');
+        } else {
+          activeFilter = filter;
+          this.classList.add('active');
+        }
+        applyFilter();
+      });
+    });
+
+    // ── HubDB fetch + render ──
+    function loadInsights() {
+      var container = document.getElementById('insightsContainer');
+      var loading   = document.getElementById('insightsLoading');
+      var empty     = document.getElementById('insightsEmpty');
+
+      Promise.all(WEEKLY_TABLES.map(function(t) {
+        return fetch('https://api.hubapi.com/cms/v3/hubdb/tables/' + t.id + '/rows?portalId=' + PORTAL_ID + '&orderBy=-page_date&limit=50')
+          .then(function(r){ return r.json(); })
+          .then(function(d){
+            return (d.results || [])
+              .filter(function(r){ return r.values; })
+              .map(function(r){ r._table = t; return r; });
+          })
+          .catch(function(){ return []; });
+      })).then(function(results) {
+        if (loading) loading.style.display = 'none';
+        var allArticles = [].concat.apply([], results);
+        if (!allArticles.length) { if (empty) empty.style.display = ''; return; }
+
+        // hot-issue and buy-list have multiple rows/week — keep only the first per week per type
+        var seenPerType = {};
+        allArticles = allArticles.filter(function(a) {
+          var type = a._table.type;
+          if (type !== 'buy-list' && type !== 'hot-issue') return true;
+          var slug = a.values.week_slug || a.path || '';
+          var key = type + '|' + slug;
+          if (seenPerType[key]) return false;
+          seenPerType[key] = true;
+          return true;
+        });
+
+        allArticlesData = allArticles;
+
+        // Group by week slug (row.path)
+        var weekMap = {};
+        allArticles.forEach(function(a) {
+          var slug = a.values.week_slug || a.path || '';
+          if (slug) {
+            if (!weekMap[slug]) weekMap[slug] = [];
+            weekMap[slug].push(a);
+          }
+        });
+
+        // Sort descending (YYYY-MM-DD sorts lexicographically)
+        var slugs = Object.keys(weekMap).sort().reverse();
+        slugs.forEach(function(slug, i) {
+          var weekEl = i === 0 ? renderHeroWeek(weekMap[slug]) : renderCarouselWeek(weekMap[slug]);
+          container.insertBefore(weekEl, empty);
+        });
+
+        if (empty) empty.style.display = slugs.length ? 'none' : '';
+        initCarousels();
+        initWeekModal();
+      }).catch(function() {
+        if (loading) loading.style.display = 'none';
+        if (empty) empty.style.display = '';
+      });
+    }
+
+    loadInsights();
+
+  </script>
+
+{% endblock %}

@@ -1,0 +1,35 @@
+<!--
+  templateType: global_partial
+  label: Navbar
+-->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <div class="navbar-left">
+      <a href="https://www.yuanta.co.th/" target="_blank" class="navbar-main-site-btn d-none d-lg-inline-flex">
+        <img src="https://landing.yuanta.co.th/hubfs/AI-Generated%20Media/wh.png" width="16" height="16" alt="" style="object-fit:contain;flex-shrink:0;" />
+        เว็บไซต์หลัก
+      </a>
+      <a href="https://landing.yuanta.co.th/wealth-home" class="navbar-logo">
+        <img src="{{ get_asset_url('../../images/logo.png') }}" alt="Yuanta Wealth" />
+      </a>
+    </div>
+    <div class="d-flex d-lg-none align-items-center" style="gap: 20px;">
+      <a href="#" class="btn-book-meeting d-none d-sm-inline-flex" onclick="openMeetingModal(); return false;">Book a meeting</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+    <div class="collapse navbar-collapse" id="navbarMain">
+      <div class="navbar-right">
+        <nav class="navbar-menu">
+          <a href="/wealth-home" {% if '/wealth-home' in request.path %}class="active"{% endif %}>Home</a>
+          <a href="/wealth-whyus" {% if '/wealth-whyus' in request.path %}class="active"{% endif %}>Why us</a>
+          <a href="/wealth-privilegesandevents" {% if '/wealth-privileges' in request.path %}class="active"{% endif %}>Privileges &amp; Events</a>
+          <a href="/wealth-insights" {% if '/wealth-insights' in request.path %}class="active"{% endif %}>Insights</a>
+          <a href="/wealth-contactus" {% if '/wealth-contact' in request.path %}class="active"{% endif %}>Contact Us</a>
+        </nav>
+        <a href="#" class="btn-book-meeting" onclick="openMeetingModal(); return false;">Book a meeting</a>
+      </div>
+    </div>
+  </div>
+</nav>
