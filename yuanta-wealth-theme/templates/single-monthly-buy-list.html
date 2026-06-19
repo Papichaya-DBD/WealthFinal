@@ -9,7 +9,11 @@
 {% block body %}
 {% set current_row = dynamic_page_hubdb_row %}
 {% set bl_week = current_row.week_slug %}
-{% set related_hotissue = hubdb_table_rows(2601147111, "week_slug__eq=" ~ bl_week ~ "&limit=1") %}
+{% set related_hotissue    = hubdb_table_rows(2601147111, "week_slug__eq=" ~ bl_week ~ "&limit=1") %}
+{% set related_assetperf   = hubdb_table_rows(2601147110, "week_slug__eq=" ~ bl_week ~ "&limit=1") %}
+{% set related_mktoutlook  = hubdb_table_rows(2601119430, "week_slug__eq=" ~ bl_week ~ "&limit=1") %}
+{% set related_assetoutlook= hubdb_table_rows(2601147112, "week_slug__eq=" ~ bl_week ~ "&limit=1") %}
+{% set related_mktcalendar = hubdb_table_rows(2679062221, "week_slug__eq=" ~ bl_week ~ "&limit=1") %}
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 {{ require_css(get_asset_url('../css/main.css')) }}
@@ -382,21 +386,38 @@
               </button>
             </div>
 
-            <div id="hubRelatedHotissue" style="display:none;">{% for rel in related_hotissue %}<div class="swiper-slide"><div class="insight-card" onclick="location.href='/wealth-single-monthly-hotissue/{{ rel.week_slug|trim }}'"><div class="insight-card-img-wrap"><img class="insight-card-img" src="{{ get_asset_url('../images/thumb-hot-issue.jpg') }}" alt="{{ rel.main_title }}" /><span class="insight-card-img-tag insight-tag tag-hot-issue">Hot issue</span></div><div class="insight-card-content"><p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p><h4 class="insight-card-title">{{ rel.main_title }}</h4>{% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}</div></div></div>{% endfor %}</div>
-
-            <div class="related-section" id="relatedSection" style="display:none;">
+            {% if related_hotissue|length > 0 or related_assetperf|length > 0 or related_mktoutlook|length > 0 or related_assetoutlook|length > 0 or related_mktcalendar|length > 0 %}
+            <div class="related-section">
               <div class="related-week-header-row">
                 <span class="related-week-chip">Monthly</span>
-                <span class="related-week-label">บทวิเคราะห์รายเดือนอื่นๆ</span>
+                {% set _m = bl_week[5:7]|int %}{% set _y = bl_week[:4]|int + 543 %}{% set _tm = ["","มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"] %}
+                <span class="related-week-label">{{ _tm[_m] }} {{ _y }}</span>
               </div>
               <div class="weekly-related-wrapper">
                 <div class="swiper weekly-related-swiper">
-                  <div class="swiper-wrapper" id="relatedSwiperWrapper"></div>
+                <div class="swiper-wrapper">
+                  {% for rel in related_hotissue %}
+                  <div class="swiper-slide"><div class="insight-card" onclick="location.href='/wealth-single-monthly-hotissue/{{ rel.week_slug|trim }}'"><div class="insight-card-img-wrap"><img class="insight-card-img" src="{{ get_asset_url('../images/thumb-hot-issue.jpg') }}" alt="{{ rel.main_title }}" /><span class="insight-card-img-tag insight-tag tag-hot-issue">Hot issue</span></div><div class="insight-card-content"><p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p><h4 class="insight-card-title">{{ rel.main_title }}</h4>{% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}</div></div></div>
+                  {% endfor %}
+                  {% for rel in related_assetperf %}
+                  <div class="swiper-slide"><div class="insight-card" onclick="location.href='/wealth-single-monthly-asset-performance/{{ rel.week_slug|trim }}'"><div class="insight-card-img-wrap"><img class="insight-card-img" src="{{ get_asset_url('../images/thumb-asset-performance.jpg') }}" alt="{{ rel.main_title }}" /><span class="insight-card-img-tag insight-tag tag-asset-perf">Asset performance</span></div><div class="insight-card-content"><p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p><h4 class="insight-card-title">{{ rel.main_title }}</h4>{% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}</div></div></div>
+                  {% endfor %}
+                  {% for rel in related_mktoutlook %}
+                  <div class="swiper-slide"><div class="insight-card" onclick="location.href='/wealth-single-monthly-market-outlook/{{ rel.week_slug|trim }}'"><div class="insight-card-img-wrap">{% if rel.cover_image %}<img class="insight-card-img" src="{{ rel.cover_image.url }}" alt="{{ rel.main_title }}" />{% else %}<img class="insight-card-img" src="{{ get_asset_url('../images/comingsoon.png') }}" alt="" />{% endif %}<span class="insight-card-img-tag insight-tag tag-mkt-outlook">Market outlook</span></div><div class="insight-card-content"><p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p><h4 class="insight-card-title">{{ rel.main_title }}</h4>{% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}</div></div></div>
+                  {% endfor %}
+                  {% for rel in related_assetoutlook %}
+                  <div class="swiper-slide"><div class="insight-card" onclick="location.href='/wealth-single-monthly-asset-class-outlook/{{ rel.week_slug|trim }}'"><div class="insight-card-img-wrap">{% if rel.cover_image %}<img class="insight-card-img" src="{{ rel.cover_image.url }}" alt="{{ rel.main_title }}" />{% else %}<img class="insight-card-img" src="{{ get_asset_url('../images/comingsoon.png') }}" alt="" />{% endif %}<span class="insight-card-img-tag insight-tag tag-asset-outlook">Asset class outlook</span></div><div class="insight-card-content"><p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p><h4 class="insight-card-title">{{ rel.main_title }}</h4>{% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}</div></div></div>
+                  {% endfor %}
+                  {% for rel in related_mktcalendar %}
+                  <div class="swiper-slide"><div class="insight-card" onclick="location.href='/wealth-single-monthly-market-calendar/{{ rel.week_slug|trim }}'"><div class="insight-card-img-wrap"><img class="insight-card-img" src="{{ get_asset_url('../images/thumb-market-calendar.jpg') }}" alt="{{ rel.main_title }}" /><span class="insight-card-img-tag insight-tag tag-mkt-calendar">Market calendar</span></div><div class="insight-card-content"><p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p><h4 class="insight-card-title">{{ rel.main_title }}</h4>{% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}</div></div></div>
+                  {% endfor %}
+                </div>
                 </div>
                 <div class="swiper-button-prev weekly-prev"></div>
                 <div class="swiper-button-next weekly-next"></div>
               </div>
             </div>
+            {% endif %}
 
           </div>
         </div>
@@ -711,47 +732,12 @@
             models[key] = v;
           });
           updateTabs();
-          loadRelated(week);
         })
         .catch(function(err) { console.error('BuyList HubDB error:', err); });
     })();
 
-    // ── Related articles ──
-    function loadRelated(week) {
-      Promise.all(RELATED_TABLES.map(function(t) {
-        return fetch('https://api.hubapi.com/cms/v3/hubdb/tables/' + t.id
-          + '/rows?portalId=' + PORTAL + '&week_slug__eq=' + encodeURIComponent(week) + '&limit=1')
-          .then(function(r) { return r.json(); })
-          .then(function(d) {
-            var rows = d.results || [];
-            return rows.length ? Object.assign({}, rows[0], {_table: t}) : null;
-          })
-          .catch(function() { return null; });
-      })).then(function(articles) {
-        var valid = articles.filter(Boolean);
-        var hubl = document.getElementById('hubRelatedHotissue');
-        var hublHtml = hubl ? hubl.innerHTML.trim() : '';
-        if (!valid.length && !hublHtml) return;
-        var wrapper = document.getElementById('relatedSwiperWrapper');
-        var section = document.getElementById('relatedSection');
-        if (!wrapper || !section) return;
-        wrapper.innerHTML = hublHtml + valid.map(function(a) {
-          var t = a._table;
-          var src = THUMB[t.id] || FALLBACK_IMG;
-          var url = t.path + (a.values.week_slug || '');
-          return '<div class="swiper-slide">'
-            + '<div class="insight-card" onclick="location.href=\'' + url + '\'">'
-            + '<div class="insight-card-img-wrap">'
-            + '<img class="insight-card-img" src="' + src + '" alt="" />'
-            + '<span class="insight-card-img-tag insight-tag ' + t.cls + '">' + t.label + '</span>'
-            + '</div>'
-            + '<div class="insight-card-content">'
-            + '<p class="insight-card-date">' + (a.values.page_date ? thaiDate(a.values.page_date) : '') + '</p>'
-            + '<h4 class="insight-card-title">' + (a.values.main_title || '') + '</h4>'
-            + '<p class="insight-card-excerpt">' + (a.values.description || '') + '</p>'
-            + '</div></div></div>';
-        }).join('');
-        section.style.display = '';
+    document.addEventListener('DOMContentLoaded', function() {
+      if (document.querySelector('.weekly-related-swiper')) {
         new Swiper('.weekly-related-swiper', {
           slidesPerView: 4,
           spaceBetween: 16,
@@ -763,8 +749,8 @@
             992: { enabled: true, slidesPerView: 4, spaceBetween: 16 }
           }
         });
-      });
-    }
+      }
+    });
 
     // ── Fund drawer ──
     function openDrawer(ticker) {
