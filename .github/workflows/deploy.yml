@@ -13,19 +13,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Deploy to HubSpot
+        uses: HubSpot/hubspot-cms-deploy-action@v1.0
         with:
-          node-version: '20'
-
-      - name: Install HubSpot CLI
-        run: npm install -g @hubspot/cli
-
-      - name: Configure HubSpot CLI
-        run: |
-          printf 'defaultPortal: yuanta-wealth\nportals:\n  - name: yuanta-wealth\n    portalId: 43844850\n    authType: personalaccesskey\n    personalAccessKey: "%s"\n' "$HUBSPOT_ACCESS_KEY" > hubspot.config.yml
-        env:
-          HUBSPOT_ACCESS_KEY: ${{ secrets.HUBSPOT_ACCESS_KEY }}
-
-      - name: Upload to HubSpot
-        run: hs cms upload yuanta-wealth-theme yuanta-wealth-theme --account yuanta-wealth
+          src_dir: yuanta-wealth-theme
+          dest_dir: yuanta-wealth-theme
+          portal_id: "43844850"
+          personal_access_key: ${{ secrets.HUBSPOT_ACCESS_KEY }}
