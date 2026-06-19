@@ -23,9 +23,8 @@ jobs:
 
       - name: Configure HubSpot CLI
         run: |
-          printf 'defaultPortal: "43844850"\nportals:\n  - name: yuanta-wealth\n    portalId: 43844850\n    authType: personalaccesskey\n    personalAccessKey: "%s"\n' "$HUBSPOT_ACCESS_KEY" > hubspot.config.yml
           mkdir -p ~/.config/@hubspot/cli
-          cp hubspot.config.yml ~/.config/@hubspot/cli/config.yml
+          printf 'defaultPortal: yuanta-wealth\nportals:\n  - name: yuanta-wealth\n    portalId: 43844850\n    authType: personalaccesskey\n    personalAccessKey: "%s"\n' "$HUBSPOT_ACCESS_KEY" > ~/.config/@hubspot/cli/config.yml
         env:
           HUBSPOT_ACCESS_KEY: ${{ secrets.HUBSPOT_ACCESS_KEY }}
 
