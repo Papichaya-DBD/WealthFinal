@@ -9,7 +9,7 @@
         <img src="https://landing.yuanta.co.th/hubfs/AI-Generated%20Media/wh.png" width="16" height="16" alt="" style="object-fit:contain;flex-shrink:0;" />
         เว็บไซต์หลัก
       </a>
-      <a href="https://landing.yuanta.co.th/wealth-home" class="navbar-logo">
+      <a href="https://wealth.yuanta.co.th/" class="navbar-logo">
         <img src="{{ get_asset_url('../../images/logo.png') }}" alt="Yuanta Wealth" />
       </a>
     </div>
@@ -22,7 +22,7 @@
     <div class="collapse navbar-collapse" id="navbarMain">
       <div class="navbar-right">
         <nav class="navbar-menu">
-          <a href="/wealth-home" {% if '/wealth-home' in request.path %}class="active"{% endif %}>Home</a>
+          <a href="/" {% if request.path == '/' %}class="active"{% endif %}>Home</a>
           <a href="/wealth-whyus" {% if '/wealth-whyus' in request.path %}class="active"{% endif %}>Why us</a>
           <a href="/wealth-privilegesandevents" {% if '/wealth-privileges' in request.path %}class="active"{% endif %}>Privileges &amp; Events</a>
           <a href="/wealth-insights" {% if '/wealth-insights' in request.path %}class="active"{% endif %}>Insights</a>

@@ -356,11 +356,7 @@
 
     /* ── Toggle desktop/mobile ── */
     .home-d-lg-grid { display: grid; }
-    .home-d-lg-none { display: flex !important; }
-    @media (min-width: 992px) {
-      .home-d-lg-grid { display: grid !important; }
-      .home-d-lg-none { display: none !important; }
-    }
+    .home-d-lg-none { display: none !important; }
     @media (max-width: 991px) {
       .home-week-featured-layout { grid-template-columns: 1fr; }
       .home-week-carousel-track .col-card { flex: 0 0 calc(50% - 8px); }
@@ -369,8 +365,10 @@
     }
     @media (max-width: 767px) {
       .home-week-label { font-size: 16px; }
-      .home-article-list { border-left: none; border-top: 1px solid rgba(0,0,0,.08); }
-      .home-featured-card-img-wrap img { min-height: 200px; }
+      .home-article-list { border-left: none; border-top: 1px solid rgba(0,0,0,.08); margin-left: 0; }
+      .home-article-list-thumb-wrap { width: 123px; height: 80px; }
+      .home-article-list-item { padding: 18px 0; }
+      .home-featured-card-img-wrap img { height: 200px; }
       .home-week-carousel-track .col-card { flex: 0 0 100%; }
       .home-carousel-nav { width: 30px; height: 30px; }
     }
@@ -387,7 +385,7 @@
         </div>
       </div>
       <div class="section-view-all-center">
-        <a href="/insights" class="view-all">
+        <a href="https://wealth.yuanta.co.th/wealth-insights" class="view-all">
           ดูบทวิเคราะห์ทั้งหมด
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
@@ -404,9 +402,9 @@
       <div class="section-header-center">
         <h2 class="section-title">Exclusive Events</h2>
       </div>
+      {% if home_events %}
       <div class="swiper events-swiper">
         <div class="swiper-wrapper">
-          {% if home_events %}
             {% for event in home_events %}
             <div class="swiper-slide">
               <div class="event-card" style="cursor:pointer;" onclick="location.href='/wealth-single-events?slug={{ event.slug }}'">
@@ -434,16 +432,12 @@
               </div>
             </div>
             {% endfor %}
-          {% endif %}
         </div>
         <div class="swiper-pagination"></div>
       </div>
-      <div class="events-view-all">
-        <a href="/wealth-privilegesandevents" class="view-all">
-          ดูเพิ่มเติม
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-      </div>
+      {% else %}
+      <p style="text-align:center;color:#8f9aac;font-family:'Noto Sans Thai',sans-serif;font-size:15px;padding:40px 0;">ยังไม่มี Events ในขณะนี้</p>
+      {% endif %}
     </div>
   </section>
 
@@ -790,9 +784,10 @@
     slidesPerView: 1.15,
     slidesPerGroup: 1,
     spaceBetween: 24,
+    centerInsufficientSlides: true,
     pagination: { el: '.events-swiper .swiper-pagination', clickable: true },
     breakpoints: {
-      576: { slidesPerView: 2.15, slidesPerGroup: 2 },
+      576: { slidesPerView: 2, slidesPerGroup: 2 },
       992: { slidesPerView: 3, slidesPerGroup: 3 },
       1200: { slidesPerView: 4, slidesPerGroup: 4 }
     }

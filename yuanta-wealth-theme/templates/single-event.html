@@ -1,0 +1,159 @@
+<!--
+  templateType: page
+  label: Single Event
+  isAvailableForNewContent: true
+-->
+{% extends "./layouts/base.html" %}
+
+{% block body %}
+
+{% set slug = request.query_dict.slug %}
+{% set event_rows = hubdb_table_rows(2514745078, "slug__eq=" ~ slug ~ "&limit=1") %}
+{% set event = event_rows[0] %}
+
+{% if event %}
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb-bar">
+  <div class="container">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/privileges-events">Privileges &amp; events</a></li>
+      <li class="breadcrumb-item active">{{ event.title }}</li>
+    </ol>
+  </div>
+</div>
+
+<!-- EVENT HERO -->
+<section class="event-hero">
+  <div class="container">
+    <div class="row align-items-center g-4">
+      <div class="col-12 col-lg-6">
+        {% if event.image %}
+        <img src="{{ event.image.url }}" alt="{{ event.title }}" class="event-hero-img" />
+        {% endif %}
+      </div>
+      <div class="col-12 col-lg-6">
+        <h1 class="event-hero-title">{{ event.title }}</h1>
+        <div class="event-hero-meta">
+          {% if event.event_date %}
+          <div class="event-hero-meta-item">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="4" width="14" height="13" rx="2" stroke="#3d506e" stroke-width="1.5"/><path d="M6 2v4M14 2v4M3 8h14" stroke="#3d506e" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <span>{{ event.event_date|datetimeformat("%d %B %Y") }}{% if event.event_time %} | {{ event.event_time }}{% endif %}</span>
+          </div>
+          {% endif %}
+          {% if event.location %}
+          <div class="event-hero-meta-item">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 18s6-5.686 6-10a6 6 0 10-12 0c0 4.314 6 10 6 10z" stroke="#3d506e" stroke-width="1.5"/><circle cx="10" cy="8" r="2" stroke="#3d506e" stroke-width="1.5"/></svg>
+            <span>{{ event.location }}</span>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTENT -->
+<section class="event-content-section">
+  <div class="container">
+
+    <!-- Share bar -->
+    <div class="event-share-bar">
+      <span class="event-share-label">แชร์</span>
+      <button class="share-btn" onclick="shareToFacebook()" title="Facebook">
+        <svg viewBox="0 0 20 20" fill="none"><path d="M11 10.5h2l.5-2.5H11V6.5c0-.7.35-1.5 1.5-1.5H13.5V2.5A13 13 0 0011.5 2.5C9.14 2.5 8 3.9 8 6v2H5.5v2.5H8V18h3v-7.5z" fill="#1877F2"/></svg>
+      </button>
+      <button class="share-btn" onclick="shareToX()" title="X">
+        <svg viewBox="0 0 20 20" fill="none"><path d="M15.5 3h-2.1l-3.4 4.3L6.4 3H2l5.7 7.3L2.1 17H4.2l3.7-4.6 3.7 4.6H16l-6-7.7L15.5 3z" fill="#000"/></svg>
+      </button>
+      <button class="share-btn" onclick="copyLink()" title="คัดลอกลิงก์">
+        <svg viewBox="0 0 20 20" fill="none"><path d="M8.5 11.5a4 4 0 005.66 0l2-2a4 4 0 00-5.66-5.66l-1 1" stroke="#555" stroke-width="1.5" stroke-linecap="round"/><path d="M11.5 8.5a4 4 0 00-5.66 0l-2 2a4 4 0 005.66 5.66l1-1" stroke="#555" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+      <button class="share-btn" onclick="shareByEmail()" title="อีเมล">
+        <svg viewBox="0 0 20 20" fill="none"><rect x="2" y="4" width="16" height="12" rx="2" stroke="#555" stroke-width="1.5"/><path d="M2 7l8 5 8-5" stroke="#555" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="event-body">
+      {{ event.body }}
+    </div>
+
+  </div>
+</section>
+
+<!-- RELATED EVENTS -->
+{% set related = hubdb_table_rows(2514745078, "is_published__eq=true&slug__neq=" ~ slug ~ "&orderBy=event_date&limit=4") %}
+{% if related %}
+<section class="related-events-section">
+  <div class="container">
+    <div class="related-events-header">
+      <h2 class="related-events-title">กิจกรรมอื่นๆ</h2>
+      <a href="/privileges-events" class="related-see-all">
+        ดูทั้งหมด
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#a2603c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+    <div class="row g-4">
+      {% for rel in related %}
+      <div class="col-12 col-sm-6 col-lg-3">
+        <a href="/wealth-single-events?slug={{ rel.slug }}" style="text-decoration:none;color:inherit;display:block;">
+          <div class="event-card">
+            {% if rel.image %}
+            <img class="event-img" src="{{ rel.image.url }}" alt="{{ rel.title }}" />
+            {% else %}
+            <img class="event-img" src="{{ get_asset_url('../images/comingsoon.png') }}" alt="{{ rel.title }}" />
+            {% endif %}
+            <div class="event-card-content">
+              <h3 class="event-title">{{ rel.title }}</h3>
+              <div class="event-meta">
+                <p class="event-datetime">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 1v4M11 1v4M2 7h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  <span class="event-date-text">{{ rel.event_date|datetimeformat("%d %b %Y") }}</span>
+                  {% if rel.event_time %}<span class="event-date-sep"></span><span class="event-time">{{ rel.event_time }}</span>{% endif %}
+                </p>
+                {% if rel.location %}
+                <p class="event-location">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 14s5-4.686 5-8a5 5 0 10-10 0c0 3.314 5 8 5 8z" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="6" r="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+                  <span>{{ rel.location }}</span>
+                </p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% else %}
+
+<!-- Event not found -->
+<section style="padding: 80px 0; text-align: center;">
+  <div class="container">
+    <p style="color: #3d506e; font-size: 16px;">ไม่พบกิจกรรมที่ระบุ</p>
+    <a href="/privileges-events" style="color: #a2603c;">← กลับไปหน้ากิจกรรม</a>
+  </div>
+</section>
+
+{% endif %}
+
+<script>
+  function shareToFacebook() {
+    window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(location.href), '_blank');
+  }
+  function shareToX() {
+    window.open('https://x.com/intent/tweet?url=' + encodeURIComponent(location.href), '_blank');
+  }
+  function copyLink() {
+    navigator.clipboard.writeText(location.href).then(function() { alert('คัดลอกลิงก์แล้ว'); });
+  }
+  function shareByEmail() {
+    location.href = 'mailto:?subject={{ event.title }}&body=' + encodeURIComponent(location.href);
+  }
+</script>
+
+{% endblock body %}

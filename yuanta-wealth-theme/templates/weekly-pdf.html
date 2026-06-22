@@ -76,7 +76,7 @@
 </div>
 {% endif %}
 
-<div id="page-meta" data-pdf="{{ row.pdf_url.url if row else '' }}"></div>
+<div id="page-meta" data-pdf="{{ row.pdf_url.url if row and row.pdf_url else '' }}"></div>
 
 <script>
   window.addEventListener('DOMContentLoaded', function() {
@@ -84,16 +84,20 @@
 
     if (pdfUrl) {
       setTimeout(function() {
-        window.location.href = pdfUrl;
-      }, 3000);
+        var ext = pdfUrl.split('?')[0].split('.').pop().toLowerCase();
+        if (ext === 'pptx' || ext === 'ppt') {
+          window.location.href = 'https://view.officeapps.live.com/op/view.aspx?src=' + encodeURIComponent(pdfUrl);
+        } else {
+          window.location.href = pdfUrl;
+        }
+      }, 1500);
     } else {
       var secs = 8;
       var el = document.getElementById('countdown');
       function tick() {
         if (el) el.textContent = secs + '…';
         if (secs <= 0) {
-          if (document.referrer) { window.location.href = document.referrer; }
-          else { history.back(); }
+          window.location.href = '/wealth-insights';
           return;
         }
         secs--;

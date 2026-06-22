@@ -984,10 +984,6 @@ input, textarea, select { font-family: inherit; }
   margin-top: 42px;
 }
 
-/* Center slides when fewer than slidesPerView */
-.events-swiper .swiper-wrapper {
-  justify-content: center;
-}
 
 /* Equal-height swiper slides */
 .events-swiper .swiper-slide,
@@ -1051,7 +1047,7 @@ input, textarea, select { font-family: inherit; }
 }
 
 /* Peek effect on mobile */
-@media (max-width: 991px) {
+@media (max-width: 575px) {
   .events-swiper { overflow: visible; }
 }
 
@@ -2172,7 +2168,6 @@ input, textarea, select { font-family: inherit; }
 }
 .event-hero-img {
   width: 100%;
-  height: 303px;
   object-fit: cover;
   border-radius: 4px;
 }
@@ -2257,12 +2252,10 @@ input, textarea, select { font-family: inherit; }
 @media (max-width: 991px) {
   .event-hero { padding: 40px 0; }
   .event-hero-title { font-size: 20px; line-height: 30px; }
-  .event-hero-img { height: 220px; }
   .event-content-section { padding: 40px 0; }
   .related-events-section { padding: 40px 0; }
 }
 @media (max-width: 575px) {
-  .event-hero-img { height: 180px; }
   .breadcrumb-bar .breadcrumb-item.active { max-width: 180px; }
 }
 
