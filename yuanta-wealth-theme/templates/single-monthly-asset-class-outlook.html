@@ -72,17 +72,13 @@
   .article-content ul { list-style: disc; }
   .article-content ol { list-style: decimal; }
   .article-content li { margin-bottom: 6px; }
-  .tbl-scroll-inner { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-  .tbl-scroll-inner::-webkit-scrollbar { display: none; }
-  .tbl-scroll-nav { display: none; justify-content: center; align-items: center; gap: 12px; margin-top: 8px; margin-bottom: 24px; font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; color: #8f9aac; }
-  .tbl-scroll-btn { background: none; border: none; padding: 3px 12px; cursor: pointer; font-size: 16px; line-height: 1; color: #8f9aac; }
   .article-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; }
   .article-table th { background: #0c244a; color: #fff; padding: 10px 14px; text-align: left; font-weight: 600; white-space: nowrap; }
-  .article-table td { padding: 10px 14px !important; border-bottom: 1px solid rgba(0,0,0,.07); color: #1a2e44; vertical-align: top; word-break: break-word; min-width: 160px; }
+  .article-table td { padding: 10px 14px !important; border-bottom: 1px solid #eaeaea; color: #1a2e44; vertical-align: top; word-break: break-word; min-width: 160px; }
   .article-table tr:nth-child(even) td { background: #f9f7f4; }
   .article-content table { width: 100% !important; border-collapse: collapse; margin: 20px 0; font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; }
   .article-content table th { background: #0c244a; color: #fff; padding: 10px 14px; text-align: left; font-weight: 600; word-break: break-word; overflow-wrap: anywhere; }
-  .article-content table td { padding: 10px 14px; border-bottom: 1px solid rgba(0,0,0,.07); color: #1a2e44; vertical-align: top; word-break: break-word; overflow-wrap: anywhere; }
+  .article-content table td { padding: 10px 14px; border-bottom: 1px solid #eaeaea; color: #1a2e44; vertical-align: top; word-break: break-word; overflow-wrap: anywhere; }
   .article-content table tr:nth-child(even) td { background: #f9f7f4; }
   .article-cta-row { margin-bottom: 32px; }
   .article-cta-left { border: 1.5px solid #0000001A; background: url('{{ get_asset_url('../images/bgoverall.jpg') }}') center/cover no-repeat; padding: 44px 40px; }
@@ -316,8 +312,7 @@
                 <div class="swiper-slide">
                   <div class="insight-card" onclick="location.href='/wealth-single-monthly-market-outlook/{{ rel.week_slug|trim }}'">
                     <div class="insight-card-img-wrap">
-                      {% if rel.cover_image %}<img class="insight-card-img" src="{{ rel.cover_image.url }}" alt="{{ rel.main_title }}" />
-                      {% else %}<img class="insight-card-img" src="{{ get_asset_url('../images/comingsoon.png') }}" alt="" />{% endif %}
+                      <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-market-outlook.jpg') }}" alt="" />
                       <span class="insight-card-img-tag insight-tag tag-mkt-outlook">Market outlook</span>
                     </div>
                     <div class="insight-card-content">
@@ -373,13 +368,7 @@
 </div>
 
 {% else %}
-
-<section style="padding: 80px 0; text-align: center;">
-  <div class="container">
-    <p style="color: #3d506e; font-size: 16px;">ไม่พบบทวิเคราะห์ที่ระบุ</p>
-    <a href="/wealth-insights" style="color: #a2603c;">← กลับไปหน้า Insights</a>
-  </div>
-</section>
+<script>{% if not is_in_editor %}window.location.replace('https://wealth.yuanta.co.th/wealth-insights');{% endif %}</script>
 
 {% endif %}
 
@@ -478,34 +467,12 @@
   document.addEventListener('DOMContentLoaded', function() {
     var nav = document.querySelector('.navbar, nav, header');
     if (nav) document.documentElement.style.setProperty('--nav-height', nav.offsetHeight + 'px');
-    document.querySelectorAll('.article-content').forEach(function(ac) { _wrapTableScroll(ac); });
-  });
-  function _wrapTableScroll(root) {
-    if (!root) return;
-    root.querySelectorAll('table').forEach(function(tbl) {
-      tbl.removeAttribute('style');
-      tbl.querySelectorAll('td,th,col').forEach(function(el) {
-        el.removeAttribute('width'); el.style.removeProperty('width');
-      });
-      if (tbl.parentNode.classList && tbl.parentNode.classList.contains('tbl-scroll-inner')) return;
-      var inner = document.createElement('div'); inner.className = 'tbl-scroll-inner';
-      tbl.parentNode.insertBefore(inner, tbl); inner.appendChild(tbl);
-      var wrap = document.createElement('div'); inner.parentNode.insertBefore(wrap, inner); wrap.appendChild(inner);
-      var nav = document.createElement('div'); nav.className = 'tbl-scroll-nav';
-      nav.innerHTML = '<button class="tbl-scroll-btn" onclick="this.parentNode.previousElementSibling.scrollBy({left:-140,behavior:\'smooth\'})">&#8249;</button>'
-        + '<span>เลื่อนดูเพิ่มเติม</span>'
-        + '<button class="tbl-scroll-btn" onclick="this.parentNode.previousElementSibling.scrollBy({left:140,behavior:\'smooth\'})">&#8250;</button>';
-      wrap.appendChild(nav);
-      function checkNav() { nav.style.display = inner.scrollWidth > inner.clientWidth ? 'flex' : 'none'; }
-      requestAnimationFrame(checkNav); window.addEventListener('resize', checkNav);
-      var isDragging = false, startX, scrollLeft;
-      inner.style.cursor = 'grab';
-      inner.addEventListener('mousedown', function(e) { isDragging = true; startX = e.pageX - inner.offsetLeft; scrollLeft = inner.scrollLeft; inner.style.cursor = 'grabbing'; inner.style.userSelect = 'none'; });
-      inner.addEventListener('mouseleave', function() { isDragging = false; inner.style.cursor = 'grab'; });
-      inner.addEventListener('mouseup', function() { isDragging = false; inner.style.cursor = 'grab'; inner.style.userSelect = ''; });
-      inner.addEventListener('mousemove', function(e) { if (!isDragging) return; e.preventDefault(); inner.scrollLeft = scrollLeft - (e.pageX - inner.offsetLeft - startX); });
+    document.querySelectorAll('.article-content table').forEach(function(tbl) {
+      tbl.style.width = '100%';
+      tbl.style.tableLayout = 'fixed'; tbl.style.borderColor = '#eaeaea';
+      tbl.querySelectorAll('col, th, td').forEach(function(el) { el.style.width = ''; el.removeAttribute('width'); }); tbl.querySelectorAll('td').forEach(function(el) { el.style.padding = '10px'; });
     });
-  }
+  });
   function switchTab(btn, tabId) {
     document.querySelectorAll('.on-this-page-tab').forEach(function(t) { t.classList.remove('active'); });
     document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });

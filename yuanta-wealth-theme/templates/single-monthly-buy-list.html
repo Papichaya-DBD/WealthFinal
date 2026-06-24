@@ -229,18 +229,6 @@
   .fd-highlights ul li { font-family:'Noto Sans Thai',sans-serif; font-size:13px; color:#3d506e; line-height:1.75; padding-left:14px; position:relative; margin-bottom:6px; }
   .fd-highlights ul li::before { content:'•'; position:absolute; left:0; color:#1a3a6b; }
   .fd-highlights span { font-size:14px; }
-  .tbl-scroll-inner { overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
-  .tbl-scroll-inner::-webkit-scrollbar { display:none; }
-  .tbl-scroll-inner table { min-width:620px; border-collapse:collapse; font-family:'Noto Sans Thai',sans-serif; font-size:13px; }
-  .tbl-scroll-inner table th { background:#a2603c; color:#fff; font-weight:600; padding:10px 16px; text-align:center; white-space:nowrap; letter-spacing:.02em; }
-  .tbl-scroll-inner table td { padding:10px 16px; border-bottom:1px solid #e8ecf2; color:#3d506e; vertical-align:middle; white-space:nowrap; text-align:center; }
-  .tbl-scroll-inner table tr:last-child td { border-bottom:none; }
-  .tbl-scroll-inner table tr:nth-child(even) td { background:#f8f6f3; }
-  .tbl-scroll-inner table tr:hover td { background:#f0ede8; }
-  .tbl-scroll-nav { display:flex; align-items:center; justify-content:center; gap:10px; padding:10px 0 4px; }
-  .tbl-scroll-nav span { font-family:'Noto Sans Thai',sans-serif; font-size:12px; color:#8f9aac; }
-  .tbl-scroll-btn { background:none; border:none; padding:3px 12px; cursor:pointer; color:#8f9aac; font-size:16px; line-height:1.4; transition:color .15s; }
-  .tbl-scroll-btn:hover { color:#3d506e; }
   .fd-cta { background: url('{{ get_asset_url('../images/bginvest.jpg') }}') center/cover no-repeat; padding:28px 24px; text-align:center; }
   .fd-cta-title { font-family:'Noto Sans Thai',sans-serif; font-size:16px; font-weight:700; color:#fff; margin-bottom:8px; line-height:1.4; }
   .fd-cta-desc { font-family:'Noto Sans Thai',sans-serif; font-size:13px; color:rgba(255,255,255,0.75); margin-bottom:20px; line-height:1.6; }
@@ -403,10 +391,10 @@
                   <div class="swiper-slide"><div class="insight-card" onclick="location.href='/wealth-single-monthly-asset-performance/{{ rel.week_slug|trim }}'"><div class="insight-card-img-wrap"><img class="insight-card-img" src="{{ get_asset_url('../images/thumb-asset-performance.jpg') }}" alt="{{ rel.main_title }}" /><span class="insight-card-img-tag insight-tag tag-asset-perf">Asset performance</span></div><div class="insight-card-content"><p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p><h4 class="insight-card-title">{{ rel.main_title }}</h4>{% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}</div></div></div>
                   {% endfor %}
                   {% for rel in related_mktoutlook %}
-                  <div class="swiper-slide"><div class="insight-card" onclick="location.href='/wealth-single-monthly-market-outlook/{{ rel.week_slug|trim }}'"><div class="insight-card-img-wrap">{% if rel.cover_image %}<img class="insight-card-img" src="{{ rel.cover_image.url }}" alt="{{ rel.main_title }}" />{% else %}<img class="insight-card-img" src="{{ get_asset_url('../images/comingsoon.png') }}" alt="" />{% endif %}<span class="insight-card-img-tag insight-tag tag-mkt-outlook">Market outlook</span></div><div class="insight-card-content"><p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p><h4 class="insight-card-title">{{ rel.main_title }}</h4>{% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}</div></div></div>
+                  <div class="swiper-slide"><div class="insight-card" onclick="location.href='/wealth-single-monthly-market-outlook/{{ rel.week_slug|trim }}'"><div class="insight-card-img-wrap"><img class="insight-card-img" src="{{ get_asset_url('../images/thumb-market-outlook.jpg') }}" alt="" /><span class="insight-card-img-tag insight-tag tag-mkt-outlook">Market outlook</span></div><div class="insight-card-content"><p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p><h4 class="insight-card-title">{{ rel.main_title }}</h4>{% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}</div></div></div>
                   {% endfor %}
                   {% for rel in related_assetoutlook %}
-                  <div class="swiper-slide"><div class="insight-card" onclick="location.href='/wealth-single-monthly-asset-class-outlook/{{ rel.week_slug|trim }}'"><div class="insight-card-img-wrap">{% if rel.cover_image %}<img class="insight-card-img" src="{{ rel.cover_image.url }}" alt="{{ rel.main_title }}" />{% else %}<img class="insight-card-img" src="{{ get_asset_url('../images/comingsoon.png') }}" alt="" />{% endif %}<span class="insight-card-img-tag insight-tag tag-asset-outlook">Asset class outlook</span></div><div class="insight-card-content"><p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p><h4 class="insight-card-title">{{ rel.main_title }}</h4>{% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}</div></div></div>
+                  <div class="swiper-slide"><div class="insight-card" onclick="location.href='/wealth-single-monthly-asset-class-outlook/{{ rel.week_slug|trim }}'"><div class="insight-card-img-wrap"><img class="insight-card-img" src="{{ get_asset_url('../images/thumb-asset-class-outlook.jpg') }}" alt="" /><span class="insight-card-img-tag insight-tag tag-asset-outlook">Asset class outlook</span></div><div class="insight-card-content"><p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p><h4 class="insight-card-title">{{ rel.main_title }}</h4>{% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}</div></div></div>
                   {% endfor %}
                   {% for rel in related_mktcalendar %}
                   <div class="swiper-slide"><div class="insight-card" onclick="location.href='/wealth-single-monthly-market-calendar/{{ rel.week_slug|trim }}'"><div class="insight-card-img-wrap"><img class="insight-card-img" src="{{ get_asset_url('../images/thumb-market-calendar.jpg') }}" alt="{{ rel.main_title }}" /><span class="insight-card-img-tag insight-tag tag-mkt-calendar">Market calendar</span></div><div class="insight-card-content"><p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p><h4 class="insight-card-title">{{ rel.main_title }}</h4>{% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}</div></div></div>
@@ -527,8 +515,8 @@
     var THUMB = {
       '2601147111': '{{ get_asset_url("../images/thumb-hot-issue.jpg") }}',
       '2601147110': '{{ get_asset_url("../images/thumb-asset-performance.jpg") }}',
-      '2601147112': '{{ get_asset_url("../images/comingsoon.png") }}',
-      '2601119430': '{{ get_asset_url("../images/comingsoon.png") }}',
+      '2601147112': '{{ get_asset_url("../images/thumb-asset-class-outlook.jpg") }}',
+      '2601119430': '{{ get_asset_url("../images/thumb-market-outlook.jpg") }}',
       '2679062221': '{{ get_asset_url("../images/thumb-market-calendar.jpg") }}',
     };
 
@@ -716,7 +704,7 @@
     (function() {
       var week = new URLSearchParams(location.search).get('week')
         || location.pathname.split('/').filter(Boolean).pop();
-      if (!/^\d{4}-\d{2}(-\d{2})?$/.test(week)) { {% if not is_in_editor %}location.replace('/wealth-insights');{% endif %} return; }
+      if (!/^\d{4}-\d{2}(-\d{2})?$/.test(week)) { {% if not is_in_editor %}location.replace('https://wealth.yuanta.co.th/wealth-insights');{% endif %} return; }
       BL_WEEK_SLUG = week;
       var pdfBtn = document.getElementById('ctaPdfBtn');
       if (pdfBtn) pdfBtn.href = '/wealth-monthly-report?week=' + encodeURIComponent(week);
@@ -791,43 +779,11 @@
       var content = v.content && v.content.trim();
       contentWrap.style.display = content ? '' : 'none';
       document.getElementById('fdHighlights').innerHTML = content || '';
-      _wrapTableScroll();
-    }
-
-    function _wrapTableScroll(root) {
-      var container = root || document.getElementById('fdHighlights');
-      if (!container) return;
-      container.querySelectorAll('table').forEach(function(tbl) {
-        if (tbl.parentNode.classList && tbl.parentNode.classList.contains('tbl-scroll-inner')) return;
-        var inner = document.createElement('div');
-        inner.className = 'tbl-scroll-inner';
-        tbl.parentNode.insertBefore(inner, tbl);
-        inner.appendChild(tbl);
-        var wrap = document.createElement('div');
-        inner.parentNode.insertBefore(wrap, inner);
-        wrap.appendChild(inner);
-        var nav = document.createElement('div');
-        nav.className = 'tbl-scroll-nav';
-        nav.innerHTML = '<button class="tbl-scroll-btn" onclick="this.parentNode.previousElementSibling.scrollBy({left:-140,behavior:\'smooth\'})">&#8249;</button>'
-          + '<span>เลื่อนดูเพิ่มเติม</span>'
-          + '<button class="tbl-scroll-btn" onclick="this.parentNode.previousElementSibling.scrollBy({left:140,behavior:\'smooth\'})">&#8250;</button>';
-        wrap.appendChild(nav);
-        function checkNav() { nav.style.display = inner.scrollWidth > inner.clientWidth ? 'flex' : 'none'; }
-        requestAnimationFrame(checkNav);
-        window.addEventListener('resize', checkNav);
-        var isDragging = false, startX, scrollLeft;
-        inner.style.cursor = 'grab';
-        inner.addEventListener('mousedown', function(e) {
-          isDragging = true; startX = e.pageX - inner.offsetLeft; scrollLeft = inner.scrollLeft;
-          inner.style.cursor = 'grabbing'; inner.style.userSelect = 'none';
-        });
-        inner.addEventListener('mouseleave', function() { isDragging = false; inner.style.cursor = 'grab'; });
-        inner.addEventListener('mouseup', function() { isDragging = false; inner.style.cursor = 'grab'; inner.style.userSelect = ''; });
-        inner.addEventListener('mousemove', function(e) {
-          if (!isDragging) return;
-          e.preventDefault();
-          inner.scrollLeft = scrollLeft - (e.pageX - inner.offsetLeft - startX);
-        });
+      var container = document.getElementById('fdHighlights');
+      if (container) container.querySelectorAll('table').forEach(function(tbl) {
+        tbl.style.width = '100%';
+        tbl.style.tableLayout = 'fixed'; tbl.style.borderColor = '#eaeaea';
+        tbl.querySelectorAll('col, th, td').forEach(function(el) { el.style.width = ''; el.removeAttribute('width'); }); tbl.querySelectorAll('td').forEach(function(el) { el.style.padding = '10px'; });
       });
     }
 

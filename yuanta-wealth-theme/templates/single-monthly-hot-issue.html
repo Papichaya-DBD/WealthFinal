@@ -74,11 +74,11 @@
   .article-content li { margin-bottom: 6px; }
   .article-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; }
   .article-table th { background: #0c244a; color: #fff; padding: 10px 14px; text-align: left; font-weight: 600; white-space: nowrap; }
-  .article-table td { padding: 10px 14px !important; border-bottom: 1px solid rgba(0,0,0,.07); color: #1a2e44; vertical-align: top; word-break: break-word; min-width: 160px; }
+  .article-table td { padding: 10px 14px !important; border-bottom: 1px solid #eaeaea; color: #1a2e44; vertical-align: top; word-break: break-word; min-width: 160px; }
   .article-table tr:nth-child(even) td { background: #f9f7f4; }
   .article-content table { width: 100% !important; table-layout: fixed; border-collapse: collapse; margin: 20px 0; font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; }
   .article-content table th { padding: 10px 14px; text-align: left; font-weight: 600; word-break: break-word; overflow-wrap: anywhere; }
-  .article-content table td { padding: 10px 14px; border-bottom: 1px solid rgba(0,0,0,.07); vertical-align: top; word-break: break-word; overflow-wrap: anywhere; }
+  .article-content table td { padding: 10px 14px; border-bottom: 1px solid #eaeaea; vertical-align: top; word-break: break-word; overflow-wrap: anywhere; }
   .article-content table tr:nth-child(even) td { background: #f9f7f4; }
   .article-cta-row { margin-bottom: 32px; }
   .article-cta-left { border: 1.5px solid #0000001A; background: url('{{ get_asset_url('../images/bgoverall.jpg') }}') center/cover no-repeat; padding: 44px 40px; }
@@ -312,8 +312,7 @@
               <div class="swiper-slide">
                 <div class="insight-card" onclick="location.href='/wealth-single-monthly-market-outlook/{{ rel.week_slug|trim }}'">
                   <div class="insight-card-img-wrap">
-                    {% if rel.cover_image %}<img class="insight-card-img" src="{{ rel.cover_image.url }}" alt="{{ rel.main_title }}" />
-                    {% else %}<img class="insight-card-img" src="{{ get_asset_url('../images/comingsoon.png') }}" alt="" />{% endif %}
+                    <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-market-outlook.jpg') }}" alt="" />
                     <span class="insight-card-img-tag insight-tag tag-mkt-outlook">Market outlook</span>
                   </div>
                   <div class="insight-card-content">
@@ -328,8 +327,7 @@
               <div class="swiper-slide">
                 <div class="insight-card" onclick="location.href='/wealth-single-monthly-asset-class-outlook/{{ rel.week_slug|trim }}'">
                   <div class="insight-card-img-wrap">
-                    {% if rel.cover_image %}<img class="insight-card-img" src="{{ rel.cover_image.url }}" alt="{{ rel.main_title }}" />
-                    {% else %}<img class="insight-card-img" src="{{ get_asset_url('../images/comingsoon.png') }}" alt="" />{% endif %}
+                    <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-asset-class-outlook.jpg') }}" alt="" />
                     <span class="insight-card-img-tag insight-tag tag-asset-outlook">Asset class outlook</span>
                   </div>
                   <div class="insight-card-content">
@@ -385,13 +383,7 @@
 </div>
 
 {% else %}
-
-<section style="padding: 80px 0; text-align: center;">
-  <div class="container">
-    <p style="color: #3d506e; font-size: 16px;">ไม่พบบทวิเคราะห์ที่ระบุ</p>
-    <a href="/wealth-insights" style="color: #a2603c;">← กลับไปหน้า Insights</a>
-  </div>
-</section>
+<script>{% if not is_in_editor %}window.location.replace('https://wealth.yuanta.co.th/wealth-insights');{% endif %}</script>
 
 {% endif %}
 
@@ -497,8 +489,8 @@
   document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.article-content table').forEach(function(tbl) {
       tbl.style.width = '100%';
-      tbl.style.tableLayout = 'fixed';
-      tbl.querySelectorAll('col, th, td').forEach(function(el) { el.style.width = ''; el.removeAttribute('width'); });
+      tbl.style.tableLayout = 'fixed'; tbl.style.borderColor = '#eaeaea';
+      tbl.querySelectorAll('col, th, td').forEach(function(el) { el.style.width = ''; el.removeAttribute('width'); }); tbl.querySelectorAll('td').forEach(function(el) { el.style.padding = '10px'; });
     });
   });
   function _wrapTableScroll(root) {
