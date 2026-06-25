@@ -8,7 +8,7 @@
 
 {% block body %}
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script src="{{ get_asset_url('../js/chart.umd.min.js') }}"></script>
 {{ require_css(get_asset_url('../css/main.css')) }}
 
 <style>

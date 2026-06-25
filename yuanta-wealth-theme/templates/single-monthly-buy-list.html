@@ -15,7 +15,7 @@
 {% set related_assetoutlook= hubdb_table_rows(2601147112, "week_slug__eq=" ~ bl_week ~ "&limit=1") %}
 {% set related_mktcalendar = hubdb_table_rows(2679062221, "week_slug__eq=" ~ bl_week ~ "&limit=1") %}
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script src="{{ get_asset_url('../js/chart.umd.min.js') }}"></script>
 {{ require_css(get_asset_url('../css/main.css')) }}
 
 <style>
