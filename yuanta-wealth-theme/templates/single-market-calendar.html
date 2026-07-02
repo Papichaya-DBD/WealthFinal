@@ -14,6 +14,15 @@
 {% set related_asset    = hubdb_table_rows(2599723735, "week_slug__eq=" ~ week ~ "&limit=1") %}
 {% set related_buylist  = hubdb_table_rows(2612300495, "week_slug__eq=" ~ week ~ "&limit=1") %}
 
+{# Monthly modal data — HubL server-side loop (no client-side API fetch) #}
+{% set month_slug = (week[:7] ~ '-01') if week else '' %}
+{% set monthly_hotissue     = hubdb_table_rows(2601147111, "week_slug__eq=" ~ month_slug ~ "&limit=1") if month_slug else [] %}
+{% set monthly_assetperf    = hubdb_table_rows(2601147110, "week_slug__eq=" ~ month_slug ~ "&limit=1") if month_slug else [] %}
+{% set monthly_buylist      = hubdb_table_rows(2601119426, "week_slug__eq=" ~ month_slug ~ "&limit=1") if month_slug else [] %}
+{% set monthly_mktcalendar  = hubdb_table_rows(2679062221, "week_slug__eq=" ~ month_slug ~ "&limit=1") if month_slug else [] %}
+{% set monthly_mktoutlook   = hubdb_table_rows(2601119430, "week_slug__eq=" ~ month_slug ~ "&limit=1") if month_slug else [] %}
+{% set monthly_assetoutlook = hubdb_table_rows(2601147112, "week_slug__eq=" ~ month_slug ~ "&limit=1") if month_slug else [] %}
+
 {% if row %}
 
 <style>
@@ -134,6 +143,8 @@
   .tag-asset-perf { background: #F8F4ED; color: #92600a; border: 1px solid #E9DEC7; }
   .tag-mkt-calendar { background: #E7E9ED; color: #0c244a; border: 1px solid #B4BBC7; }
   .tag-buy-list { background: #EEF1F0; color: #2c4a42; border: 1px solid #CBD4D0; }
+  .tag-mkt-outlook { background: #F0EFF5; color: #3d2260; border: 1px solid #D1CCDF; }
+  .tag-asset-outlook { background: #F2F0EE; color: #3d2c1e; border: 1px solid #D6D1CB; }
   @media (max-width: 767px) {
     .week-modal-body .insight-card { flex-direction: row; align-items: stretch; }
     .week-modal-body .insight-card-img-wrap { width: 110px; min-height: 90px; flex-shrink: 0; order: 2; }
@@ -290,7 +301,102 @@
       </button>
     </div>
     <div class="week-modal-body">
+      {% if monthly_hotissue|length > 0 or monthly_assetperf|length > 0 or monthly_buylist|length > 0 or monthly_mktcalendar|length > 0 or monthly_mktoutlook|length > 0 or monthly_assetoutlook|length > 0 %}
+      <div class="row g-3">
+        {% for rel in monthly_hotissue %}
+        <div class="col-6 col-lg-3">
+          <div class="insight-card" onclick="location.href='/wealth-single-monthly-hotissue/{{ rel.week_slug|trim }}'">
+            <div class="insight-card-img-wrap">
+              <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-hot-issue.jpg') }}" alt="{{ rel.main_title }}" />
+              <span class="insight-card-img-tag insight-tag tag-hot-issue">Hot issue</span>
+            </div>
+            <div class="insight-card-content">
+              <p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p>
+              <h4 class="insight-card-title">{{ rel.main_title }}</h4>
+              {% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        {% for rel in monthly_assetperf %}
+        <div class="col-6 col-lg-3">
+          <div class="insight-card" onclick="location.href='/wealth-single-monthly-asset-performance/{{ rel.week_slug|trim }}'">
+            <div class="insight-card-img-wrap">
+              <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-asset-performance.jpg') }}" alt="{{ rel.main_title }}" />
+              <span class="insight-card-img-tag insight-tag tag-asset-perf">Asset performance</span>
+            </div>
+            <div class="insight-card-content">
+              <p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p>
+              <h4 class="insight-card-title">{{ rel.main_title }}</h4>
+              {% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        {% for rel in monthly_buylist %}
+        <div class="col-6 col-lg-3">
+          <div class="insight-card" onclick="location.href='/wealth-single-monthly-buy-list/{{ rel.week_slug|trim }}'">
+            <div class="insight-card-img-wrap">
+              <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-buy-list.jpg') }}" alt="{{ rel.main_title }}" />
+              <span class="insight-card-img-tag insight-tag tag-buy-list">Buy list</span>
+            </div>
+            <div class="insight-card-content">
+              <p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p>
+              <h4 class="insight-card-title">{{ rel.main_title }}</h4>
+              {% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        {% for rel in monthly_mktcalendar %}
+        <div class="col-6 col-lg-3">
+          <div class="insight-card" onclick="location.href='/wealth-single-monthly-market-calendar/{{ rel.week_slug|trim }}'">
+            <div class="insight-card-img-wrap">
+              <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-market-calendar.jpg') }}" alt="{{ rel.main_title }}" />
+              <span class="insight-card-img-tag insight-tag tag-mkt-calendar">Market calendar</span>
+            </div>
+            <div class="insight-card-content">
+              <p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p>
+              <h4 class="insight-card-title">{{ rel.main_title }}</h4>
+              {% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        {% for rel in monthly_mktoutlook %}
+        <div class="col-6 col-lg-3">
+          <div class="insight-card" onclick="location.href='/wealth-single-monthly-market-outlook/{{ rel.week_slug|trim }}'">
+            <div class="insight-card-img-wrap">
+              <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-market-outlook.jpg') }}" alt="{{ rel.main_title }}" />
+              <span class="insight-card-img-tag insight-tag tag-mkt-outlook">Market outlook</span>
+            </div>
+            <div class="insight-card-content">
+              <p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p>
+              <h4 class="insight-card-title">{{ rel.main_title }}</h4>
+              {% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        {% for rel in monthly_assetoutlook %}
+        <div class="col-6 col-lg-3">
+          <div class="insight-card" onclick="location.href='/wealth-single-monthly-asset-class-outlook/{{ rel.week_slug|trim }}'">
+            <div class="insight-card-img-wrap">
+              <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-asset-class-outlook.jpg') }}" alt="{{ rel.main_title }}" />
+              <span class="insight-card-img-tag insight-tag tag-asset-outlook">Asset class outlook</span>
+            </div>
+            <div class="insight-card-content">
+              <p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p>
+              <h4 class="insight-card-title">{{ rel.main_title }}</h4>
+              {% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
       <p style="color:#8f9aac;font-size:14px;font-family:'Noto Sans Thai',sans-serif;padding:8px 0;">ยังไม่มีบทวิเคราะห์ประจำเดือนนี้</p>
+      {% endif %}
     </div>
   </div>
 </div>
