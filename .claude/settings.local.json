@@ -71,7 +71,9 @@
       "Bash(sed -n '113,152p' single-weekly-asset-performance.html)",
       "Bash(sed -n '123,162p' single-weekly-hot-issue.html)",
       "Read(//tmp/**)",
-      "Bash(echo \"diff exit: $?\")"
+      "Bash(echo \"diff exit: $?\")",
+      "Bash(sed -i '' 's/\\\\.on-this-page { padding: 0 0 0; margin-bottom: 0; }/.on-this-page { padding: 0 0 0; margin-bottom: 0; background: #F9F7F4; }/' yuanta-wealth-theme/templates/single-hot-issue.html yuanta-wealth-theme/templates/single-hot-issue-preview.html yuanta-wealth-theme/templates/single-weekly-hot-issue.html)",
+      "Bash(sed -i '' 's/\\\\.on-this-page { padding: 28px 0 0; margin-bottom: 0; }/.on-this-page { padding: 28px 0 0; margin-bottom: 0; background: #F9F7F4; }/' yuanta-wealth-theme/templates/single-monthly-hot-issue.html yuanta-wealth-theme/templates/single-monthly-asset-class-outlook.html)"
     ]
   }
 }

@@ -39,10 +39,11 @@
   @media (max-width: 767px) { .article-body { padding: 0; } }
 
   /* ── Tabs ── */
-  .on-this-page { padding: 0 0 0; margin-bottom: 0; }
+  .on-this-page { padding: 20px 0 16px; margin-bottom: 0; background: #F9F7F4; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; }
   .on-this-page-heading { font-family: 'Noto Sans Thai', sans-serif; font-size: 24px; font-weight: 700; color: #0c244a; margin-bottom: 4px; }
   .on-this-page-count { font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; color: #8f9aac; margin-bottom: 16px; }
-  .on-this-page-tabs-wrap { position: sticky; top: var(--nav-height, 60px); background: #fff; z-index: 10; border-bottom: 1px solid rgba(0,0,0,.08); }
+  .on-this-page-tabs-wrap { position: sticky; top: var(--nav-height, 60px); background: #F9F7F4; z-index: 10; padding-bottom: 16px; width: 100vw; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
+  .on-this-page-tabs-wrap .container { padding-top: 0; padding-bottom: 0; }
   .on-this-page-tabs { display: flex; gap: 0; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .on-this-page-tabs::-webkit-scrollbar { display: none; }
   .on-this-page-tab { font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; font-weight: 500; color: #8f9aac; background: none; border: none; border-bottom: 2px solid transparent; padding: 10px 20px; cursor: pointer; white-space: nowrap; transition: color .15s, border-color .15s; flex-shrink: 0; }
@@ -214,10 +215,14 @@
 
           <!-- Tabs nav -->
           <div class="on-this-page">
+            <div class="container">
+            <div class="col-12 col-lg-9 mx-auto">
             <h3 class="on-this-page-heading">หัวข้อบทวิเคราะห์</h3>
             <p class="on-this-page-count" id="topicCount"></p>
+            </div>
+            </div>
           </div>
-          <div class="on-this-page-tabs-wrap"><div class="on-this-page-tabs" id="tabNav"></div></div>
+          <div class="on-this-page-tabs-wrap"><div class="container"><div class="col-12 col-lg-9 mx-auto"><div class="on-this-page-tabs" id="tabNav"></div></div></div></div>
 
           <!-- Tab panels container -->
           <div id="tabPanels"></div>
