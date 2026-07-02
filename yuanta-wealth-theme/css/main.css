@@ -99,7 +99,7 @@ input, textarea, select { font-family: inherit; }
 .navbar-main-site-btn svg { flex-shrink: 0; }
 .navbar-logo img {
   height: 36px;
-  width: auto;
+  width: auto; 
 }
 .navbar-right {
   display: flex;
@@ -164,8 +164,8 @@ input, textarea, select { font-family: inherit; }
 @media (max-width: 991px) {
   .navbar .container {
     flex-wrap: wrap;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 24px;
+    padding-bottom: 24px;
   }
   .navbar-collapse {
     display: block !important;
@@ -237,7 +237,10 @@ input, textarea, select { font-family: inherit; }
   background-position: center;
   background-repeat: no-repeat;
 }
-@media (max-width: 768px) {
+@media (min-width: 576px) and (max-width: 991px) {
+  .hero-bg { aspect-ratio: 16/9; }
+}
+@media (max-width: 575px) {
   .hero-bg { aspect-ratio: 3/4; }
 }
 /* Gradient overlay — floats above swiper, passes through events */
@@ -359,7 +362,7 @@ input, textarea, select { font-family: inherit; }
   align-items: center;
   gap: 8px;
   border: none;
-  border-radius: 4px;
+  border-radius: 0;
   font-weight: 500;
   transition: all 0.2s;
   letter-spacing: 0.02em;
@@ -435,6 +438,9 @@ input, textarea, select { font-family: inherit; }
   .section-title { font-size: 28px; }
   .section-header:not(.experts-section-header) { flex-direction: column; align-items: flex-start; gap: 12px; }
   .experts-section-header { align-items: center; }
+}
+@media (max-width: 575px) {
+  .section-title { font-size: 32px; }
 }
 
 /* ============================================
@@ -657,12 +663,12 @@ input, textarea, select { font-family: inherit; }
    EVENT CARDS
    ============================================ */
 .events-section {
-  padding: 80px 0;
+  padding: 60px 0;
   background: var(--color-bg-beige);
   overflow-x: hidden;
 }
 .event-card {
-  border-radius: 2px;
+  border-radius: 0;
   overflow: hidden;
   background: var(--color-white);
   cursor: pointer;
@@ -787,7 +793,7 @@ input, textarea, select { font-family: inherit; }
   position: relative;
   background-size: cover;
   background-position: center;
-  padding: 80px 0;
+  padding: 60px 0;
   overflow: hidden;
 }
 .cta-overlay {
@@ -808,7 +814,6 @@ input, textarea, select { font-family: inherit; }
   color: var(--color-white);
   margin-top: 12px;
   line-height: 1.5;
-  max-width: 480px;
 }
 
 .cta-section .btn-primary { font-size: 18px; }
@@ -823,7 +828,7 @@ input, textarea, select { font-family: inherit; }
    ============================================ */
 .experts-section {
   padding: 40px 0;
-  background: var(--color-white);
+  background: var(--color-bg-beige);
   position: relative;
   overflow-x: hidden;
 }
@@ -855,7 +860,7 @@ input, textarea, select { font-family: inherit; }
 
 .expert-card {
   background: var(--color-white);
-  border-radius: 8px;
+  border-radius: 0;
   overflow: hidden;
   box-shadow: 0 0 1.5px rgba(102,102,102,0.16), 0 6px 6px rgba(102,102,102,0.12);
   height: 100%;
@@ -1019,31 +1024,27 @@ input, textarea, select { font-family: inherit; }
 
 .experts-swiper .swiper-pagination { display: none; }
 
-/* Experts static grid */
-.experts-swiper .swiper-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
-  transform: none !important;
-}
-.experts-swiper .swiper-slide {
-  flex: 1 1 calc(33.333% - 16px);
-  min-width: 240px;
-  width: auto !important;
-}
-@media (min-width: 576px) and (max-width: 991px) {
-  .experts-swiper .swiper-slide {
-    flex: 0 1 calc(50% - 12px);
-  }
+/* Experts: static grid on desktop only */
+@media (min-width: 992px) {
   .experts-swiper .swiper-wrapper {
-    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    transform: none !important;
+  }
+  .experts-swiper .swiper-slide {
+    flex: 1 1 calc(33.333% - 16px);
+    min-width: 240px;
+    width: auto !important;
   }
 }
-@media (max-width: 575px) {
-  .experts-swiper .swiper-slide {
-    flex: 1 1 100%;
-    min-width: unset;
+/* Tablet + mobile: Swiper carousel */
+@media (max-width: 991px) {
+  .experts-grid-wrap.swiper {
+    clip-path: none;
+    padding-bottom: 0;
   }
+  .experts-swiper .swiper-pagination { display: flex; }
 }
 
 /* Peek effect on mobile */
@@ -1091,7 +1092,7 @@ input, textarea, select { font-family: inherit; }
    ============================================ */
 .newsletter-section {
   background: #0C244A;
-  padding: 80px 0;
+  padding: 60px 0;
 }
 .newsletter-label {
   font-family: var(--font-sans);
@@ -1117,8 +1118,9 @@ input, textarea, select { font-family: inherit; }
   line-height: 1.7;
   padding-right: 200px;
 }
-@media (max-width: 768px) {
+@media (max-width: 991px) {
   .newsletter-desc { padding-right: 0; }
+  .newsletter-section .row { --bs-gutter-y: 16px; }
 }
 .newsletter-form {
   display: flex;
@@ -1128,7 +1130,7 @@ input, textarea, select { font-family: inherit; }
   flex: 1;
   background: var(--color-white);
   border: none;
-  border-radius: 4px 0 0 4px;
+  border-radius: 0;
   padding: 14px 18px;
   font-size: 16px;
   color: var(--color-text-primary);
@@ -1142,7 +1144,7 @@ input, textarea, select { font-family: inherit; }
   font-weight: 500;
   color: var(--color-white);
   background: var(--color-brand);
-  border-radius: 0 4px 4px 0;
+  border-radius: 0;
   padding: 14px 28px;
   transition: background 0.2s;
   letter-spacing: 0.03em;
@@ -1151,14 +1153,14 @@ input, textarea, select { font-family: inherit; }
 }
 .newsletter-form button:hover { background: #8f5433; }
 
-@media (max-width: 768px) {
+@media (max-width: 991px) {
   .newsletter-section { padding: 48px 0; }
   .newsletter-title { font-size: 28px; }
 }
 @media (max-width: 575px) {
   .newsletter-form { flex-direction: column; }
-  .newsletter-form input { border-radius: 4px; }
-  .newsletter-form button { border-radius: 4px; margin-top: 10px; }
+  .newsletter-form input { border-radius: 0; }
+  .newsletter-form button { border-radius: 0; margin-top: 10px; }
 }
 
 /* ============================================
@@ -1444,7 +1446,7 @@ input, textarea, select { font-family: inherit; }
 /* Yuanta Rewards info box */
 .priv-rewards-box {
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 0;
   padding: 24px 28px;
   margin-bottom: 32px;
   background: var(--color-white);
@@ -1548,7 +1550,7 @@ input, textarea, select { font-family: inherit; }
 /* Bordered content box wrapping heading + table */
 .priv-content-box {
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 0;
   overflow: hidden;
   margin-top: 24px;
   margin-bottom: 24px;
@@ -1572,6 +1574,9 @@ input, textarea, select { font-family: inherit; }
 }
 .priv-section-box table tr:last-child td {
   border-bottom: none;
+}
+.priv-table td:not(:last-child) {
+  border-right: 1px solid var(--color-border);
 }
 .priv-col-feature { width: 46%; }
 .priv-col-half    { width: 50%; }
@@ -1755,7 +1760,7 @@ input, textarea, select { font-family: inherit; }
    WHY US
    ============================================ */
 .whyus-desc-section {
-  padding: 40px 0 0 0;
+  padding: 40px 0;
   background: var(--color-white);
 }
 .whyus-desc-center {
@@ -1798,8 +1803,8 @@ input, textarea, select { font-family: inherit; }
   gap: 28px;
   padding: 24px;
   border: 1px solid var(--color-border);
-  border-radius: 8px;
-  align-items: flex-start;
+  border-radius: 0;
+  align-items: center;
   margin-bottom: 16px;
 }
 .award-item-new:last-child { margin-bottom: 0; }
@@ -1807,7 +1812,7 @@ input, textarea, select { font-family: inherit; }
   width: 200px;
   height: 130px;
   object-fit: cover;
-  border-radius: 4px;
+  border-radius: 0;
   flex-shrink: 0;
 }
 .award-content { flex: 1; }
@@ -1847,13 +1852,15 @@ input, textarea, select { font-family: inherit; }
   padding: 80px 0;
   background: #F9F7F4;
 }
+@media (max-width: 991px) {
+  .contact-main-section { padding: 40px 0; }
+}
 
 /* Contact info list (left column) */
 .contact-info-list {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding-top: 8px;
 }
 .contact-info-item {
   display: flex;
@@ -1861,7 +1868,7 @@ input, textarea, select { font-family: inherit; }
   align-items: center;
   background: var(--color-white);
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 0;
   padding: 20px 24px;
 }
 .contact-info-icon {
@@ -1896,7 +1903,7 @@ input, textarea, select { font-family: inherit; }
 /* Form card (right column) */
 .contact-form-card {
   background: var(--color-primary);
-  border-radius: 8px;
+  border-radius: 0;
   padding: 40px;
   height: 100%;
 }
@@ -1952,6 +1959,7 @@ input, textarea, select { font-family: inherit; }
 .form-group textarea {
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 0;
   padding: 12px 16px;
   font-size: 16px;
   color: var(--color-white);

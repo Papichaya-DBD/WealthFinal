@@ -70,7 +70,7 @@
     }
     .tag-hot-issue     { background: #EBC7C7; color: #7a1c1c; }
     .tag-buy-list      { background: #CBD4D0; color: #2c4a42; }
-    .tag-asset-perf    { background: #fef3cd; color: #92600a; }
+    .tag-asset-perf    { background: #F8F4ED; color: #92600a; border: 1px solid #E9DEC7; }
     .tag-mkt-calendar  { background: #b4bbc7; color: #0c244a; }
     .tag-asset-outlook { background: #D6D1CB; color: #3d2c1e; }
     .tag-mkt-outlook   { background: #D1CCDF; color: #3d2260; }
@@ -108,6 +108,15 @@
       padding: 3px 10px;
       white-space: nowrap;
     }
+    .month-chip {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      font-weight: 600;
+      background: #0c244a;
+      color: #fff;
+      padding: 3px 10px;
+      white-space: nowrap;
+    }
     .week-label {
       font-family: 'Noto Sans Thai', sans-serif;
       font-size: 20px;
@@ -130,7 +139,7 @@
     /* ── Featured + list layout (first week) ── */
     .week-featured-layout {
       display: grid;
-      grid-template-columns: 3fr 2fr;
+      grid-template-columns: 1fr 1fr;
       gap: 0;
     }
     .featured-card {
@@ -228,7 +237,7 @@
       width: 32px; height: 32px;
       border: 1.5px solid rgba(0,0,0,.18);
       background: #fff;
-      border-radius: 50%;
+      border-radius: 0;
       display: flex; align-items: center; justify-content: center;
       cursor: pointer;
       transition: background .15s;
@@ -302,7 +311,7 @@
       height: 32px;
       border: 1px solid rgba(0,0,0,.15);
       background: #fff;
-      border-radius: 50%;
+      border-radius: 0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -341,7 +350,7 @@
       height: 36px;
       border: 1.5px solid rgba(0,0,0,.2);
       background: #fff;
-      border-radius: 50%;
+      border-radius: 0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -472,7 +481,7 @@
     }
     .insight-card-title {
       font-family: 'Noto Sans Thai', sans-serif;
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 700;
       color: #0c244a;
       line-height: 1.45;
@@ -485,7 +494,7 @@
     }
     .insight-card-excerpt {
       font-family: 'Noto Sans Thai', sans-serif;
-      font-size: 13px;
+      font-size: 14px;
       color: #3d506e;
       line-height: 1.55;
       flex: 1;
@@ -708,7 +717,7 @@
           <button class="filter-pill" data-filter="buy-list">Buy list</button>
           <button class="filter-pill" data-filter="asset-performance">Asset performance</button>
           <button class="filter-pill" data-filter="market-calendar">Market calendar</button>
-          <button class="filter-pill" data-filter="asset-outlook">Asset class outlook</button>
+          <button class="filter-pill" data-filter="asset-class-outlook">Asset class outlook</button>
           <button class="filter-pill" data-filter="market-outlook">Market outlook</button>
         </div>
       </div>
@@ -789,12 +798,26 @@
       '2599723735': '{{ get_asset_url('../images/thumb-asset-performance.jpg') }}',
       '2612300495': '{{ get_asset_url('../images/thumb-buy-list.jpg') }}',
       '2610619077': '{{ get_asset_url('../images/thumb-market-calendar.jpg') }}',
+      '2601147111': '{{ get_asset_url('../images/thumb-hot-issue.jpg') }}',
+      '2601147110': '{{ get_asset_url('../images/thumb-asset-performance.jpg') }}',
+      '2601119426': '{{ get_asset_url('../images/thumb-buy-list.jpg') }}',
+      '2679062221': '{{ get_asset_url('../images/thumb-market-calendar.jpg') }}',
+      '2601119430': '{{ get_asset_url('../images/thumb-market-outlook.jpg') }}',
+      '2601147112': '{{ get_asset_url('../images/thumb-asset-class-outlook.jpg') }}',
     };
     var WEEKLY_TABLES = [
       {id:'2599182038', type:'hot-issue',        label:'Hot issue',        cls:'tag-hot-issue',    path:'/wealth-single-weekly-hotissue/'},
       {id:'2599723735', type:'asset-performance', label:'Asset performance',cls:'tag-asset-perf',   path:'/wealth-single-weekly-asset-performance/'},
       {id:'2612300495', type:'buy-list',          label:'Buy list',         cls:'tag-buy-list',     path:'/wealth-single-weekly-buy-list/'},
       {id:'2610619077', type:'market-calendar',   label:'Market calendar',  cls:'tag-mkt-calendar', path:'/wealth-single-weekly-market-calendar/'},
+    ];
+    var MONTHLY_TABLES = [
+      {id:'2601147111', type:'hot-issue',          label:'Hot issue',           cls:'tag-hot-issue',     path:'/wealth-single-monthly-hotissue/'},
+      {id:'2601147110', type:'asset-performance',  label:'Asset performance',   cls:'tag-asset-perf',    path:'/wealth-single-monthly-asset-performance/'},
+      {id:'2601119426', type:'buy-list',           label:'Buy list',            cls:'tag-buy-list',      path:'/wealth-single-monthly-buy-list/'},
+      {id:'2679062221', type:'market-calendar',    label:'Market calendar',     cls:'tag-mkt-calendar',  path:'/wealth-single-monthly-market-calendar/'},
+      {id:'2601119430', type:'market-outlook',     label:'Market outlook',      cls:'tag-mkt-outlook',   path:'/wealth-single-monthly-market-outlook/'},
+      {id:'2601147112', type:'asset-class-outlook',label:'Asset class outlook', cls:'tag-asset-outlook', path:'/wealth-single-monthly-asset-class-outlook/'},
     ];
 
     var SVG_ARROW = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -803,6 +826,7 @@
 
     // ── Thai date helpers ──
     var THAI_MONTHS = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+    var THAI_MONTHS_FULL = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
     function thaiDate(ms) {
       if (!ms) return '';
       var d = new Date(Number(ms));
@@ -826,6 +850,11 @@
       }
       return dS.getDate() + ' ' + THAI_MONTHS[dS.getMonth()] + '–' + dE.getDate() + ' ' + THAI_MONTHS[dE.getMonth()] + ' ' + y;
     }
+    function thaiMonthYear(ms) {
+      if (!ms) return '';
+      var d = new Date(Number(ms));
+      return THAI_MONTHS_FULL[d.getMonth()] + ' ' + (d.getFullYear() + 543);
+    }
     function imgUrl(a) {
       return (a._table && THUMB[a._table.id]) || FALLBACK_IMG;
     }
@@ -848,10 +877,17 @@
         + '</div></div>';
     }
     function weekHeaderHtml(articles) {
+      var _slug = (articles[0] && articles[0].values.week_slug) || '';
+      var isMonthly = /^\d{4}-\d{2}-01$/.test(_slug);
+      var _chipClass = isMonthly ? 'month-chip' : 'week-chip';
+      var _chipLabel = isMonthly ? 'Monthly' : 'Weekly';
+      var _dateLabel = isMonthly
+        ? thaiMonthYear(articles[0] && articles[0].values.page_date)
+        : thaiDateRange(articles);
       return '<div class="week-section-header">'
         + '<div class="week-section-left">'
-        + '<span class="week-chip">Weekly</span>'
-        + '<span class="week-label">' + thaiDateRange(articles) + '</span>'
+        + '<span class="' + _chipClass + '">' + _chipLabel + '</span>'
+        + '<span class="week-label">' + _dateLabel + '</span>'
         + '</div>'
         + '<a href="#" class="week-see-all">ดูทั้งหมด ' + SVG_ARROW + '</a>'
         + '</div>';
@@ -972,13 +1008,13 @@
         }
         function updateCarousel() {
           var perPage = getPerPage();
-          var pages   = Math.ceil(total / perPage);
+          var pages   = Math.max(1, total - perPage + 1);
           if (current >= pages) current = pages - 1;
           if (current < 0)      current = 0;
           var wrapWidth = carousel.querySelector('.week-carousel-track-wrap').offsetWidth;
           var gap       = 16;
           var cardWidth = (wrapWidth - gap * (perPage - 1)) / perPage;
-          var offset    = current * (cardWidth + gap) * perPage;
+          var offset    = current * (cardWidth + gap);
           track.style.transform = 'translateX(-' + offset + 'px)';
           var showNav = total > perPage;
           var isMobile = window.innerWidth <= 767;
@@ -989,7 +1025,7 @@
         }
         prevBtn.addEventListener('click', function() { if (current > 0) { current--; updateCarousel(); } });
         nextBtn.addEventListener('click', function() {
-          var pages = Math.ceil(total / getPerPage());
+          var pages = Math.max(1, total - getPerPage() + 1);
           if (current < pages - 1) { current++; updateCarousel(); }
         });
         updateCarousel();
@@ -1097,10 +1133,14 @@
         });
         filterGrid.innerHTML = weekOrder.map(function(slug) {
           var arts = weekGroups[slug];
+          var isMonthly = /^\d{4}-\d{2}-01$/.test(slug);
+          var _chipClass = isMonthly ? 'month-chip' : 'week-chip';
+          var _chipLabel = isMonthly ? 'Monthly' : 'Weekly';
+          var _dateLabel = isMonthly ? thaiMonthYear(arts[0] && arts[0].values.page_date) : thaiDateRange(arts);
           return '<div class="week-section">'
             + '<div class="week-section-header"><div class="week-section-left">'
-            + '<span class="week-chip">Weekly</span>'
-            + '<span class="week-label">' + thaiDateRange(arts) + '</span>'
+            + '<span class="' + _chipClass + '">' + _chipLabel + '</span>'
+            + '<span class="week-label">' + _dateLabel + '</span>'
             + '</div></div>'
             + '<div class="row g-3">'
             + arts.map(function(a) {
@@ -1134,7 +1174,7 @@
       var loading   = document.getElementById('insightsLoading');
       var empty     = document.getElementById('insightsEmpty');
 
-      Promise.all(WEEKLY_TABLES.map(function(t) {
+      Promise.all(WEEKLY_TABLES.concat(MONTHLY_TABLES).map(function(t) {
         return fetch('https://api.hubapi.com/cms/v3/hubdb/tables/' + t.id + '/rows?portalId=' + PORTAL_ID + '&orderBy=-page_date&limit=50')
           .then(function(r){ return r.json(); })
           .then(function(d){
@@ -1148,11 +1188,10 @@
         var allArticles = [].concat.apply([], results);
         if (!allArticles.length) { if (empty) empty.style.display = ''; return; }
 
-        // hot-issue and buy-list have multiple rows/week — keep only the first per week per type
+        // keep only first row per type+slug (monthly tables may have multiple rows per period)
         var seenPerType = {};
         allArticles = allArticles.filter(function(a) {
           var type = a._table.type;
-          if (type !== 'buy-list' && type !== 'hot-issue') return true;
           var slug = a.values.week_slug || a.path || '';
           var key = type + '|' + slug;
           if (seenPerType[key]) return false;

@@ -56,6 +56,10 @@
   .article-content { font-family: 'Noto Sans Thai', sans-serif; font-size: 15px; color: #1a2e44; line-height: 1.75; }
   .article-content h2 { font-family: 'Noto Sans Thai', sans-serif; font-size: 18px; font-weight: 700; color: #0c244a; margin: 32px 0 16px; padding-bottom: 12px; border-bottom: 2px solid #0c244a; display: inline-block; }
   .article-content p { margin-bottom: 14px; }
+  .article-content ul, .article-content ol { padding-left: 20px; margin-bottom: 14px; }
+  .article-content ul { list-style: disc; }
+  .article-content ol { list-style: decimal; }
+  .article-content li { margin-bottom: 6px; }
   .article-content img { width: 100%; border-radius: 4px; margin: 16px 0; display: block; }
   .mc-table { width: 100%; border-collapse: collapse; font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; margin: 8px 0; }
   .mc-table th { background: #0c244a; color: #fff; padding: 10px 14px; text-align: left; font-weight: 600; white-space: nowrap; }
@@ -85,7 +89,7 @@
   @media (max-width: 767px) { .article-cta-row { grid-template-columns: 1fr; } .article-cta-left, .article-cta-right { padding: 24px 20px; } .article-cta-right { align-items: flex-start; } .article-cta-right-title { text-align: left; } }
   .experts-section { margin-bottom: 0; background: transparent; }
   .experts-title { font-family: 'Noto Sans Thai', sans-serif; font-size: 16px; font-weight: 700; color: #0c244a; margin-bottom: 20px; }
-  .expert-item { display: flex; align-items: stretch; background: #fff; box-shadow: 0 0 1px rgba(102,102,102,.14), 0 4px 16px rgba(102,102,102,.1); border-radius: 4px; overflow: hidden; margin-bottom: 16px; }
+  .expert-item { display: flex; align-items: stretch; background: #fff; border-radius: 4px; overflow: hidden; margin-bottom: 16px; }
   .expert-avatar { width: 100px; height: 100px; object-fit: cover; flex-shrink: 0; display: block; }
   .expert-info { padding: 14px 16px; flex: 1; }
   .expert-name { font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; font-weight: 700; color: #0c244a; margin-bottom: 4px; }
@@ -94,8 +98,9 @@
   .related-week-header-row { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(0,0,0,.08); }
   .related-week-chip { font-family: 'Noto Sans Thai', sans-serif; font-size: 12px; font-weight: 700; background: #0c244a; color: #fff; padding: 3px 10px; border-radius: 3px; flex-shrink: 0; }
   .related-week-label { font-family: 'Noto Sans Thai', sans-serif; font-size: 15px; font-weight: 700; color: #0c244a; }
+  .related-week-date { font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; color: #3D506E; margin-left: 4px; }
   .weekly-related-wrapper { position: relative; padding: 0 44px; }
-  .weekly-related-swiper { position: relative; overflow: hidden; }
+  .weekly-related-swiper { position: relative; overflow: hidden; padding: 8px 0; margin: -8px 0; }
   .weekly-related-wrapper .swiper-button-prev,
   .weekly-related-wrapper .swiper-button-next { position: absolute; top: 38%; width: 32px; height: 32px; background: #fff; border: 1px solid rgba(0,0,0,.15); border-radius: 50%; color: #0c244a; margin-top: 0; }
   .weekly-related-wrapper .swiper-button-prev { left: 0; }
@@ -118,7 +123,7 @@
   .insight-card { background: #fff; display: flex; flex-direction: column; height: 100%; cursor: pointer; transition: box-shadow .2s, transform .18s; box-shadow: 0 0 1px rgba(102,102,102,.14), 0 2px 6px rgba(102,102,102,.08); }
   .insight-card:hover { box-shadow: 0 4px 18px rgba(0,0,0,.11); transform: translateY(-2px); }
   .insight-card-img-wrap { position: relative; flex-shrink: 0; }
-  .insight-card-img { width: 100%; height: 160px; object-fit: cover; display: block; }
+  .insight-card-img { width: 100%; height: 115px; object-fit: cover; display: block; }
   .insight-card-img-tag { position: absolute; top: 8px; left: 8px; }
   .insight-card-content { padding: 14px; display: flex; flex-direction: column; flex: 1; }
   .insight-card-date { font-family: 'Noto Sans Thai', sans-serif; font-size: 11px; color: #8f9aac; margin-bottom: 6px; }
@@ -152,13 +157,15 @@
   <!-- BREADCRUMB -->
   <div class="insight-breadcrumb">
     <div class="container">
+      <div class="col-12 col-lg-9 mx-auto">
       <ol>
-        <li><a href="/">Home</a></li>
+        <li><a href="https://landing.yuanta.co.th/wealth-home">Home</a></li>
         <li class="sep">/</li>
         <li><a href="/wealth-insights">Insights</a></li>
         <li class="sep">/</li>
         <li class="active">Market calendar</li>
       </ol>
+      </div>
     </div>
   </div>
 
@@ -204,8 +211,8 @@
             <a class="article-cta-btn" href="/wealth-weekly-report?week={{ week }}" target="_blank">ดูมุมมองเพิ่มเติม</a>
           </div>
           <div class="article-cta-right">
-            <p class="article-cta-right-title">ดูมุมมอง<br>บทวิเคราะห์อื่นในสัปดาห์นี้</p>
-            <button class="article-cta-outline-btn" onclick="openWeeklyModal()">บทวิเคราะห์ประจำสัปดาห์ &gt;</button>
+            <p class="article-cta-right-title">ดูมุมมอง<br>บทวิเคราะห์อื่นในเดือนนี้</p>
+            <button class="article-cta-outline-btn" onclick="openMonthlyModal()">บทวิเคราะห์ประจำเดือน &gt;</button>
           </div>
         </div>
 
@@ -270,11 +277,32 @@
 
 </div>
 
+<!-- MONTHLY MODAL -->
+<div class="week-modal-overlay" id="monthlyModalOverlay" onclick="closeMonthlyModal(event)">
+  <div class="week-modal">
+    <div class="week-modal-header">
+      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
+        <span class="related-week-chip">Monthly</span>
+        <span class="related-week-label">บทวิเคราะห์รายเดือนเดียวกัน</span>
+      </div>
+      <button class="week-modal-close" onclick="closeMonthlyModalDirect()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="week-modal-body">
+      <p style="color:#8f9aac;font-size:14px;font-family:'Noto Sans Thai',sans-serif;padding:8px 0;">ยังไม่มีบทวิเคราะห์ประจำเดือนนี้</p>
+    </div>
+  </div>
+</div>
+
 <!-- Weekly modal -->
 <div class="week-modal-overlay" id="weeklyModalOverlay" onclick="closeWeeklyModal(event)">
   <div class="week-modal">
     <div class="week-modal-header">
-      <h3 class="week-modal-title">มุมมองเพิ่มเติม — {{ row.page_subtitle }}</h3>
+      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
+        <span class="related-week-chip">Weekly</span>
+        <span class="related-week-label">{{ row.page_subtitle }}</span>
+      </div>
       <button class="week-modal-close" onclick="closeWeeklyModalDirect()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
@@ -378,14 +406,12 @@
     document.getElementById('weeklyModalOverlay').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
-  function closeWeeklyModal(e) {
-    if (e.target === document.getElementById('weeklyModalOverlay')) closeWeeklyModalDirect();
-  }
-  function closeWeeklyModalDirect() {
-    document.getElementById('weeklyModalOverlay').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeWeeklyModalDirect(); });
+  function closeWeeklyModal(e) { if (e.target === document.getElementById('weeklyModalOverlay')) closeWeeklyModalDirect(); }
+  function closeWeeklyModalDirect() { document.getElementById('weeklyModalOverlay').classList.remove('open'); document.body.style.overflow = ''; }
+  function openMonthlyModal() { document.getElementById('monthlyModalOverlay').classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function closeMonthlyModal(e) { if (e.target === document.getElementById('monthlyModalOverlay')) closeMonthlyModalDirect(); }
+  function closeMonthlyModalDirect() { document.getElementById('monthlyModalOverlay').classList.remove('open'); document.body.style.overflow = ''; }
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { closeWeeklyModalDirect(); closeMonthlyModalDirect(); } });
 
   document.getElementById('newsletter-form').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -419,6 +445,7 @@
 
   var PORTAL = '43844850';
   var WEEK_SLUG = '{{ row.week_slug }}';
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(WEEK_SLUG)) { {% if not is_in_editor %}location.replace('/wealth-insights');{% endif %} }
   var FALLBACK_IMG = '{{ get_asset_url('../images/comingsoon.png') }}';
   var THUMB = {
     '2599182038': '{{ get_asset_url('../images/thumb-hot-issue.jpg') }}',

@@ -1,0 +1,333 @@
+<!--
+  templateType: page
+  label: Contact Us
+  isAvailableForNewContent: true
+-->
+{% extends "./layouts/base.html" %}
+
+{% block body %}
+
+<!-- HERO -->
+<section class="hero" style="background-image: url('https://landing.yuanta.co.th/hubfs/contactbanner.png');">
+  <div class="hero-overlay"></div>
+  <div class="hero-inner hero-content" style="width:100%;">
+    <div class="container">
+      <div style="text-align:center; width:100%;">
+        <h1 class="hero-title">{% module "contact_hero_title" path="@hubspot/text", label="Hero Title", value="Contact Us" %}</h1>
+        <p class="hero-subtitle">{% module "contact_hero_subtitle" path="@hubspot/text", label="Hero Subtitle", value="พูดคุยกับทีมที่ปรึกษาของเรา เพื่อเริ่มต้นเส้นทางสู่ความมั่งคั่งที่ยั่งยืน" %}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT MAIN -->
+<section class="contact-main-section">
+  <div class="container">
+    <div class="row gy-5 align-items-start">
+
+      <!-- Left: Contact Info -->
+      <div class="col-12 col-lg-6">
+        <div class="contact-info-list">
+
+          <div class="contact-info-item">
+            <div class="contact-info-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/>
+              </svg>
+            </div>
+            <div class="contact-info-text">
+              <span class="contact-info-label">{% module "contact_phone_label" path="@hubspot/text", label="Phone Label", value="Online service" %}</span>
+              <span class="contact-info-value"><a href="tel:020098000">{% module "contact_phone_value" path="@hubspot/text", label="Phone Number", value="0-2009-8000" %}</a></span>
+            </div>
+          </div>
+
+          <div class="contact-info-item">
+            <div class="contact-info-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3h17.25c.621 0 1.125-.504 1.125-1.125V4.875c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125z"/>
+              </svg>
+            </div>
+            <div class="contact-info-text">
+              <span class="contact-info-label">{% module "contact_fax_label" path="@hubspot/text", label="Fax Label", value="Fax" %}</span>
+              <span class="contact-info-value">{% module "contact_fax_value" path="@hubspot/text", label="Fax Number", value="02-009-8089" %}</span>
+            </div>
+          </div>
+
+          <div class="contact-info-item">
+            <div class="contact-info-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/>
+              </svg>
+            </div>
+            <div class="contact-info-text">
+              <span class="contact-info-label">{% module "contact_email_label" path="@hubspot/text", label="Email Label", value="Email" %}</span>
+              <span class="contact-info-value"><a href="mailto:online@yuanta.co.th">{% module "contact_email_value" path="@hubspot/text", label="Email Address", value="online@yuanta.co.th" %}</a></span>
+            </div>
+          </div>
+
+          <div class="contact-info-item" style="align-items: flex-start;">
+            <div class="contact-info-icon" style="margin-top: 2px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+            </div>
+            <div class="contact-info-text">
+              <span class="contact-info-value">{% module "contact_office_name" path="@hubspot/text", label="Office Name", value="หยวนต้า (สำนักงานใหญ่)" %}</span>
+              <span class="contact-info-address" style="font-family: var(--font-sans); font-size: 14px; color: var(--color-text-muted); display: block; margin-top: 4px; line-height: 1.6;">{% module "contact_office_address" path="@hubspot/text", label="Office Address", value="127 อาคารเกษร ทาวเวอร์ ชั้น 14-16 ถนนราชดำริ แขวงลุมพินี เขตปทุมวัน กรุงเทพฯ 10330" %}</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Right: Form Card -->
+      <div class="col-12 col-lg-6">
+        <div class="contact-form-card">
+          <h2 class="contact-form-card__title"><span style="font-family: var(--font-sans); font-weight: 500;">สมัครบริการ</span> <span style="font-family: var(--font-serif); font-size: 1.15em;">Yuanta Wealth</span></h2>
+          <!-- Step 1: Form -->
+          <form class="contact-form" id="contact-form">
+            <div class="form-row">
+              <div class="form-group">
+                <input type="text" name="firstname" placeholder="ชื่อ" required />
+              </div>
+              <div class="form-group">
+                <input type="text" name="lastname" placeholder="นามสกุล" required />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <input type="tel" name="phone" placeholder="เบอร์โทรศัพท์" />
+              </div>
+              <div class="form-group">
+                <input type="email" name="email" placeholder="อีเมล" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <input type="hidden" name="investment_amount" id="investment_amount_val" />
+              <div class="custom-select" id="custom-select-investment">
+                <div class="custom-select__trigger">
+                  <span class="custom-select__label">มูลค่าสินทรัพย์รวมที่ต้องการบริหาร</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+                <div class="custom-select__options">
+                  <div class="custom-select__option" data-value="ไม่เกิน 5 ล้านบาท">ไม่เกิน 5 ล้านบาท</div>
+                  <div class="custom-select__option" data-value="5 – 30 ล้านบาท">5 – 30 ล้านบาท</div>
+                  <div class="custom-select__option" data-value="30 - 50 ล้านบาท">30 - 50 ล้านบาท</div>
+                  <div class="custom-select__option" data-value="100 - 500 ล้านบาท">100 - 500 ล้านบาท</div>
+                  <div class="custom-select__option" data-value="500 ล้านบาทขึ้นไป">500 ล้านบาทขึ้นไป</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <textarea name="message" placeholder="ข้อความเพิ่มเติม..."></textarea>
+            </div>
+            <div style="display: flex; justify-content: center;">
+              <button type="submit" id="form-submit-btn" class="btn btn-primary" style="width: 50%; justify-content: center;">
+                ส่งข้อมูล
+              </button>
+            </div>
+          </form>
+
+          <!-- Step 2: Consent (hidden) -->
+          <div id="consent-step" style="display:none;">
+            <p style="font-family: var(--font-sans); font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.7; margin-bottom: 20px;">
+              Yuanta Securities มุ่งมั่นในการปกป้องและเคารพความเป็นส่วนตัวของคุณ และเราจะใช้ข้อมูลส่วนตัวของคุณเฉพาะเพื่อจัดการบัญชีของคุณ และเพื่อให้บริการผลิตภัณฑ์และบริการต่างๆ ที่คุณร้องขอจากเรา ในบางครั้งเราอาจติดต่อคุณเกี่ยวกับผลิตภัณฑ์และบริการของเรา รวมถึงเนื้อหาอื่นๆ ที่คุณอาจสนใจ หากคุณยินยอม ให้เราติดต่อคุณเพื่อจุดประสงค์นี้ โปรดกาเครื่องหมายด้านล่างเพื่อแจ้งว่าคุณต้องการให้เราติดต่อคุณอย่างไร:
+            </p>
+            <label style="display:flex; align-items:flex-start; gap:10px; cursor:pointer; margin-bottom:16px;">
+              <input type="checkbox" id="consent-communication" style="margin-top:3px; flex-shrink:0; accent-color:#b8996a; width:16px; height:16px;" />
+              <span style="font-family: var(--font-sans); font-size: 13px; color: rgba(255,255,255,0.85); line-height: 1.6;">
+                ข้าพเจ้ายอมรับในการรับการสื่อสารอื่นๆ จาก Yuanta Securities <span style="color:#ffaaaa;">*</span>
+              </span>
+            </label>
+            <label style="display:flex; align-items:flex-start; gap:10px; cursor:pointer; margin-bottom:24px;">
+              <input type="checkbox" id="consent-data" style="margin-top:3px; flex-shrink:0; accent-color:#b8996a; width:16px; height:16px;" />
+              <span style="font-family: var(--font-sans); font-size: 13px; color: rgba(255,255,255,0.85); line-height: 1.6;">
+                ข้าพเจ้าตกลงอนุญาตให้ Yuanta Securities เก็บและประมวลผลข้อมูลส่วนตัวของข้าพเจ้า <span style="color:#ffaaaa;">*</span>
+              </span>
+            </label>
+            <div style="display:flex; gap:10px; justify-content:center;">
+              <button id="consent-back-btn" type="button" class="btn" style="width:35%; justify-content:center; background:transparent; border:1px solid rgba(255,255,255,0.3); color:rgba(255,255,255,0.7);">
+                ย้อนกลับ
+              </button>
+              <button id="consent-confirm-btn" type="button" class="btn btn-primary" style="width:55%; justify-content:center;">
+                ยืนยันและส่งข้อมูล
+              </button>
+            </div>
+            <p id="form-error" style="display:none; font-family: var(--font-sans); font-size: 14px; color: #ffaaaa; margin-top: 12px; text-align: center;">เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง</p>
+          </div>
+
+          <!-- Step 3: Success (hidden) -->
+          <div id="success-step" style="display:none; text-align:center; padding: 32px 0;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="#b8996a" stroke-width="1.5" style="margin-bottom:16px;"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <p style="font-family: var(--font-sans); font-size: 16px; color: rgba(255,255,255,0.9); font-weight: 500; margin-bottom: 8px;">ขอบคุณครับ</p>
+            <p style="font-family: var(--font-sans); font-size: 14px; color: rgba(255,255,255,0.65);">ทีมงานจะติดต่อกลับภายใน 1 วันทำการ</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% endblock body %}
+
+{% block scripts %}
+<style>
+.custom-select {
+  position: relative;
+  user-select: none;
+}
+.custom-select__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: 0;
+  padding: 12px 16px;
+  font-size: 16px;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.custom-select.has-value .custom-select__trigger {
+  color: var(--color-text-primary);
+}
+.custom-select.open .custom-select__trigger {
+  border-color: var(--color-brand);
+}
+.custom-select__trigger svg {
+  flex-shrink: 0;
+  transition: transform 0.2s;
+  color: var(--color-text-muted);
+}
+.custom-select.open .custom-select__trigger svg {
+  transform: rotate(180deg);
+}
+.custom-select__options {
+  display: none;
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  right: 0;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: 0;
+  z-index: 100;
+  overflow: hidden;
+}
+.custom-select.open .custom-select__options {
+  display: block;
+}
+.custom-select__option {
+  padding: 12px 16px;
+  font-size: 15px;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.custom-select__option:hover {
+  background: #F6F3EF;
+}
+.custom-select__option.selected {
+  color: var(--color-brand);
+  font-weight: 500;
+}
+</style>
+<script>
+  var _pendingFields = [];
+
+  // Step 1 → Step 2: validate form แล้วแสดง consent
+  document.getElementById('contact-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var form = this;
+    _pendingFields = Array.from(form.querySelectorAll('[name]'))
+      .filter(function(el) { return el.value.trim() !== ''; })
+      .map(function(el) { return { name: el.name, value: el.value.trim() }; });
+
+    form.style.display = 'none';
+    document.getElementById('consent-step').style.display = 'block';
+  });
+
+  // ย้อนกลับ → Step 1
+  document.getElementById('consent-back-btn').addEventListener('click', function() {
+    document.getElementById('consent-step').style.display = 'none';
+    document.getElementById('contact-form').style.display = 'block';
+    document.getElementById('form-error').style.display = 'none';
+  });
+
+  // ยืนยัน → submit HubSpot
+  document.getElementById('consent-confirm-btn').addEventListener('click', function() {
+    var commConsent = document.getElementById('consent-communication').checked;
+    var dataConsent = document.getElementById('consent-data').checked;
+    var error = document.getElementById('form-error');
+
+    if (!commConsent || !dataConsent) {
+      error.style.display = 'block';
+      error.textContent = 'กรุณายอมรับเงื่อนไขทั้งหมดก่อนส่งข้อมูล';
+      return;
+    }
+
+    error.style.display = 'none';
+    var btn = this;
+    btn.disabled = true;
+    btn.textContent = 'กำลังส่ง...';
+
+    fetch('https://api.hsforms.com/submissions/v3/integration/submit/43844850/43e53319-a0ca-466f-9506-6fd66f9b4d4b', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        fields: _pendingFields.concat([{ name: 'consent_status', value: 'Yes' }]),
+        context: { pageUri: window.location.href, pageName: document.title }
+      })
+    })
+    .then(function(res) {
+      if (res.ok) {
+        document.getElementById('consent-step').style.display = 'none';
+        document.getElementById('success-step').style.display = 'block';
+      } else {
+        throw new Error(res.status);
+      }
+    })
+    .catch(function(err) {
+      error.style.display = 'block';
+      error.textContent = 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง';
+      console.error('HubSpot submit error:', err);
+    })
+    .finally(function() {
+      btn.disabled = false;
+      btn.textContent = 'ยืนยันและส่งข้อมูล';
+    });
+  });
+
+  // Custom select
+  (function() {
+    var cs = document.getElementById('custom-select-investment');
+    var trigger = cs.querySelector('.custom-select__trigger');
+    var label = cs.querySelector('.custom-select__label');
+    var options = cs.querySelectorAll('.custom-select__option');
+    var hidden = document.getElementById('investment_amount_val');
+
+    trigger.addEventListener('click', function(e) {
+      e.stopPropagation();
+      cs.classList.toggle('open');
+    });
+
+    options.forEach(function(opt) {
+      opt.addEventListener('click', function() {
+        options.forEach(function(o) { o.classList.remove('selected'); });
+        opt.classList.add('selected');
+        label.textContent = opt.getAttribute('data-value');
+        hidden.value = opt.getAttribute('data-value');
+        cs.classList.add('has-value');
+        cs.classList.remove('open');
+      });
+    });
+
+    document.addEventListener('click', function() {
+      cs.classList.remove('open');
+    });
+  })();
+</script>
+{% endblock scripts %}

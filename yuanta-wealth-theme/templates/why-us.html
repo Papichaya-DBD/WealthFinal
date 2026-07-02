@@ -1,0 +1,183 @@
+<!--
+  templateType: page
+  label: Why Us
+  isAvailableForNewContent: true
+-->
+{% extends "./layouts/base.html" %}
+
+{% block body %}
+
+<!-- HERO -->
+<section class="hero" style="background-image: url('https://landing.yuanta.co.th/hubfs/expertbanner.png');">
+  <div class="hero-overlay"></div>
+  <div class="hero-inner hero-content" style="width:100%;">
+    <div class="container">
+      <div style="text-align:center; width:100%;">
+        <h1 class="hero-title">{% module "whyus_hero_title" path="@hubspot/text", label="Hero Title", value="Why us" %}</h1>
+        <p class="hero-subtitle">{% module "whyus_hero_subtitle" path="@hubspot/text", label="Hero Subtitle", value="เหตุผลที่นักลงทุนระดับ High-Net-Worth ไว้วางใจ Yuanta Wealth" %}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DESCRIPTION -->
+<section class="whyus-desc-section">
+  <div class="container">
+    <div class="whyus-desc-center">
+      <p class="whyus-desc-text">{% module "whyus_desc_1" path="@hubspot/text", label="Description 1", value="Yuanta Wealth Management ให้บริการที่ปรึกษาการลงทุนส่วนตัว ด้วยทีมผู้เชี่ยวชาญที่มีประสบการณ์ระดับนานาชาติ เราออกแบบพอร์ตการลงทุนที่ปรับแต่งเฉพาะบุคคล สอดคล้องกับเป้าหมายทางการเงิน ระดับความเสี่ยงที่ยอมรับได้ และแผนการส่งต่อความมั่งคั่งสู่คนรุ่นถัดไป" %}</p>
+      <p class="whyus-desc-text" style="margin-top:16px;">{% module "whyus_desc_2" path="@hubspot/text", label="Description 2", value="ด้วยความเชี่ยวชาญในตลาดทุนไทยและสากลกว่า 25 ปี เรามุ่งมั่นสร้างผลตอบแทนที่มั่นคงและยั่งยืน พร้อมดูแลความมั่งคั่งของคุณในทุกมิติ ตั้งแต่การลงทุน การวางแผนภาษี ไปจนถึงการส่งต่อมรดกสู่รุ่นถัดไป" %}</p>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERTS -->
+<section class="experts-section">
+  <div class="container" style="position:relative;z-index:1;">
+    <div class="section-header experts-section-header" style="justify-content:center; text-align:center; margin-bottom:48px;">
+      <div class="section-header-left" style="align-items:center;">
+        <h2 class="section-title" style="text-align:center;">Expert</h2>
+      </div>
+    </div>
+    <div class="row g-4 justify-content-center" id="expertsGrid">
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="expert-card">
+          <div class="expert-photo-wrap">
+            <img class="expert-photo" src="https://landing.yuanta.co.th/hubfs/%E0%B8%84%E0%B8%B8%E0%B8%93%E0%B8%94%E0%B8%99%E0%B8%B1%E0%B8%A2_%E0%B8%84%E0%B8%A3%E0%B8%B6%E0%B9%88%E0%B8%87%E0%B8%9A%E0%B8%99.jpg" alt="Expert" />
+          </div>
+          <div class="expert-card-body">
+            <p class="expert-name">Danai Aroonkittichai</p>
+            <p class="expert-role">CFA</p>
+            <div class="expert-divider-strip"></div>
+            <p class="expert-title-th">Chief Retail Business Office at Yuanta Securities</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="expert-card">
+          <div class="expert-photo-wrap">
+            <img class="expert-photo" src="https://landing.yuanta.co.th/hubfs/%E0%B8%84%E0%B8%B8%E0%B8%93%E0%B8%A7%E0%B8%B1%E0%B8%A8%E0%B8%81%E0%B8%A3%E0%B8%93%E0%B9%8C_%E0%B8%84%E0%B8%A3%E0%B8%B6%E0%B9%88%E0%B8%87%E0%B8%9A%E0%B8%99.jpg" alt="Expert" />
+          </div>
+          <div class="expert-card-body">
+            <p class="expert-name">Visakorn Kirivan</p>
+            <p class="expert-role">CFA, PhD</p>
+            <div class="expert-divider-strip"></div>
+            <p class="expert-title-th">Senior Investment Strategist , Fundamental Investment Analyst</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="expert-card">
+          <div class="expert-photo-wrap">
+            <img class="expert-photo" src="https://landing.yuanta.co.th/hubfs/%E0%B8%84%E0%B8%B8%E0%B8%93%E0%B8%93%E0%B8%B1%E0%B8%90%E0%B8%81%E0%B8%B4%E0%B8%95_%E0%B8%84%E0%B8%A3%E0%B8%B6%E0%B9%88%E0%B8%87%E0%B8%9A%E0%B8%99.jpg" alt="Expert" />
+          </div>
+          <div class="expert-card-body">
+            <p class="expert-name">Natakit Karnkriangkrai</p>
+            <p class="expert-role"></p>
+            <div class="expert-divider-strip"></div>
+            <p class="expert-title-th">Investment Strategist with a passion for global investing and portfolio solutions.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="experts-pagination" id="expertsPagination"></div>
+  </div>
+</section>
+
+<!-- AWARDS -->
+<section class="awards-section">
+  <div class="container">
+    <div class="section-header" style="justify-content:center; align-items:center; text-align:center; margin-bottom:48px;">
+      <div class="section-header-left" style="align-items:center;">
+        <h2 class="section-title" style="text-align:center;">Awards</h2>
+      </div>
+    </div>
+    <div class="awards-list" id="awards-list">
+      <!-- loaded from HubDB -->
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter-section">
+  <div class="container">
+    <div class="row align-items-center gy-5">
+      <div class="col-12 col-lg-6">
+        <div class="newsletter-left">
+          <p class="newsletter-label">Exclusive Insights</p>
+          <h2 class="newsletter-title">Unlock Insights &amp;<br>Market Intelligence</h2>
+          <p class="newsletter-desc">รับข้อมูลเชิงลึกด้านการลงทุน บทวิเคราะห์ตลาด และโอกาสการลงทุนพิเศษ<br>ส่งตรงถึงอีเมลของคุณทุกสัปดาห์</p>
+        </div>
+      </div>
+      <div class="col-12 col-lg-6">
+        <div class="newsletter-right">
+          <form class="newsletter-form" id="newsletter-form">
+            <input type="email" id="newsletter-email" placeholder="กรอกอีเมลของคุณ" required />
+            <button type="submit">Subscribe to insights</button>
+          </form>
+          <p id="newsletter-msg" style="display:none; margin-top:12px; font-size:14px; font-family:var(--font-sans);"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock body %}
+
+{% block scripts %}
+<script>
+  (function() {
+    var fallback = '{{ get_asset_url("../images/comingsoon.png") }}';
+    fetch('https://api.hubapi.com/cms/v3/hubdb/tables/2302074604/rows?portalId=43844850&sort=order&limit=100')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var rows = (data.results || []).sort(function(a, b) {
+          return (a.values.order || 0) - (b.values.order || 0);
+        });
+        var html = rows.map(function(row) {
+          var v = row.values;
+          var thumb = (v.thumbnail && v.thumbnail.url) ? v.thumbnail.url : fallback;
+          return '<div class="award-item-new">'
+            + '<img class="award-thumb" src="' + thumb + '" alt="" />'
+            + '<div class="award-content">'
+            + '<span class="award-date-label">' + (v.date_label || '') + '</span>'
+            + '<h3 class="award-title-new">' + (v.title || '') + '</h3>'
+            + '<p class="award-desc-text">' + (v.description || '') + '</p>'
+            + '</div></div>';
+        }).join('');
+        document.getElementById('awards-list').innerHTML = html;
+      })
+      .catch(function() {});
+  })();
+</script>
+<script>
+  document.getElementById('newsletter-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var email = document.getElementById('newsletter-email').value;
+    var msg = document.getElementById('newsletter-msg');
+    fetch('https://api.hsforms.com/submissions/v3/integration/submit/43844850/366d7ed2-7a14-44f0-8a7c-dffcba0cd288', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        fields: [{ name: 'email', value: email }],
+        context: { pageUri: window.location.href, pageName: document.title }
+      })
+    })
+    .then(function(res) {
+      msg.style.display = '';
+      if (res.ok) {
+        msg.style.color = '#2d7a4f';
+        msg.textContent = 'สมัครสมาชิกเรียบร้อยแล้ว ขอบคุณที่สนใจ!';
+        document.getElementById('newsletter-email').value = '';
+      } else {
+        msg.style.color = '#c0392b';
+        msg.textContent = 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง';
+      }
+    })
+    .catch(function() {
+      msg.style.display = '';
+      msg.style.color = '#c0392b';
+      msg.textContent = 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง';
+    });
+  });
+</script>
+{% endblock scripts %}

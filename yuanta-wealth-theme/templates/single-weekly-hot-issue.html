@@ -363,6 +363,7 @@
     if (nav) document.documentElement.style.setProperty('--nav-height', nav.offsetHeight + 'px');
   })();
 
+  var WEEK_SLUG    = '{{ row.week_slug }}';
   var PORTAL       = '43844850';
   var HOT_TABLE    = '2599182038';
   var EXCLUDE_TABLE = '2599182038';
@@ -436,7 +437,7 @@
 
   // ── Main fetch ──
   (function() {
-    weekSlug = location.pathname.split('/').filter(Boolean).pop();
+    weekSlug = WEEK_SLUG || location.pathname.split('/').filter(Boolean).pop();
     var pdfBtn = document.getElementById('ctaPdfBtn');
     if (pdfBtn && weekSlug) pdfBtn.href = '/wealth-weekly-report?week=' + encodeURIComponent(weekSlug);
     if (!weekSlug) {

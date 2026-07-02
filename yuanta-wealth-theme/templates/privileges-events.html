@@ -1,0 +1,399 @@
+<!--
+  templateType: page
+  label: Privileges & Events
+  isAvailableForNewContent: true
+-->
+{% extends "./layouts/base.html" %}
+
+{% block body %}
+
+{% set events_rows = hubdb_table_rows(2514745078, "category__eq=events&is_published__eq=true&orderBy=event_date&limit=100") %}
+
+<!-- HERO -->
+<section class="hero" style="background-image: url('https://landing.yuanta.co.th/hubfs/privilegesbanner.png');">
+  <div class="hero-overlay"></div>
+  <div class="hero-inner hero-content" style="width:100%;">
+    <div class="container">
+      <div style="text-align:center; width:100%;">
+        <h1 class="hero-title hero-page">{% module "priv_hero_title" path="@hubspot/text", label="Hero Title", value="Privileges & Events" %}</h1>
+        <p class="hero-subtitle">{% module "priv_hero_subtitle" path="@hubspot/text", label="Hero Subtitle", value="กิจกรรมพิเศษและสิทธิประโยชน์เฉพาะสำหรับลูกค้า Yuanta Wealth" %}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TABS + CARDS -->
+<section style="padding: 60px 0 0; background: var(--color-white);">
+  <div class="container">
+    <div class="tabs-outer">
+      <div class="tabs-bar">
+        <button class="tab-chip active" onclick="switchTab(this, 'events')">Events</button>
+        <button class="tab-chip" onclick="switchTab(this, 'privileges')">Privileges</button>
+      </div>
+    </div>
+
+    <!-- Events tab -->
+    <div id="tab-events" class="row g-4">
+      {% if events_rows %}
+        {% for event in events_rows %}
+        <div class="col-12 col-sm-6 col-lg-3">
+          <a href="/wealth-single-events?slug={{ event.slug }}" style="text-decoration:none;color:inherit;display:block;">
+            <div class="event-card">
+              {% if event.image %}
+              <img class="event-img" src="{{ event.image.url }}" alt="{{ event.title }}" />
+              {% else %}
+              <img class="event-img" src="{{ get_asset_url('../images/comingsoon.png') }}" alt="{{ event.title }}" />
+              {% endif %}
+              <div class="event-card-content">
+                <h3 class="event-title">{{ event.title }}</h3>
+                <div class="event-meta">
+                  <p class="event-datetime">
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="3" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5 1v4M11 1v4M2 7h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    <span class="event-date-text">{{ event.event_date|datetimeformat("%d %b %Y") }}</span>
+                    {% if event.event_time %}<span class="event-date-sep"></span><span class="event-time">{{ event.event_time }}</span>{% endif %}
+                  </p>
+                  {% if event.location %}
+                  <p class="event-location">
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 14s5-4.686 5-8a5 5 0 10-10 0c0 3.314 5 8 5 8z" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="6" r="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+                    <span>{{ event.location }}</span>
+                  </p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="col-12" style="padding: 40px 0; text-align: center; color: #3d506e;">
+          <p>ไม่มีกิจกรรมในขณะนี้</p>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Privileges tab (hidden by default) -->
+    <div id="tab-privileges" style="display:none;">
+
+      <!-- Yuanta Rewards info box -->
+      <div class="priv-rewards-box" style="background-image: url('{{ get_asset_url('../images/bg-privilege.png') }}'); background-position: center; background-size: cover; background-repeat: no-repeat;">
+        <p class="priv-rewards-heading">
+          <img src="{{ get_asset_url('../images/icon-prestige.png') }}" alt="" class="priv-rewards-icon" />
+          Yuanta Rewards
+        </p>
+        <p class="priv-rewards-tagline">เปลี่ยนทุกการลงทุนให้คุ้มค่ายิ่งขึ้น</p>
+        <p class="priv-rewards-body"><strong>Yuanta Rewards</strong> คือ โปรแกรมสิทธิพิเศษที่ออกแบบมา เพื่อลูกค้าหยวนต้าโดยเฉพาะ</p>
+        <p class="priv-rewards-body">สะสมคะแนนจากการลงทุนผ่านผลิตภัณฑ์ หรือบริการ ของ Yuanta และรับสิทธิพิเศษที่เพิ่มขึ้นตามระดับ สถานะของคุณ ยิ่งลงทุนมาก ยิ่งได้รับมาก ทั้งของรางวัลสุดพิเศษและสิทธิประโยชน์เฉพาะลูกค้าในแต่ละระดับ</p>
+      </div>
+
+      <!-- Section heading above cards -->
+      <div class="priv-card-heading">
+        <p>สิทธิประโยชน์ที่คุณจะได้รับ</p>
+        <p>จาก <strong>Yuanta Ultimate</strong></p>
+      </div>
+
+      <!-- Card tiers -->
+      <div class="priv-card-img-wrap">
+        <img src="{{ get_asset_url('../images/card.png') }}" alt="Yuanta Elite, Signature, Prestige Cards" class="priv-card-img" />
+      </div>
+
+      <!-- Bordered content box -->
+      <div class="priv-content-box">
+
+        <div class="priv-section-heading">
+          <p class="priv-section-num"><span>1</span> สิทธิพิเศษตามสถานะ</p>
+          <p class="priv-section-sub">ไม่ว่าคุณจะอยู่ในสถานะใด ก็สามารถได้รับสิทธิประโยชน์ ที่ออกแบบมาเฉพาะสำหรับระดับนั้นๆทันที</p>
+          <p class="priv-section-sub">เพียงสะสมคะแนนจากการลงทุนผ่านผลิตภัณฑ์หรือบริการของ Yuanta คุณก็สามารถคงระดับหรืออัปเกรดสถานะ เพื่อรับสิทธิประโยชน์ที่มากขึ้นได้อย่างต่อเนื่อง</p>
+        </div>
+
+        <div class="priv-table-area">
+          <div id="priv-benefits-table"><!-- loaded from HubDB --></div>
+        </div>
+
+        <div class="priv-footnote">
+          <p>การรับสถานะสามารถทำได้ผ่าน 2 เงื่อนไข</p>
+          <p>1. สะสมค่า RC ให้ถึงเกณฑ์ หรือ</p>
+          <p>2. มีมูลค่าสินทรัพย์การลงทุนในพอร์ตกองทุน ถึงที่กำหนดในวันใดๆที่ได้ภายในช่วงเวลาที่กำหนด</p>
+          <br>
+          <p>รอบการคิดค่าธรรมเนียมสะสม, มูลค่าการลงทุนในหุ้นกู้ที่มีอนุพันธ์แฝง และหุ้นกู้ จะพิจารณาทุก 6 เดือน (2 รอบ/ปี) ได้แก่ :</p>
+          <p>• รอบที่ 1: 1 มกราคม – 30 มิถุนายน</p>
+          <p>• รอบที่ 2: 1 กรกฎาคม – 31 ธันวาคม</p>
+          <p>โดยในแต่ละรอบจะเริ่มนับมูลค่าการลงทุนสะสมตั้งแต่ 0 บาท และจะมีการตัดยอดเมื่อสิ้นสุดรอบดังกล่าว</p>
+        </div>
+
+      </div><!-- /priv-content-box -->
+
+      <!-- Section 2 -->
+      <div class="priv-content-box" style="margin-top: 24px;">
+
+        <div class="priv-section-heading">
+          <p class="priv-section-num"><span>2</span> สะสมคะแนนจากการลงทุน หรือ ร่วมภารกิจพิเศษ</p>
+          <p class="priv-section-sub">นำคะแนนไปแลกรางวัลที่คุณเลือกเองได้ตามความต้องการ ผ่าน YSInvest มูลค่าของคะแนน จะแตกต่างกันไปตามรางวัลที่คุณเลือก</p>
+          <p class="priv-section-sub">ยิ่งสะสมมาก ยิ่งมีสิทธิ์เลือกของรางวัลพรีเมียม ที่ตรงใจคุณได้มากขึ้น</p>
+        </div>
+
+        <div class="priv-table-area">
+          <div id="priv-products-table"><!-- loaded from HubDB --></div>
+        </div>
+
+      </div><!-- /priv-content-box section 2 -->
+
+      <div class="priv-section-box" style="margin-top: 16px; background-image: url('{{ get_asset_url('../images/bgoverall.jpg') }}'); background-position: center; background-size: cover; background-repeat: no-repeat;">
+        <div class="priv-footnote" style="border-top: none;">
+          <p class="priv-footnote-title">ระยะเวลาสะสมคะแนน Yuanta Points</p>
+          <p class="priv-footnote-bold">คะแนน Yuanta Points จะสะสมตลอดทั้งปี และมีอายุ 1 ปีปฏิทิน</p>
+          <p>เช่น คะแนนสะสมตลอดปี 2026 จะหมดอายุวันที่ 31 ธ.ค. 2027</p>
+        </div>
+      </div>
+
+      <!-- TERMS & CONDITIONS ACCORDION -->
+      <div class="tac-section" style="padding: 24px 0 60px;">
+        <div class="tac-outer">
+          <button class="tac-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#tacContent" aria-expanded="false" aria-controls="tacContent">
+            <span>ข้อกำหนดและเงื่อนไขบริการ Yuanta Rewards</span>
+            <svg class="tac-chevron" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div id="tacContent" class="collapse">
+            <div class="tac-body">
+              <p>ผู้ขอใช้บริการตกลงยอมรับข้อกำหนดและเงื่อนไขเพิ่มเติมของโครงการ Yuanta Rewards ดังต่อไปนี้</p>
+
+              <p><strong>นิยามคำสำคัญ (Definitions)</strong><br>
+              ภายใต้ข้อกำหนดและเงื่อนไขฉบับนี้</p>
+              <ul>
+                <li>"บริษัท" หมายถึง บริษัทหลักทรัพย์ หยวนต้า (ประเทศไทย) จำกัด</li>
+                <li>"โครงการ Yuanta Rewards" หมายถึง โครงการสิทธิประโยชน์สำหรับลูกค้าของบริษัทตามที่บริษัทกำหนด</li>
+                <li>"RC (Rewards Credit)" หมายถึง หน่วยคะแนนที่ได้จากค่าคอมมิชชั่นหรือกิจกรรมที่บริษัทกำหนด ซึ่งใช้เป็นฐานในการคำนวณระดับสมาชิกและ Yuanta Points</li>
+                <li>"Yuanta Points" หมายถึง คะแนนสะสมที่คำนวณจาก RC ตามระดับสมาชิก และสามารถนำไปใช้แลกสิทธิประโยชน์ตามที่บริษัทกำหนด</li>
+                <li>"Tier" และ "ระดับสมาชิก" หมายถึง ระดับสถานะของลูกค้าในโครงการ Yuanta Rewards ซึ่งกำหนดจาก RC หรือ AUM ตามเงื่อนไขของบริษัท</li>
+                <li>"Yuanta Ultimate" หมายถึง ระดับสิทธิประโยชน์พิเศษเพิ่มเติมสำหรับลูกค้าที่เข้าเงื่อนไขเฉพาะ ตามที่บริษัทกำหนด</li>
+              </ul>
+              <p>หากไม่มีการกำหนดนิยามไว้เป็นการเฉพาะในข้อกำหนดและเงื่อนไขฉบับนี้ ให้ตีความตามนิยามที่ปรากฏในข้อกำหนดและเงื่อนไขการใช้บริการของบริษัทหลักทรัพย์หยวนต้า (ประเทศไทย) จำกัด</p>
+              <p>ข้อกำหนดและเงื่อนไขฉบับนี้ใช้บังคับเฉพาะกับผู้ขอใช้บริการที่มีสิทธิเข้าร่วมโครงการ Yuanta Rewards เท่านั้น</p>
+              <p>โครงการสะสมคะแนน Yuanta Rewards จัดขึ้นสำหรับผู้ลงทุนรายบุคคลหรือนิติบุคคล (ยกเว้นผู้ลงทุนสถาบันตามประกาศของคณะกรรมการกำกับตลาดทุน ทั้งในปัจจุบันและที่จะมีการแก้ไขเพิ่มเติมในอนาคต) ซึ่งมีคำสั่งซื้อและ/หรือขายสินทรัพย์ผ่านบัญชีของตนเองกับบริษัท และดำเนินรายการสำเร็จภายใต้ช่วงระยะเวลาโครงการ</p>
+              <p><strong>ระยะเวลาโครงการ</strong> : ตั้งแต่วันที่ 1 มกราคม 2569 – 31 ธันวาคม 2569</p>
+
+              <p><strong>ผลิตภัณฑ์ที่เข้าร่วมและอัตราการให้ RC</strong></p>
+
+              <div class="tac-product-section">
+                <h4>4.1 หุ้นไทย อนุพันธ์ หุ้นต่างประเทศ และกองทุนรวม</h4>
+                <table class="tac-table">
+                  <tr>
+                    <td class="tac-td-label">ผลิตภัณฑ์ที่ร่วมรายการ</td>
+                    <td><ul><li>หลักทรัพย์ที่จดทะเบียนใน SET และ MAI</li><li>สัญญาซื้อขายล่วงหน้า (TFEX)</li><li>กองทุนรวม</li><li>หุ้นต่างประเทศ</li></ul></td>
+                  </tr>
+                  <tr>
+                    <td class="tac-td-label">อัตราคะแนน</td>
+                    <td>ทุกค่าธรรมเนียมการลงทุน 25 บาท จะได้รับ 1 RC</td>
+                  </tr>
+                  <tr>
+                    <td class="tac-td-label">การคำนวณคะแนน</td>
+                    <td>การคำนวณคะแนนจากคำสั่งซื้อ และ/หรือ ขายแยกตามแต่ละผลิตภัณฑ์ และ/หรือ แต่ละรายการลงทุน โดยจะทำการคำนวณและแสดงผลคะแนนสะสมผ่าน YSInvest</td>
+                  </tr>
+                  <tr>
+                    <td class="tac-td-label">การตรวจสอบคะแนน</td>
+                    <td>คะแนนจะถูกคำนวนทุกเดือน และจะอัพเดตคะแนนภายใน 5 วันทำการของเดือนถัดไป<br>ตรวจสอบคะแนนได้ทางแพลตฟอร์ม YSInvest</td>
+                  </tr>
+                </table>
+              </div>
+
+              <div class="tac-product-section">
+                <h4>4.2 หุ้นกู้ที่มีอนุพันธ์แฝง</h4>
+                <table class="tac-table">
+                  <tr>
+                    <td class="tac-td-label">ผลิตภัณฑ์ที่ร่วมรายการ</td>
+                    <td><ul><li>Thai Structure Note</li><li>Global Structured Note</li></ul></td>
+                  </tr>
+                  <tr>
+                    <td class="tac-td-label">อัตราคะแนน</td>
+                    <td>ทุกจำนวนเงินลงทุน 2,500 บาท<br>จะได้รับ 1 RC</td>
+                  </tr>
+                  <tr>
+                    <td class="tac-td-label">การตรวจสอบคะแนน</td>
+                    <td>คะแนนจะถูกคำนวนทุกเดือน และจะอัพเดตคะแนนภายใน 5 วันทำการของเดือนถัดไป<br>ตรวจสอบคะแนนได้ทางแพลตฟอร์ม YSInvest</td>
+                  </tr>
+                </table>
+              </div>
+
+              <div class="tac-product-section">
+                <h4>4.3 หุ้นกู้</h4>
+                <table class="tac-table">
+                  <tr>
+                    <td class="tac-td-label">ผลิตภัณฑ์ที่ร่วมรายการ</td>
+                    <td><ul><li>หุ้นกู้</li></ul></td>
+                  </tr>
+                  <tr>
+                    <td class="tac-td-label">อัตราคะแนน</td>
+                    <td>ทุกจำนวนเงินลงทุน 500,000 บาท จะได้รับ 1 RC</td>
+                  </tr>
+                  <tr>
+                    <td class="tac-td-label">การตรวจสอบคะแนน</td>
+                    <td>คะแนนจะถูกคำนวนทุกเดือน และจะอัพเดตคะแนนภายใน 5 วันทำการของเดือนถัดไป<br>ตรวจสอบคะแนนได้ทางแพลตฟอร์ม YSInvest</td>
+                  </tr>
+                </table>
+              </div>
+
+              <p><strong>อายุคะแนน</strong> : คะแนน Yuanta Point มีอายุ 1 ปีปฏิทิน เช่น คะแนนที่สะสมตลอดปี 2569 จะหมดอายุในวันที่ 31 ธันวาคม 2570</p>
+
+              <p><strong>หลักเกณฑ์การสะสม RC</strong> : RC จะถูกคำนวณจากค่าธรรมเนียม ค่าคอมมิชชั่น และ/หรือจำนวนเงินลงทุนที่ลูกค้าชำระจริง โดยแยกการคำนวณตามประเภทผลิตภัณฑ์และคำสั่งซื้อขาย ตามหลักเกณฑ์ที่บริษัทกำหนด ทั้งนี้ เศษของยอดที่ไม่ครบตามเกณฑ์การคำนวณ RC จะถูกปัดลง การคำนวณ RC จะอ้างอิงข้อมูลที่บริษัทบันทึกไว้ในระบบ และดำเนินการตามรอบระยะเวลาที่บริษัทกำหนด RC ที่ได้รับจะถูกนำมาใช้เป็นฐานในการประเมินระดับสมาชิก (Tier) และคำนวณ Yuanta Points บริษัทขอสงวนสิทธิ์ในการกำหนด เปลี่ยนแปลง ระงับ หรือยกเลิกหลักเกณฑ์ วิธีการ และเงื่อนไขการสะสม RC ไม่ว่าทั้งหมดหรือบางส่วน โดยไม่ต้องแจ้งให้ทราบล่วงหน้า</p>
+
+              <p><strong>หลักเกณฑ์การคำนวณ Yuanta Points</strong> : Yuanta Points จะถูกคำนวณจากจำนวน RC ที่ลูกค้าได้รับ โดยอ้างอิงอัตราส่วน RC ต่อ 1 Yuanta Point ตามระดับสมาชิก (Tier) ที่บริษัทกำหนด การคำนวณ Yuanta Points จะอ้างอิงข้อมูล Outstanding ณ สิ้นเดือนของแต่ละรอบบัญชี ทั้งนี้ อัตราส่วน RC ต่อ 1 Yuanta Point จะแตกต่างกันไปตามระดับสมาชิกของลูกค้า บริษัทขอสงวนสิทธิ์ในการปรับเปลี่ยนหลักเกณฑ์ อัตราส่วน วิธีการคำนวณ หรือเงื่อนไขที่เกี่ยวข้องกับ Yuanta Points ตามที่บริษัทเห็นสมควร โดยไม่ต้องแจ้งให้ทราบล่วงหน้า</p>
+
+              <p><strong>การนำคะแนน Yuanta Point มาแลกส่วนลดค่าธรรมเนียม</strong></p>
+              <ul>
+                <li>8.1 ผู้ใช้บริการสามารถใช้ Yuanta Point แลกเป็นส่วนลดค่าธรรมเนียมการลงทุนผ่านทุกช่องทาง (ยกเว้นลูกค้านิติบุคคล, การซื้อกองทุนภาษีที่ไม่ร่วมรายการ) โดยปฏิบัติตามขั้นตอนของบริษัท</li>
+                <li>8.2 ผู้ขอใช้บริการจะต้องกดยืนยันแลกส่วนลดค่าธรรมเนียมอัตโนมัติ (Auto Cashback) เพื่อทำรายการส่วนลดค่าซื้ออัตโนมัติ</li>
+                <li>8.3 ผู้ขอใช้บริการจะได้รับส่วนลดค่าซื้อ เมื่อคำสั่งซื้อสินทรัพย์ดังกล่าวทำรายการสำเร็จ</li>
+                <li>8.4 คะแนนที่ใช้แลกส่วนลดจะเป็นไปตามเงื่อนไขของบริษัท</li>
+                <li>8.5 สามารถตรวจสอบประวัติรายการใช้ส่วนลดค่าธรรมเนียม ผ่านเมนูประวัติคะแนน บน YSInvest</li>
+                <li>8.6 หากผู้ขอใช้บริการทำการแลกคะแนน Yuanta Point หลายรายการต่อวัน คะแนน Yuanta Point ของผู้ขอใช้บริการจะถูกตัดตามลำดับการทำรายการ</li>
+                <li>8.7 ผู้ขอใช้บริการที่นำคะแนน Yuanta Point มาใช้แลกส่วนลดค่าธรรมเนียมไม่สามารถขอคืน แลกเปลี่ยน และ/หรือ โอนสิทธิส่วนลดค่าธรรมเนียมให้แก่บุคคลอื่นได้</li>
+                <li>8.8 หลังจากลูกค้าได้ทำการแลกคะแนน Yuanta Point แล้ว บริษัทฯ ขอสงวนสิทธิ์ในการแลกกลับมาเป็นคะแนน Yuanta Point หรือของรางวัลอื่นไม่ว่ากรณีใด</li>
+              </ul>
+
+              <p>กรณีที่มีความผิดพลาดไม่ว่าด้วยเหตุใด ๆ อันมีผลให้ผู้ขอใช้บริการได้รับคะแนน Yuanta Point และ/หรือ ใช้คะแนน Yuanta Point และ/หรือ ได้รับเครดิตเงินคืนค่าธรรมเนียม และ/หรือ ของรางวัล และ/หรือ สิ่งอื่นใดตามที่บริษัทกำหนด ไม่ถูกต้องตามสิทธิที่ผู้ขอใช้บริการจะได้รับ บริษัทมีสิทธิที่จะปรับปรุงให้ถูกต้องได้ทันที ทั้งนี้ กรณีมีข้อโต้แย้ง และ/หรือ ข้อพิพาท ให้ถือคำตัดสินของบริษัทถือเป็นที่สุด</p>
+              <p>บริษัทมีสิทธิที่จะระงับ หรือยกเลิกการสะสมคะแนน Yuanta Point จากการทำรายการ และการแลกคะแนน Yuanta Point เมื่อใดก็ได้ โดยแจ้งให้ผู้ขอใช้บริการทราบล่วงหน้า เว้นแต่ กรณีที่บริษัทเห็นว่าการดำเนินการตามข้อกำหนดและเงื่อนไขนี้ และ/หรือ ข้อกำหนดเพิ่มเติม อาจเป็นการขัดต่อกฎหมาย หรือความสงบเรียบร้อยหรือศีลธรรมอันดีของประชาชน หรือมีพฤติการณ์อันน่าเชื่อว่ามีการใช้บริการหรือการทำรายการในลักษณะ Robot หรือโดยทุจริต หรือโดยมิชอบไม่ว่าด้วยประการใด ๆ หรือมีเหตุจำเป็นอื่นซึ่งไม่อาจแจ้งล่วงหน้าได้ บริษัทมีสิทธิระงับ หรือยกเลิกการสะสมคะแนน Yuanta Point จากการทำรายการ และการแลกคะแนน Yuanta Point ได้ทันที โดยบริษัทจะแจ้งให้ผู้ขอใช้บริการทราบโดยเร็ว</p>
+              <p>ผู้ขอใช้บริการตกลงและรับทราบรายละเอียดของบริการ Yuanta Point ตามข้อกำหนดและเงื่อนไขการใช้บริการ และตกลงยอมรับผูกพันและปฏิบัติตามข้อกำหนดและเงื่อนไขนี้ และข้อกำหนดและเงื่อนไขอื่นใดตามที่บริษัทจะได้กำหนดเพิ่มเติม แก้ไข หรือเปลี่ยนแปลงในภายหน้า ซึ่งให้ถือเป็นส่วนหนึ่งของข้อกำหนดและเงื่อนไขนี้ด้วย</p>
+              <p><strong>หมายเหตุ</strong> : ผู้ลงทุนควรศึกษาข้อมูลผลิตภัณฑ์ เงื่อนไข ผลตอบแทน และความเสี่ยงก่อนตัดสินใจลงทุน เนื่องจากการลงทุนมีความเสี่ยง ควรลงทุนให้เหมาะสมกับระดับความเสี่ยงที่สามารถยอมรับได้</p>
+              <p>สอบถามข้อมูลเพิ่มเติมได้ที่ บริษัทหลักทรัพย์หยวนต้า (ประเทศไทย) จำกัด ทุกวันทำการ หรือ Yuanta Online Service โทร. 02-009-8000</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /tab-privileges -->
+
+  </div>
+</section>
+
+<!-- CTA BOOK A MEETING -->
+<section class="cta-section" style="background-image: url('{{ get_asset_url('../images/consult-banner.jpg') }}');">
+  <div class="cta-overlay"></div>
+  <div class="cta-content">
+    <div class="container">
+      <div class="row align-items-center gy-4">
+        <div class="col-12 col-lg-8">
+          <div class="cta-text">
+            <p class="section-label" style="color: var(--color-brand-soft);">Start Your Wealth Journey</p>
+            <p class="cta-main-text">พบกับที่ปรึกษาการลงทุนส่วนตัวของคุณ</p>
+          </div>
+        </div>
+        <div class="col-12 col-lg-4 d-flex justify-content-lg-end">
+          <a href="#" class="btn btn-primary" onclick="openMeetingModal(); return false;">
+            Book a meeting
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock body %}
+
+{% block scripts %}
+<script>
+  function switchTab(el, tab) {
+    document.querySelectorAll('.tab-chip').forEach(function(c) { c.classList.remove('active'); });
+    el.classList.add('active');
+    document.getElementById('tab-events').style.display = tab === 'events' ? '' : 'none';
+    document.getElementById('tab-privileges').style.display = tab === 'privileges' ? '' : 'none';
+  }
+</script>
+<script>
+  (function () {
+    var CHECK_IMGS = [
+      '{{ get_asset_url("../images/check-elite.png") }}',
+      '{{ get_asset_url("../images/check-prestige.png") }}',
+      '{{ get_asset_url("../images/check-signature.png") }}'
+    ];
+    var TIER_ICONS = [
+      '{{ get_asset_url("../images/icon-elite.png") }}',
+      '{{ get_asset_url("../images/icon-prestige.png") }}',
+      '{{ get_asset_url("../images/icon-signature.png") }}'
+    ];
+    var TIER_LABELS = ['Elite', 'Prestige', 'Signature'];
+
+    function cell(val, idx) {
+      if (!val) return '<td></td>';
+      if (val === 'check') return '<td><img src="' + CHECK_IMGS[idx] + '" class="priv-check-img" alt="✓" /></td>';
+      return '<td class="priv-val">' + val + '</td>';
+    }
+
+    function box(rows) {
+      return '<div class="priv-section-box"><table class="priv-table"><colgroup>'
+        + '<col class="priv-col-feature"><col class="priv-col-tier"><col class="priv-col-tier"><col class="priv-col-tier">'
+        + '</colgroup><tbody>' + rows + '</tbody></table></div>';
+    }
+
+    function mainHeaderBox(feature, addMargin) {
+      var rows = '<tr class="priv-main-header-row"><td colspan="4">' + feature + '</td></tr>'
+        + '<tr class="priv-tier-icons-row"><td>ระดับสมาชิก</td>'
+        + TIER_ICONS.map(function(src, i) { return '<td><img src="' + src + '" class="priv-tier-icon-sm" alt="' + TIER_LABELS[i] + '" /></td>'; }).join('')
+        + '</tr>';
+      return '<div class="priv-section-box"' + (addMargin ? ' style="margin-top:24px;"' : '') + '>'
+        + '<table class="priv-table"><colgroup><col class="priv-col-feature"><col class="priv-col-tier"><col class="priv-col-tier"><col class="priv-col-tier"></colgroup>'
+        + '<tbody>' + rows + '</tbody></table></div>';
+    }
+
+    function build(rows) {
+      var html = '';
+      var currentRows = '';
+      var mainHeaderCount = 0;
+
+      rows.forEach(function (row) {
+        var v = row.values;
+        if (v.is_category && v.is_main_header) {
+          if (currentRows) { html += box(currentRows); currentRows = ''; }
+          html += mainHeaderBox(v.feature, mainHeaderCount > 0);
+          mainHeaderCount++;
+        } else if (v.is_category) {
+          if (currentRows) { html += box(currentRows); currentRows = ''; }
+          currentRows = '<tr class="priv-section-row"><td colspan="4">' + v.feature + '</td></tr>';
+        } else {
+          currentRows += '<tr class="priv-row"><td>' + v.feature + '</td>'
+            + cell(v.tier_1, 0) + cell(v.tier_2, 1) + cell(v.tier_3, 2) + '</tr>';
+        }
+      });
+      if (currentRows) html += box(currentRows);
+      return html;
+    }
+
+    fetch('https://api.hubapi.com/cms/v3/hubdb/tables/1884011208/rows?portalId=43844850&sort=order&limit=100')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var rows = (data.results || []).sort(function (a, b) {
+          return (a.values.order || 0) - (b.values.order || 0);
+        });
+        document.getElementById('priv-benefits-table').innerHTML = build(rows);
+      })
+      .catch(function () {
+        document.getElementById('priv-benefits-table').innerHTML = '';
+      });
+  })();
+</script>
+<script>
+  (function () {
+    fetch('https://api.hubapi.com/cms/v3/hubdb/tables/2279360248/rows?portalId=43844850&sort=order&limit=100')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var rows = (data.results || []).sort(function (a, b) {
+          return (a.values.order || 0) - (b.values.order || 0);
+        });
+        var bodyRows = rows.map(function (row) {
+          var v = row.values;
+          return '<tr class="priv-row"><td>' + (v.product || '') + '</td>'
+            + '<td class="priv-val">' + (v.rc_rate || '') + '</td></tr>';
+        }).join('');
+        var html = '<div class="priv-section-box">'
+          + '<table class="priv-table"><colgroup><col class="priv-col-half"><col class="priv-col-half"></colgroup>'
+          + '<tbody>'
+          + '<tr class="priv-main-header-row"><td colspan="2">การสะสม Yuanta Point จากผลิตภัณฑ์ลงทุน</td></tr>'
+          + '<tr class="priv-section-row priv-col-header-row"><td>ผลิตภัณฑ์ลงทุน</td><td>รับ 1 RC</td></tr>'
+          + bodyRows
+          + '</tbody></table></div>';
+        document.getElementById('priv-products-table').innerHTML = html;
+      })
+      .catch(function () {
+        document.getElementById('priv-products-table').innerHTML = '';
+      });
+  })();
+</script>
+{% endblock scripts %}
