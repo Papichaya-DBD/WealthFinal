@@ -74,6 +74,12 @@
   .cal-event-time   { color: #a2603c; font-weight: 600; font-size: 10px; margin-right: 2px; }
   .cal-more-label   { display: none; }
 
+  /* Tablet: slightly smaller header/event text */
+  @media (min-width: 768px) and (max-width: 991px) {
+    .monthly-cal th { font-size: 14px; }
+    .cal-event-item { font-size: 12px; }
+  }
+
   /* Mobile: compact inline grid */
   @media (max-width: 767px) {
     .monthly-cal-wrap { overflow-x: hidden; margin-bottom: 32px; }

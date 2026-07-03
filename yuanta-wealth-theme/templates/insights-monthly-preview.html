@@ -640,6 +640,10 @@
         max-width: calc(100vw - 56px);
         scroll-snap-align: start;
       }
+      .week-carousel-feat .week-carousel-track .col-card {
+        flex: 0 0 300px;
+        scroll-snap-stop: always;
+      }
       .week-carousel-track::after { content: ''; flex: 0 0 24px; }
     }
 
@@ -830,11 +834,12 @@
     }
     function thaiMonthYear(articles) {
       var first = articles[0] || {};
-      var v = (first.values) || {};
-      var ms = Number(v.page_date || v.week_start_date || 0);
-      if (!ms) return '';
-      var d = new Date(ms);
-      return THAI_MONTHS_FULL[d.getMonth()] + ' ' + (d.getFullYear() + 543);
+      var slug = (first.values && first.values.week_slug) || '';
+      var m = slug.match(/^(\d{4})-(\d{2})-\d{2}$/);
+      if (!m) return '';
+      var y  = parseInt(m[1], 10) + 543;
+      var mo = parseInt(m[2], 10) - 1;
+      return THAI_MONTHS_FULL[mo] + ' ' + y;
     }
     function thaiDateRange(articles) {
       var first = articles[0] || {};
@@ -935,7 +940,7 @@
         + '<div class="week-nav-dots"></div>'
         + '</div></div>'
         + '</div>'
-        + '<div class="week-carousel d-lg-none" data-perpage="4">'
+        + '<div class="week-carousel week-carousel-feat d-lg-none" data-perpage="4">'
         + '<button class="carousel-nav prev" disabled>' + SVG_PREV + '</button>'
         + '<div class="week-carousel-track-wrap"><div class="week-carousel-track">' + mobileCards + '</div></div>'
         + '<button class="carousel-nav next">' + SVG_NEXT + '</button>'

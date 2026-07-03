@@ -93,7 +93,7 @@
 
   .asset-item { background:#fff; box-shadow:0 0 1px rgba(102,102,102,.14), 0 2px 8px rgba(102,102,102,.08); margin:12px; padding:20px; }
   .asset-row-labels { display:flex; justify-content:space-between; margin-bottom:4px; }
-  .asset-lbl { font-family:'Noto Sans Thai',sans-serif; font-size:12px; color:#8f9aac; }
+  .asset-lbl { font-family:'Noto Sans Thai',sans-serif; font-size:14px; color:#8f9aac; }
   .asset-row-name { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; }
   .asset-name { font-family:'Noto Sans Thai',sans-serif; font-size:18px; font-weight:700; color:#0c244a; }
   .asset-name-sub { font-family:'Noto Sans Thai',sans-serif; font-size:16px; color:#000; font-weight:700; margin-bottom:10px; }
@@ -120,6 +120,8 @@
 
   .perf-bar { display:flex; align-items:stretch; margin-top:20px; margin-bottom:0; }
   .perf-sec { display:flex; align-items:center; flex:1; }
+  .perf-sec:first-of-type { flex:3; }
+  .perf-sec:last-of-type { flex:2; }
   .perf-lbl-box { padding:12px 18px; text-align:center; display:flex; align-items:center; justify-content:center; align-self:stretch; min-width:80px; }
   .perf-lbl { font-family:'Noto Sans Thai',sans-serif; font-size:16px; font-weight:700; color:#0c244a; }
   .perf-items { display:flex; flex:1; }
@@ -137,6 +139,11 @@
   .invest-btn { font-family:'Noto Sans Thai',sans-serif; font-size:14px; font-weight:600; background:#0c244a; color:#fff; border:none; padding:12px 32px; cursor:pointer; transition:background .2s; text-decoration:none; display:inline-block; }
   .invest-btn:hover { background:#1a3a6b; color:#fff; }
   .perf-divider { width:1px; background:#e2e8f0; }
+  @media (min-width:768px) and (max-width:991px) {
+    .perf-sec { flex-direction:column; }
+    .perf-lbl-box { min-width:unset; padding:10px 0; }
+    .perf-items { width:100%; }
+  }
   @media (max-width:767px) {
     .perf-bar { flex-direction:column; }
     .perf-sec { flex-direction:column; align-items:flex-start; }
