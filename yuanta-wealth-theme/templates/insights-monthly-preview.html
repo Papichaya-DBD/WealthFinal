@@ -117,7 +117,7 @@
     }
     .week-see-all {
       font-family: 'Noto Sans Thai', sans-serif;
-      font-size: 13px;
+      font-size: 16px;
       color: #a2603c;
       text-decoration: none;
       display: inline-flex;
@@ -148,7 +148,8 @@
     }
     .featured-card-img-wrap img {
       width: 100%;
-      height: 320px;
+      aspect-ratio: 16 / 9;
+      height: auto;
       object-fit: cover;
       display: block;
     }
@@ -247,16 +248,27 @@
     .week-nav-btn.wk-next::after { transform: rotate(45deg) translateX(-1px); }
     .week-nav-btn:hover:not(:disabled) { background: #f0f0f0; }
     .week-nav-btn:disabled { opacity: .3; cursor: default; }
+    .week-nav-dots { display: none; align-items: center; gap: 6px; }
+    .week-nav-dot { width: 8px; height: 8px; border-radius: 50%; background: #d0d5df; border: none; padding: 0; cursor: pointer; transition: all .2s; }
+    .week-nav-dot.active { width: 20px; border-radius: 4px; background: #0c244a; }
     .article-list-text {
       flex: 1;
       min-width: 0;
       padding-right: 14px;
     }
+    .article-list-tag {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      border: 1px solid rgba(0,0,0,.12);
+      letter-spacing: .03em;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
     .article-list-date {
       font-family: 'Noto Sans Thai', sans-serif;
       font-size: 11px;
       color: #3D506E;
-      margin-bottom: 5px;
+      margin-top: 6px;
     }
     .article-list-title {
       font-family: 'Noto Sans Thai', sans-serif;
@@ -281,15 +293,6 @@
       height: 100%;
       object-fit: cover;
       display: block;
-    }
-    .article-list-thumb-tag {
-      position: absolute;
-      top: 6px;
-      left: 6px;
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 500;
-      border: 1px solid rgba(0,0,0,.12);
-      letter-spacing: .03em;
     }
     .article-list-footer {
       display: flex;
@@ -613,22 +616,11 @@
     @media (max-width: 991px) {
       .featured-card-content { padding: 18px 20px 20px; }
       .featured-card-title { font-size: 16px; }
-      .week-carousel-track .col-card { flex: 0 0 calc(50% - 8px); }
-    }
+      .article-list-thumb-wrap { width: 130px; height: 90px; }
+      .week-nav-btn { display: none; }
+      .week-nav-dots { display: flex; }
 
-    @media (max-width: 767px) {
-      .insights-content { padding: 24px 0 60px; }
-      .insights-filter-bar { padding: 16px 0; }
-
-      .week-label { font-size: 16px; }
-      .week-section { margin-bottom: 32px; }
-
-      /* Featured layout: stack vertically on mobile */
-      .week-featured-layout { grid-template-columns: 1fr; }
-      .article-list { border-left: none; border-top: 1px solid rgba(0,0,0,.08); }
-      .featured-card-img-wrap img { min-height: 200px; }
-
-      /* Carousel: edge-to-edge native scroll */
+      /* Carousel: edge-to-edge native scroll (tablet + mobile) */
       .carousel-nav { display: none; }
       .week-carousel-track-wrap {
         overflow-x: auto;
@@ -649,6 +641,18 @@
         scroll-snap-align: start;
       }
       .week-carousel-track::after { content: ''; flex: 0 0 24px; }
+    }
+
+    @media (max-width: 767px) {
+      .insights-content { padding: 24px 0 60px; }
+      .insights-filter-bar { padding: 16px 0; }
+
+      .week-label { font-size: 16px; }
+      .week-section { margin-bottom: 32px; }
+
+      /* Featured layout: stack vertically on mobile */
+      .week-featured-layout { grid-template-columns: 1fr; }
+      .article-list { border-left: none; border-top: 1px solid rgba(0,0,0,.08); }
 
       .insight-card-img { height: 130px; }
       .article-list-item { padding: 14px 16px; }
@@ -680,7 +684,7 @@
     /* Toggle desktop/mobile layouts */
     .d-lg-grid { display: grid; }
     .d-lg-none { display: flex !important; }
-    @media (min-width: 992px) {
+    @media (min-width: 768px) {
       .d-lg-grid { display: grid !important; }
       .d-lg-none { display: none !important; }
     }
@@ -898,12 +902,12 @@
         var t = a._table, url = articleUrl(a);
         return '<div class="article-list-item" data-category="' + t.type + '" onclick="location.href=\'' + url + '\'">'
           + '<div class="article-list-text">'
-          + '<p class="article-list-date">' + thaiDate(a.values.page_date) + '</p>'
+          + '<span class="article-list-tag insight-tag ' + t.cls + '">' + t.label + '</span>'
           + '<h4 class="article-list-title">' + (a.values.main_title || '') + '</h4>'
+          + '<p class="article-list-date">' + thaiDate(a.values.page_date) + '</p>'
           + '</div>'
           + '<div class="article-list-thumb-wrap">'
           + '<img src="' + imgUrl(a) + '" alt="" onerror="this.onerror=null;this.src=FALLBACK_IMG" />'
-          + '<span class="article-list-thumb-tag insight-tag ' + t.cls + '">' + t.label + '</span>'
           + '</div></div>';
       }).join('');
 
@@ -928,6 +932,7 @@
         + '<div class="week-nav-row">'
         + '<button class="week-nav-btn wk-prev" disabled></button>'
         + '<button class="week-nav-btn wk-next"></button>'
+        + '<div class="week-nav-dots"></div>'
         + '</div></div>'
         + '</div>'
         + '<div class="week-carousel d-lg-none" data-perpage="4">'
@@ -944,6 +949,25 @@
       var liCur = 0;
       var prevBtn = div.querySelector('.wk-prev');
       var nextBtn = div.querySelector('.wk-next');
+      var navRow = div.querySelector('.week-nav-row');
+      if (navRow) navRow.style.display = liPages <= 1 ? 'none' : '';
+      var dotsWrap = div.querySelector('.week-nav-dots');
+      if (dotsWrap) {
+        for (var d = 0; d < liPages; d++) {
+          var dot = document.createElement('button');
+          dot.className = 'week-nav-dot';
+          dot.type = 'button';
+          (function(pageIdx) {
+            dot.addEventListener('click', function(e) {
+              e.stopPropagation();
+              liCur = pageIdx;
+              updateListPage();
+            });
+          })(d);
+          dotsWrap.appendChild(dot);
+        }
+      }
+      var dotEls = dotsWrap ? dotsWrap.querySelectorAll('.week-nav-dot') : [];
 
       function updateListPage() {
         for (var i = 0; i < liTotal; i++) {
@@ -954,6 +978,9 @@
         if (listItems[lastIdx]) listItems[lastIdx].style.borderBottom = 'none';
         if (prevBtn) prevBtn.disabled = liCur === 0;
         if (nextBtn) nextBtn.disabled = liCur >= liPages - 1;
+        for (var j = 0; j < dotEls.length; j++) {
+          dotEls[j].classList.toggle('active', j === liCur);
+        }
       }
 
       if (prevBtn) prevBtn.addEventListener('click', function(e) {
