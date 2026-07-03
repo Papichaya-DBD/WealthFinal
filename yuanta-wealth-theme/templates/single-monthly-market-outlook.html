@@ -136,6 +136,30 @@
     .weekly-related-swiper .insight-card-title { display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .weekly-related-swiper .insight-card-excerpt { display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   }
+  @media (min-width: 768px) and (max-width: 991px) {
+    .weekly-related-wrapper { padding: 0; margin-right: -40px; }
+    .weekly-related-wrapper .swiper-button-prev,
+    .weekly-related-wrapper .swiper-button-next { display: none; }
+    .weekly-related-swiper { overflow: visible; }
+    .weekly-related-swiper .swiper-wrapper {
+      display: flex;
+      transform: none !important;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      gap: 14px;
+    }
+    .weekly-related-swiper .swiper-wrapper::-webkit-scrollbar { display: none; }
+    .weekly-related-swiper .swiper-wrapper::after { content: ''; flex: 0 0 24px; }
+    .weekly-related-swiper .swiper-slide {
+      flex: 0 0 244px !important;
+      max-width: calc(100vw - 56px);
+      width: auto !important;
+      margin: 0 !important;
+      scroll-snap-align: start;
+    }
+  }
 </style>
 
 <div class="insight-page">
@@ -410,7 +434,7 @@
     navigation: { prevEl: '.weekly-prev', nextEl: '.weekly-next', disabledClass: 'swiper-button-disabled' },
     breakpoints: {
       0:   { enabled: false },
-      768: { enabled: true, slidesPerView: 2, spaceBetween: 14 },
+      768: { enabled: false },
       992: { enabled: true, slidesPerView: 4, spaceBetween: 16 }
     }
   });
