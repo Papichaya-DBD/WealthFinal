@@ -855,9 +855,9 @@
       var dS = new Date(start), dE = new Date(end || start);
       var y  = dE.getFullYear() + 543;
       if (dS.getMonth() === dE.getMonth()) {
-        return dS.getDate() + '–' + dE.getDate() + ' ' + THAI_MONTHS[dE.getMonth()] + ' ' + y;
+        return dS.getDate() + '–' + dE.getDate() + ' ' + THAI_MONTHS_FULL[dE.getMonth()] + ' ' + y;
       }
-      return dS.getDate() + ' ' + THAI_MONTHS[dS.getMonth()] + '–' + dE.getDate() + ' ' + THAI_MONTHS[dE.getMonth()] + ' ' + y;
+      return dS.getDate() + ' ' + THAI_MONTHS_FULL[dS.getMonth()] + '–' + dE.getDate() + ' ' + THAI_MONTHS_FULL[dE.getMonth()] + ' ' + y;
     }
     function imgUrl(a) {
       return (a._table && THUMB[a._table.id]) || FALLBACK_IMG;
