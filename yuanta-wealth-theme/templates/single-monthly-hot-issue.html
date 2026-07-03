@@ -319,6 +319,7 @@
         {% if related_assetperf|length > 0 or related_mktoutlook|length > 0 or related_assetoutlook|length > 0 or related_mktcalendar|length > 0 or related_buylist|length > 0 %}
         <div class="related-section">
           <div class="container">
+          <div class="col-12 col-lg-9 mx-auto">
           <div class="related-week-header-row">
             <span class="related-week-chip related-week-chip-monthly">Monthly</span>
             {% set _m = week[5:7]|int %}{% set _y = week[:4]|int + 543 %}{% set _tm = ["","มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"] %}
@@ -406,6 +407,7 @@
             </div>
             <div class="swiper-button-prev weekly-prev"></div>
             <div class="swiper-button-next weekly-next"></div>
+          </div>
           </div>
           </div>
         </div>

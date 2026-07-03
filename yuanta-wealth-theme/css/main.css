@@ -1253,6 +1253,25 @@ input, textarea, select { font-family: inherit; }
   line-height: 1.7;
 }
 
+/* Tablet: logo full-width row, then nav/contact/address in a 3-col row */
+@media (min-width: 768px) and (max-width: 991px) {
+  .footer .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 32px 24px;
+  }
+  .footer .row > div {
+    padding-left: 0;
+    padding-right: 0;
+    max-width: none;
+    width: auto;
+  }
+  .footer .row > div:nth-child(1) { grid-column: 1 / -1; }
+  .footer .row > div:nth-child(2) { grid-column: 1; }
+  .footer .row > div:nth-child(3) { grid-column: 2; }
+  .footer .row > div:nth-child(4) { grid-column: 3; }
+}
+
 /* ============================================
    PAGINATION
    ============================================ */
