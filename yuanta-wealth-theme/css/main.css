@@ -2306,7 +2306,9 @@ body .related-week-chip { font-family: 'Cormorant Garamond','Noto Sans Thai',Geo
 .week-modal-body { padding: 20px 24px 28px; }
 @media (max-width: 767px) {
   .week-modal-overlay { padding: 0; align-items: flex-end; }
-  .week-modal { max-height: 85vh; overflow-y: auto; }
+  .week-modal { max-height: 85vh; overflow-y: auto; border-radius: 16px 16px 0 0; }
+  .week-modal-header { position: relative; padding-top: 22px; }
+  .week-modal-header::before { content: ''; position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 36px; height: 4px; border-radius: 2px; background: rgba(0,0,0,.15); }
 }
 
 /* ─── Table scroll wrapper (used by buy-list & monthly article content) ─── */

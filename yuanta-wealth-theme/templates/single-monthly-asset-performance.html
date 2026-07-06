@@ -90,7 +90,7 @@
   .insight-card-img-tag { position: absolute; top: 8px; left: 8px; }
   .insight-card-content { padding: 14px; display: flex; flex-direction: column; flex: 1; }
   .insight-card-date { font-family: 'Noto Sans Thai', sans-serif; font-size: 11px; color: #8f9aac; margin-bottom: 6px; }
-  .insight-card-title { font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; font-weight: 700; color: #0c244a; line-height: 1.45; margin-bottom: 7px; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .insight-card-title { font-family: 'Noto Sans Thai', sans-serif; font-size: 16px; font-weight: 700; color: #0c244a; line-height: 1.45; margin-bottom: 7px; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .insight-card-excerpt { font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; color: #3d506e; line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
   .insight-tag { font-family: 'Noto Sans Thai', sans-serif; font-size: 11px; font-weight: 600; padding: 2px 9px; white-space: nowrap; display: inline-block; }
   .tag-hot-issue { background: #F9EDED; color: #7a1c1c; border: 1px solid #EBC7C7; }
@@ -105,6 +105,8 @@
   .related-week-label { font-family: 'Noto Sans Thai', sans-serif; font-size: 20px; font-weight: 700; color: #0c244a; }
   .weekly-related-wrapper { position: relative; padding: 14px 44px; overflow: hidden; }
   .weekly-related-swiper { position: relative; overflow: clip; overflow-clip-margin: 10px; }
+  .weekly-related-swiper .insight-card,
+  .week-modal-body .insight-card { position: relative; }
   .weekly-related-wrapper .swiper-button-prev,
   .weekly-related-wrapper .swiper-button-next { position: absolute; top: 38%; width: 32px; height: 32px; background: #fff; border: 1px solid rgba(0,0,0,.15); border-radius: 0; color: #0c244a; margin-top: 0; }
   .weekly-related-wrapper .swiper-button-prev { left: 0; }
@@ -120,15 +122,23 @@
     .weekly-related-swiper .swiper-slide { width: 100% !important; margin-bottom: 10px; }
     .weekly-related-swiper .insight-card,
     .week-modal-body .insight-card { flex-direction: row; align-items: stretch; }
+    .weekly-related-swiper .insight-card { box-shadow: none; padding-right: 14px; }
+    .weekly-related-swiper .insight-card:hover { box-shadow: none; transform: none; }
     .weekly-related-swiper .insight-card-img-wrap,
-    .week-modal-body .insight-card-img-wrap { width: 110px; min-height: 90px; flex-shrink: 0; order: 2; }
+    .week-modal-body .insight-card-img-wrap { width: 110px; min-height: 90px; flex-shrink: 0; order: 2; background: transparent; }
     .weekly-related-swiper .insight-card-img,
     .week-modal-body .insight-card-img { width: 110px; height: 100%; object-fit: contain; }
-    .weekly-related-swiper .insight-card-img-tag { top: 6px; left: auto; right: 0; }
-    .week-modal-body .insight-card-img-tag { top: 6px; left: auto; right: 0; }
+    .weekly-related-swiper .insight-card-img-tag,
+    .week-modal-body .insight-card-img-tag { position: static; margin-bottom: 6px; align-self: flex-start; }
+    .weekly-related-swiper .insight-card-excerpt,
+    .week-modal-body .insight-card-excerpt { display: none; }
     .weekly-related-swiper .insight-card-content,
     .week-modal-body .insight-card-content { order: 1; flex: 1; min-width: 0; }
     .week-modal-body .col-6 { width: 100%; }
+    .week-modal-body .row.g-3 { --bs-gutter-y: 0; }
+    .week-modal-body .insight-card { box-shadow: none; padding-bottom: 16px; margin-bottom: 16px; border-bottom: 1px solid rgba(0,0,0,.08); }
+    .week-modal-body .insight-card:hover { box-shadow: none; transform: none; }
+    .week-modal-body .col-6:last-child .insight-card { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
   }
   @media (min-width: 768px) {
     .weekly-related-swiper { overflow: hidden; }
@@ -286,11 +296,11 @@
                 <div class="insight-card" onclick="location.href='/wealth-single-monthly-hotissue/{{ rel.week_slug|trim }}'">
                   <div class="insight-card-img-wrap">
                     <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-hot-issue.jpg') }}" alt="{{ rel.main_title }}" />
-                    <span class="insight-card-img-tag insight-tag tag-hot-issue">Hot issue</span>
                   </div>
                   <div class="insight-card-content">
-                    <p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p>
+                    <span class="insight-card-img-tag insight-tag tag-hot-issue">Hot issue</span>
                     <h4 class="insight-card-title">{{ rel.main_title }}</h4>
+                    <p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p>
                     {% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}
                   </div>
                 </div>
@@ -301,11 +311,11 @@
                 <div class="insight-card" onclick="location.href='/wealth-single-monthly-market-outlook/{{ rel.week_slug|trim }}'">
                   <div class="insight-card-img-wrap">
                     <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-market-outlook.jpg') }}" alt="" />
-                    <span class="insight-card-img-tag insight-tag tag-mkt-outlook">Market outlook</span>
                   </div>
                   <div class="insight-card-content">
-                    <p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p>
+                    <span class="insight-card-img-tag insight-tag tag-mkt-outlook">Market outlook</span>
                     <h4 class="insight-card-title">{{ rel.main_title }}</h4>
+                    <p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p>
                     {% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}
                   </div>
                 </div>
@@ -316,11 +326,11 @@
                 <div class="insight-card" onclick="location.href='/wealth-single-monthly-asset-class-outlook/{{ rel.week_slug|trim }}'">
                   <div class="insight-card-img-wrap">
                     <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-asset-class-outlook.jpg') }}" alt="" />
-                    <span class="insight-card-img-tag insight-tag tag-asset-outlook">Asset class outlook</span>
                   </div>
                   <div class="insight-card-content">
-                    <p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p>
+                    <span class="insight-card-img-tag insight-tag tag-asset-outlook">Asset class outlook</span>
                     <h4 class="insight-card-title">{{ rel.main_title }}</h4>
+                    <p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p>
                     {% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}
                   </div>
                 </div>
@@ -331,11 +341,11 @@
                 <div class="insight-card" onclick="location.href='/wealth-single-monthly-market-calendar/{{ rel.week_slug|trim }}'">
                   <div class="insight-card-img-wrap">
                     <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-market-calendar.jpg') }}" alt="{{ rel.main_title }}" />
-                    <span class="insight-card-img-tag insight-tag tag-mkt-calendar">Market calendar</span>
                   </div>
                   <div class="insight-card-content">
-                    <p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p>
+                    <span class="insight-card-img-tag insight-tag tag-mkt-calendar">Market calendar</span>
                     <h4 class="insight-card-title">{{ rel.main_title }}</h4>
+                    <p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p>
                     {% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}
                   </div>
                 </div>
@@ -346,11 +356,11 @@
                 <div class="insight-card" onclick="location.href='/wealth-single-monthly-buy-list/{{ rel.week_slug|trim }}'">
                   <div class="insight-card-img-wrap">
                     <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-buy-list.jpg') }}" alt="{{ rel.main_title }}" />
-                    <span class="insight-card-img-tag insight-tag tag-buy-list">Buy list</span>
                   </div>
                   <div class="insight-card-content">
-                    <p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p>
+                    <span class="insight-card-img-tag insight-tag tag-buy-list">Buy list</span>
                     <h4 class="insight-card-title">{{ rel.main_title }}</h4>
+                    <p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p>
                     {% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}
                   </div>
                 </div>
@@ -460,9 +470,11 @@
         var url = t.path + (a.values.week_slug || '');
         return '<div class="col-6 col-lg-3"><div class="insight-card" onclick="location.href=\'' + url + '\'">'
           + '<div class="insight-card-img-wrap"><img class="insight-card-img" src="' + src + '" alt="" "/>'
-          + '<span class="insight-card-img-tag insight-tag ' + t.cls + '">' + t.label + '</span></div>'
-          + '<div class="insight-card-content"><p class="insight-card-date">' + (a.values.page_date ? thaiDateM(a.values.page_date) : '') + '</p>'
-          + '<h4 class="insight-card-title">' + (a.values.main_title || '') + '</h4></div></div></div>';
+          + '</div>'
+          + '<div class="insight-card-content">'
+          + '<span class="insight-card-img-tag insight-tag ' + t.cls + '">' + t.label + '</span>'
+          + '<h4 class="insight-card-title">' + (a.values.main_title || '') + '</h4>'
+          + '<p class="insight-card-date">' + (a.values.page_date ? thaiDateM(a.values.page_date) : '') + '</p></div></div></div>';
       }).join('');
     });
   }
