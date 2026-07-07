@@ -20,7 +20,7 @@
 
 <style>
 
-  body { overflow-x: hidden; }
+  html, body { overflow-x: hidden; }
   .insight-page { margin-top: 90px; background: #fff; }
 
   .insight-breadcrumb { padding: 30px 0; background: #fff; }
@@ -42,7 +42,6 @@
   .share-btn:hover { background:#f5f5f5; }
   .share-btn svg { width:16px; height:16px; }
   @media (max-width:767px) {
-    .insight-page { margin-top:68px; }
     .article-header { padding:0 0 20px; }
     .article-title { font-size:24px; }
     .article-subtitle { font-size:18px; }
@@ -57,6 +56,7 @@
   .cio-box ul li { font-family:'Noto Sans Thai',sans-serif; font-size:14px; color:#3d506e; line-height:1.8; padding-left:16px; position:relative; margin-bottom:8px; }
   .cio-box ul li:last-child { margin-bottom:0; }
   .cio-box ul li::before { content:'•'; position:absolute; left:0; color:#3d506e; }
+  @media (max-width:767px) { .cio-box ul li { font-size:16px; } }
 
   .pm-header { background:#f5f7fa; padding:24px 24px 0; }
   .pm-title { font-family:'Noto Sans Thai',sans-serif; font-size:24px; font-weight:700; color:#0c244a; margin-bottom:4px; }
@@ -78,6 +78,7 @@
   .donut-legend-row { display:flex; align-items:center; gap:8px; font-family:'Noto Sans Thai',sans-serif; font-size:13px; color:#3d506e; }
   .donut-dot { width:12px; height:12px; border-radius:2px; flex-shrink:0; }
   .donut-note { font-family:'Noto Sans Thai',sans-serif; font-size:14px; color:#3D506E; line-height:1.6; }
+  @media (max-width:767px) { .pm-title { font-size:18px; } .pm-tab { font-size:16px; } .donut-note { font-size:16px; } .pm-content { padding:24px 8px 0; } }
 
   .portfolio-card { box-shadow:0 0 1px rgba(102,102,102,.14), 0 2px 8px rgba(102,102,102,.08); margin-bottom:16px; overflow:hidden; }
   .portfolio-card:last-child { margin-bottom:0; }
@@ -87,8 +88,10 @@
   .pc-name { font-family:'Noto Sans Thai',sans-serif; font-size:20px; font-weight:700; }
   .pc-pct { font-family:'Noto Sans Thai',sans-serif; font-size:20px; font-weight:700; }
   .pc-sub { font-family:'Noto Sans Thai',sans-serif; font-size:16px; color:rgba(255,255,255,.7); margin-top:3px; }
+  @media (max-width:767px) { .pc-sub { font-size:14px; } }
 
   .asset-item { background:#fff; box-shadow:0 0 1px rgba(102,102,102,.14), 0 2px 8px rgba(102,102,102,.08); margin:12px; padding:20px; }
+  @media (max-width:767px) { .asset-item { margin:8px; } }
   .asset-row-labels { display:flex; justify-content:space-between; margin-bottom:4px; }
   .asset-lbl { font-family:'Noto Sans Thai',sans-serif; font-size:14px; color:#8f9aac; }
   .asset-row-name { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; }
@@ -99,6 +102,7 @@
   .asset-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:4px; margin-bottom:12px; background:#F9FAFB; padding:14px 16px; text-align:center; }
   .stat-lbl { font-family:'Noto Sans Thai',sans-serif; font-size:11px; color:#8f9aac; margin-bottom:2px; }
   .stat-val { font-family:'Noto Sans Thai',sans-serif; font-size:16px; font-weight:700; color:#0c244a; }
+  @media (max-width:767px) { .stat-lbl { font-size:12px; } .stat-val { font-size:14px; } }
   .fund-heading { font-family:'Noto Sans Thai',sans-serif; font-size:14px; color:#3d506e; font-weight:600; margin-bottom:8px; }
   .fund-tags { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
   .ftag { font-family:'Noto Sans Thai',sans-serif; font-size:13px; font-weight:600; color:#615FFF; background:#c6d2ff5c; border:1px solid #c5c4ff; padding:6px 10px; cursor:pointer; display:inline-flex; align-items:center; gap:5px; transition:all .15s; white-space:nowrap; }
@@ -108,7 +112,7 @@
   .ftag.dr:hover { background:#ffefc0; border-color:#D08700; }
   .ftag.etf { color:#0084D1; background:#e6f4ff; border-color:#99d1f5; }
   .ftag.etf:hover { background:#cce8ff; border-color:#0084D1; }
-  .legend-row { display:flex; gap:16px; flex-wrap:wrap; }
+  .legend-row { display:flex; gap:16px; flex-wrap:wrap; border-top:1px dashed #d8dee8; padding-top:10px; }
   .legend-itm { display:flex; align-items:center; gap:5px; font-family:'Noto Sans Thai',sans-serif; font-size:11px; color:#8f9aac; }
   .ldot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
   .ldot.mf { background:#615FFF; }
@@ -142,11 +146,12 @@
     .perf-items { width:100%; }
   }
   @media (max-width:767px) {
-    .perf-bar { flex-direction:column; }
+    .perf-bar { flex-direction:column; align-items:center; }
     .perf-sec { flex-direction:column; align-items:flex-start; }
     .perf-lbl-box { min-width:unset; align-self:stretch; }
-    .perf-items { flex-wrap:wrap; }
-    .perf-item { min-width:50%; border-right:none; }
+    .perf-item { border-right:none; padding:12px 6px; text-align:center; }
+    .perf-val { font-size:18px; }
+    .perf-name { font-size:14px; justify-content:center; }
     .perf-divider { height:1px; width:100%; }
   }
 
@@ -156,6 +161,7 @@
   .article-cta-left { border: 1.5px solid #0000001A; background: url('{{ get_asset_url('../images/bgoverall.jpg') }}') center/cover no-repeat; padding: 44px 40px; }
   .article-cta-title { font-family: 'Noto Sans Thai', sans-serif; font-size: 32px; font-weight: 700; color: #0c244a; margin-bottom: 10px; line-height: 1.3; }
   .article-cta-sub { font-family: 'Noto Sans Thai', sans-serif; font-size: 16px; color: #3d506e; margin-bottom: 24px; line-height: 1.6; }
+  @media (max-width: 767px) { .article-cta-title { font-size: 20px; } .article-cta-sub { font-size: 14px; } }
   .article-cta-btn { font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; font-weight: 600; background: #0c244a; color: #fff; border: none; padding: 11px 22px; border-radius: 4px; cursor: pointer; white-space: nowrap; transition: background .2s; text-decoration: none; display: inline-block; }
   .article-cta-btn:hover { background: #1a3a6b; color: #fff; }
   @media (max-width: 767px) { .article-cta-left { padding: 24px 20px; } }
@@ -251,6 +257,12 @@
   .fund-drawer.open { transform:translateX(0); }
   @media (max-width:600px) { .fund-drawer { width:100vw; } }
   .fd-head { padding:20px 24px 16px; border-bottom:1px solid #e8ecf2; flex-shrink:0; display:flex; justify-content:space-between; align-items:flex-start; }
+  @media (max-width:767px) {
+    .fund-drawer { top:auto; left:0; right:0; bottom:0; width:100%; max-width:100%; height:auto; max-height:88vh; border-radius:16px 16px 0 0; transform:translateY(100%); box-shadow:0 -4px 32px rgba(0,0,0,.15); }
+    .fund-drawer.open { transform:translateY(0); }
+    .fd-head { position:relative; padding-top:22px; }
+    .fd-head::before { content:''; position:absolute; top:8px; left:50%; transform:translateX(-50%); width:36px; height:4px; border-radius:2px; background:rgba(0,0,0,.15); }
+  }
   .fd-name { font-family:'Noto Sans Thai',sans-serif; font-size:24px; font-weight:700; color:#0c244a; margin-bottom:6px; }
   .fd-type-badge { display:inline-flex; align-items:center; gap:6px; font-family:'Noto Sans Thai',sans-serif; font-size:13px; color:#8f9aac; padding:3px 10px; }
   .fd-type-badge.dr { color:#8f9aac; }
@@ -278,6 +290,7 @@
   .fd-highlights span { font-size:16px !important; }
   .fd-highlights h3,
   .fd-highlights h3 span { font-size:20px !important; }
+  @media (max-width:767px) { .fd-highlights h3, .fd-highlights h3 span { font-size:18px !important; } }
   .fd-cta { background: url('{{ get_asset_url('../images/bginvest.jpg') }}') center/cover no-repeat; padding:28px 24px; text-align:center; }
   .fd-cta-title { font-family:'Noto Sans Thai',sans-serif; font-size:16px; font-weight:700; color:#fff; margin-bottom:8px; line-height:1.4; }
   .fd-cta-desc { font-family:'Noto Sans Thai',sans-serif; font-size:13px; color:rgba(255,255,255,0.75); margin-bottom:20px; line-height:1.6; }
@@ -712,7 +725,7 @@
       document.querySelectorAll('.perf-val').forEach(function(el, i) {
         if (!perfDefs[i]) return;
         if (!perfDefs[i].val) { el.textContent = '-'; el.className = 'perf-val neutral'; return; }
-        el.textContent = perfDefs[i].val;
+        el.textContent = perfDefs[i].val + '%';
         el.className   = perfDefs[i].cls;
       });
 
