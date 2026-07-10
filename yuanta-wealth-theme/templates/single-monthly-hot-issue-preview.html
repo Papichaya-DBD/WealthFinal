@@ -1,0 +1,563 @@
+<!--
+  templateType: page
+  label: Single Monthly Hot Issue (Preview - per-topic pages)
+  isAvailableForNewContent: true
+-->
+{% extends "./layouts/base.html" %}
+
+{% block body %}
+
+{% set current_row = dynamic_page_hubdb_row %}
+{% set week = current_row.week_slug %}
+{% set page = current_row %}
+
+{% if page %}
+
+<style>
+  .insight-page { margin-top: 90px; background: #fff; }
+  .insight-breadcrumb { padding: 30px 0; background: #fff; }
+  .insight-breadcrumb ol { margin: 0; padding: 0; list-style: none; display: flex; align-items: center; gap: 6px; font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; color: #8f9aac; }
+  .insight-breadcrumb li a { color: #8f9aac; text-decoration: none; }
+  .insight-breadcrumb li a:hover { color: #a2603c; }
+  .insight-breadcrumb li.active { color: #a2603c; }
+  .insight-breadcrumb li.sep { color: #ccc; }
+  .article-header { padding: 0 0 32px; text-align: left; }
+  @media (max-width: 767px) {
+    .article-header { padding: 0 0 24px; }
+  }
+  .article-category-tag { display: inline-block; font-family: 'Cormorant Garamond','Noto Sans Thai',Georgia,serif; font-size: 14px; font-weight: 500; padding: 4px 16px; background: #F9EDED; color: #7a1c1c; border: 1px solid #EBC7C7; border: 1px solid rgba(122,28,28,.15); margin-bottom: 20px; letter-spacing: .03em; }
+  .article-title { font-family: 'Noto Sans Thai', sans-serif; font-size: 35px; font-weight: 700; color: #0c244a; line-height: 1.3; margin-bottom: 16px; padding: 0; }
+  .article-subtitle { font-family: 'Noto Sans Thai', sans-serif; font-size: 24px; font-weight: 700; color: #3D506E; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid rgba(0,0,0,0.1); }
+  @media (max-width: 991px) { .article-title { font-size: 28px; } }
+  @media (max-width: 767px) { .article-title { font-size: 24px; padding: 0; } .article-subtitle { font-size: 18px; } }
+  .article-date { font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; color: #3D506E; font-weight: 600; }
+  .article-share { display: flex; align-items: center; gap: 8px; margin-bottom: 50px; }
+  .article-share-label { font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; color: #3d506e; margin-right: 4px; }
+  .share-btn { width: 36px; height: 36px; border: 1px solid rgba(0,0,0,.12); background: #fff; border-radius: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background .15s; }
+  .share-btn:hover { background: #f5f5f5; }
+  .share-btn svg { width: 16px; height: 16px; }
+  .article-body { padding: 0; }
+  @media (max-width: 767px) { .article-body { padding: 0; } }
+  .ai-summary-box { background: url('{{ get_asset_url('../images/bgaisummary.jpg') }}') center/cover no-repeat; border: 1px solid #3b537829; padding: 28px 32px; margin-bottom: 40px; }
+  @media (max-width: 767px) { .ai-summary-box { padding: 20px; background: url('{{ get_asset_url('../images/Mobile - Ai summary.jpg') }}') center/cover no-repeat; } }
+  .ai-summary-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .ai-summary-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .ai-summary-icon img { width: 32px; height: 32px; object-fit: contain; }
+  .ai-summary-label { font-family: 'Cormorant Garamond', sans-serif; font-size: 32px; font-weight: 700; color: #0c244a; display: block; margin-bottom: 2px; }
+  @media (max-width: 767px) { .ai-summary-label { font-size: 24px; } }
+  .ai-summary-sublabel { font-family: 'Noto Sans Thai', sans-serif; font-size: 16px; color: #8f9aac; margin: 0; }
+  .ai-summary-text { font-family: 'Noto Sans Thai', sans-serif; font-size: 16px; color: #0C244A; line-height: 1.75; }
+  .ai-summary-text p { margin-bottom: 8px; }
+  .ai-summary-text p:last-child { margin-bottom: 0; }
+  .article-content { font-family: 'Noto Sans Thai', sans-serif; font-size: 16px; color: #1a2e44; line-height: 1.75; }
+  .article-content h2 { font-family: 'Noto Sans Thai', sans-serif; font-size: 18px; font-weight: 700; color: #0c244a; margin: 32px 0 16px; padding-top: 8px; }
+  .article-content h3 { font-family: 'Noto Sans Thai', sans-serif; font-size: 20px; font-weight: 700; color: #0c244a; margin: 24px 0 12px; }
+  .article-content p { margin-bottom: 14px; }
+  @media (max-width: 767px) { .article-content h3 { font-size: 18px; } .article-content p { font-size: 16px; } }
+  .article-content img { width: 100%; border-radius: 4px; margin: 16px 0; }
+  .article-content ul, .article-content ol { padding-left: 20px; margin-bottom: 14px; }
+  .article-content ul { list-style: disc; }
+  .article-content ol { list-style: decimal; }
+  .article-content li { margin-bottom: 6px; }
+  .article-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; }
+  .article-table th { background: #0c244a; color: #fff; padding: 10px 14px; text-align: left; font-weight: 600; white-space: nowrap; }
+  .article-table td { padding: 10px 14px !important; border-bottom: 1px solid #eaeaea; color: #1a2e44; vertical-align: top; word-break: break-word; min-width: 160px; }
+  .article-table tr:nth-child(even) td { background: #f9f7f4; }
+  .article-content table { width: 100% !important; table-layout: fixed; border-collapse: collapse; margin: 20px 0; font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; }
+  .article-content table th { padding: 10px 14px; text-align: left; font-weight: 600; word-break: break-word; overflow-wrap: anywhere; }
+  .article-content table td { padding: 10px 14px; border-bottom: 1px solid #eaeaea; vertical-align: top; word-break: break-word; overflow-wrap: anywhere; }
+  .article-content table tr:nth-child(even) td { background: #f9f7f4; }
+  .article-cta-row { margin-bottom: 32px; }
+  .article-cta-left { border: 1.5px solid #0000001A; background: url('{{ get_asset_url('../images/bgoverall.jpg') }}') center/cover no-repeat; padding: 44px 40px; }
+  .article-cta-title { font-family: 'Noto Sans Thai', sans-serif; font-size: 32px; font-weight: 700; color: #0c244a; margin-bottom: 10px; line-height: 1.3; }
+  .article-cta-sub { font-family: 'Noto Sans Thai', sans-serif; font-size: 16px; color: #3d506e; margin-bottom: 24px; line-height: 1.6; }
+  @media (max-width: 767px) { .article-cta-title { font-size: 20px; } .article-cta-sub { font-size: 14px; } }
+  .article-cta-btn { font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; font-weight: 600; background: #0c244a; color: #fff; border: none; padding: 11px 22px; border-radius: 4px; cursor: pointer; white-space: nowrap; transition: background .2s; text-decoration: none; display: inline-block; }
+  .article-cta-btn:hover { background: #1a3a6b; color: #fff; }
+  @media (max-width: 767px) { .article-cta-left { padding: 24px 20px; } }
+  .experts-section { margin-bottom: 0; background: transparent; }
+  .experts-title { font-family: 'Noto Sans Thai', sans-serif; font-size: 24px; font-weight: 700; color: #0c244a; margin-bottom: 20px; }
+  .expert-item { display: flex; align-items: stretch; background: #fff; border-radius: 0; overflow: hidden; margin-bottom: 16px; }
+  .expert-avatar { width: 100px; height: 100px; object-fit: cover; flex-shrink: 0; display: block; }
+  .expert-info { padding: 14px 16px; flex: 1; }
+  .expert-name { font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; font-weight: 700; color: #0c244a; margin-bottom: 4px; }
+  .expert-credentials { font-family: 'Noto Sans Thai', sans-serif; font-size: 12px; color: #3d506e; font-weight: 600; margin-bottom: 4px; }
+  .expert-title-text { font-family: 'Noto Sans Thai', sans-serif; font-size: 12px; color: #8f9aac; line-height: 1.5; }
+  .related-section { background: #F9F7F4; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; padding: 32px 0 48px; }
+  .related-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .related-title { font-family: 'Noto Sans Thai', sans-serif; font-size: 18px; font-weight: 700; color: #0c244a; margin: 0; }
+  .related-week-header { display: none; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .related-week-chip { font-family: 'Cormorant Garamond', serif; font-size: 13px; font-weight: 600; background: #3D506E; color: #fff; padding: 3px 10px; } .related-week-chip-monthly { background: #0C244A; }
+  .related-week-label { font-family: 'Noto Sans Thai', sans-serif; font-size: 20px; font-weight: 700; color: #0c244a; }
+  @media (max-width: 767px) { .related-week-header { display: flex; } .related-grid { display: none !important; } }
+  .insight-card { background: #fff; display: flex; flex-direction: column; height: 100%; cursor: pointer; transition: box-shadow .2s, transform .18s; box-shadow: 0 0 1px rgba(102,102,102,.14), 0 2px 6px rgba(102,102,102,.08); }
+  .insight-card:hover { box-shadow: 0 4px 18px rgba(0,0,0,.11); transform: translateY(-2px); }
+  .insight-card-img-wrap { position: relative; flex-shrink: 0; }
+  .insight-card-img { width: 100%; aspect-ratio: 16/9; height: auto; object-fit: cover; display: block; }
+  .insight-card-img-tag { position: absolute; top: 8px; left: 8px; }
+  .insight-card-content { padding: 14px; display: flex; flex-direction: column; flex: 1; }
+  .insight-card-date { font-family: 'Noto Sans Thai', sans-serif; font-size: 11px; color: #8f9aac; margin-bottom: 6px; }
+  .insight-card-title { font-family: 'Noto Sans Thai', sans-serif; font-size: 16px; font-weight: 700; color: #0c244a; line-height: 1.45; margin-bottom: 7px; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .insight-card-excerpt { font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; color: #3d506e; line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .insight-tag { font-family: 'Noto Sans Thai', sans-serif; font-size: 11px; font-weight: 600; padding: 2px 9px; white-space: nowrap; display: inline-block; }
+  .tag-hot-issue { background: #F9EDED; color: #7a1c1c; border: 1px solid #EBC7C7; }
+  .tag-buy-list { background: #EEF1F0; color: #2c4a42; border: 1px solid #CBD4D0; }
+  .tag-asset-perf { background: #F8F4ED; color: #92600a; border: 1px solid #E9DEC7; }
+  .tag-mkt-calendar { background: #E7E9ED; color: #0c244a; border: 1px solid #B4BBC7; }
+  .tag-asset-outlook { background: #F2F0EE; color: #3d2c1e; border: 1px solid #D6D1CB; }
+  .tag-mkt-outlook { background: #F0EFF5; color: #3d2260; border: 1px solid #D1CCDF; }
+  .related-section { background: #F9F7F4; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; padding: 32px 0 48px; }
+  .related-week-header-row { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(0,0,0,.08); }
+  .related-week-chip { font-family: 'Cormorant Garamond', serif; font-size: 13px; font-weight: 600; background: #3D506E; color: #fff; padding: 3px 10px; flex-shrink: 0; } .related-week-chip-monthly { background: #0C244A; }
+  .related-week-label { font-family: 'Noto Sans Thai', sans-serif; font-size: 20px; font-weight: 700; color: #0c244a; }
+  .weekly-related-wrapper { position: relative; padding: 14px 44px; overflow: hidden; }
+  .weekly-related-swiper { position: relative; overflow: clip; overflow-clip-margin: 10px; }
+  .weekly-related-swiper .insight-card,
+  .week-modal-body .insight-card { position: relative; }
+  .weekly-related-wrapper .swiper-button-prev,
+  .weekly-related-wrapper .swiper-button-next { position: absolute; top: 38%; width: 32px; height: 32px; background: #fff; border: 1px solid rgba(0,0,0,.15); border-radius: 0; color: #0c244a; margin-top: 0; }
+  .weekly-related-wrapper .swiper-button-prev { left: 0; }
+  .weekly-related-wrapper .swiper-button-next { right: 0; }
+  .weekly-related-wrapper .swiper-button-prev::after,
+  .weekly-related-wrapper .swiper-button-next::after { font-size: 11px; font-weight: 700; }
+  .weekly-related-wrapper .swiper-button-disabled { opacity: 0.35; cursor: default; }
+  @media (max-width: 767px) {
+    .weekly-related-wrapper { padding: 0; }
+    .weekly-related-swiper .swiper-wrapper { display: block; transform: none !important; }
+    .weekly-related-swiper .swiper-button-prev,
+    .weekly-related-swiper .swiper-button-next { display: none; }
+    .weekly-related-swiper .swiper-slide { width: 100% !important; margin-bottom: 10px; }
+    .weekly-related-swiper .insight-card,
+    .week-modal-body .insight-card { flex-direction: row; align-items: stretch; }
+    .weekly-related-swiper .insight-card { box-shadow: none; padding-right: 14px; }
+    .weekly-related-swiper .insight-card:hover { box-shadow: none; transform: none; }
+    .weekly-related-swiper .insight-card-img-wrap,
+    .week-modal-body .insight-card-img-wrap { width: 110px; min-height: 90px; flex-shrink: 0; order: 2; background: transparent; }
+    .weekly-related-swiper .insight-card-img,
+    .week-modal-body .insight-card-img { width: 110px; height: 100%; object-fit: contain; }
+    .weekly-related-swiper .insight-card-img-tag,
+    .week-modal-body .insight-card-img-tag { position: static; margin-bottom: 6px; align-self: flex-start; }
+    .weekly-related-swiper .insight-card-excerpt,
+    .week-modal-body .insight-card-excerpt { display: none; }
+    .weekly-related-swiper .insight-card-content,
+    .week-modal-body .insight-card-content { order: 1; flex: 1; min-width: 0; }
+    .week-modal-body .row.g-3 { --bs-gutter-y: 0; }
+    .week-modal-body .insight-card { box-shadow: none; padding-bottom: 16px; margin-bottom: 16px; border-bottom: 1px solid rgba(0,0,0,.08); }
+    .week-modal-body .insight-card:hover { box-shadow: none; transform: none; }
+    .week-modal-body .col-6:last-child .insight-card { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .week-modal-body .col-6 { width: 100%; }
+  }
+  @media (min-width: 768px) {
+    .weekly-related-swiper { overflow: hidden; }
+    .weekly-related-swiper .swiper-slide { display: flex; }
+    .weekly-related-swiper .insight-card { height: 100%; }
+    .weekly-related-swiper .insight-card-title { display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .weekly-related-swiper .insight-card-excerpt { display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  }
+  @media (min-width: 768px) and (max-width: 991px) {
+    .weekly-related-wrapper { padding: 0; margin-right: -40px; }
+    .weekly-related-wrapper .swiper-button-prev,
+    .weekly-related-wrapper .swiper-button-next { display: none; }
+    .weekly-related-swiper { overflow: visible; }
+    .weekly-related-swiper .swiper-wrapper {
+      display: flex;
+      transform: none !important;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      gap: 14px;
+    }
+    .weekly-related-swiper .swiper-wrapper::-webkit-scrollbar { display: none; }
+    .weekly-related-swiper .swiper-wrapper::after { content: ''; flex: 0 0 24px; }
+    .weekly-related-swiper .swiper-slide {
+      flex: 0 0 244px !important;
+      max-width: calc(100vw - 56px);
+      width: auto !important;
+      margin: 0 !important;
+      scroll-snap-align: start;
+    }
+  }
+</style>
+
+<div class="insight-page">
+
+  <!-- BREADCRUMB -->
+  <div class="insight-breadcrumb">
+    <div class="container">
+      <div class="col-12 col-lg-9 mx-auto">
+      <ol>
+        <li><a href="https://wealth.yuanta.co.th/">Home</a></li>
+        <li class="sep">/</li>
+        <li><a href="/wealth-insights">Insights</a></li>
+        <li class="sep">/</li>
+        <li class="active">Hot issue</li>
+      </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARTICLE HEADER -->
+  <section class="article-header">
+    <div class="container">
+      <div class="col-12 col-lg-9 mx-auto">
+        <span class="article-category-tag">Hot issue</span>
+        <h1 class="article-title">{{ page.main_title }}</h1>
+        <p class="article-subtitle">{{ page.page_subtitle }}</p>
+        <p class="article-date">{{ page.page_date|datetimeformat("%d %B %Y") }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARTICLE BODY -->
+  <section class="article-body">
+    <div class="container">
+      <div class="col-12 col-lg-9 mx-auto">
+
+        <div class="ai-summary-box">
+          <div class="ai-summary-header">
+            <div class="ai-summary-icon">
+              <img src="{{ get_asset_url('../images/ai-icon.png') }}" alt="AI" />
+            </div>
+            <div>
+              <span class="ai-summary-label">AI Summary</span>
+              <p class="ai-summary-sublabel">บทสรุปจาก AI อ้างอิงโดยบทวิเคราะห์</p>
+            </div>
+          </div>
+          <div class="ai-summary-text">{{ page.ai_summary }}</div>
+        </div>
+        <div class="article-content">{{ page.body }}</div>
+
+        <!-- CTA -->
+        <div class="article-cta-row">
+          <div class="article-cta-left">
+            <p class="article-cta-title">ต้องการดูภาพรวมทั้งสัปดาห์?</p>
+            <p class="article-cta-sub">เนื้อหานี้เป็นส่วนหนึ่งของบทวิเคราะห์ฉบับเต็มที่ครอบคลุมเนื้อหาทุก asset class</p>
+            <a class="article-cta-btn" href="/wealth-monthly-report?week={{ week }}" target="_blank" rel="noopener">ดูมุมมองเพิ่มเติม</a>
+          </div>
+        </div>
+
+        <!-- Experts (HubDB: Marketing_Wealth_Database_Expert 2238813912) -->
+        {% set experts = hubdb_table_rows(2238813912, "orderBy=order") %}
+        {% if experts %}
+        <div class="experts-section">
+          <p class="experts-title">บทวิเคราะห์โดย</p>
+          <div class="row g-3">
+            {% for expert in experts %}
+            <div class="col-12 col-sm-4">
+              <div class="expert-item">
+                {% if expert.photo %}
+                <img class="expert-avatar" src="{{ expert.photo.url }}" alt="{{ expert.name }}" />
+                {% endif %}
+                <div class="expert-info">
+                  <p class="expert-name">{{ expert.name }}</p>
+                  {% if expert.credentials %}
+                  <p class="expert-credentials">{{ expert.credentials }}</p>
+                  {% endif %}
+
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+        <div class="article-share">
+          <span class="article-share-label">แชร์</span>
+          <button class="share-btn" onclick="shareToFacebook()" title="Facebook">
+            <svg viewBox="0 0 20 20" fill="none"><path d="M11 10.5h2l.5-2.5H11V6.5c0-.7.35-1.5 1.5-1.5H13.5V2.5A13 13 0 0011.5 2.5C9.14 2.5 8 3.9 8 6v2H5.5v2.5H8V18h3v-7.5z" fill="#1877F2"/></svg>
+          </button>
+          <button class="share-btn" onclick="shareToX()" title="X">
+            <svg viewBox="0 0 20 20" fill="none"><path d="M15.5 3h-2.1l-3.4 4.3L6.4 3H2l5.7 7.3L2.1 17H4.2l3.7-4.6 3.7 4.6H16l-6-7.7L15.5 3z" fill="#000"/></svg>
+          </button>
+          <button class="share-btn" onclick="copyLink()" title="คัดลอก">
+            <svg viewBox="0 0 20 20" fill="none"><path d="M8.5 11.5a4 4 0 005.66 0l2-2a4 4 0 00-5.66-5.66l-1 1" stroke="#555" stroke-width="1.5" stroke-linecap="round"/><path d="M11.5 8.5a4 4 0 00-5.66 0l-2 2a4 4 0 005.66 5.66l1-1" stroke="#555" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+          <button class="share-btn" onclick="shareByEmail()" title="อีเมล">
+            <svg viewBox="0 0 20 20" fill="none"><rect x="2" y="4" width="16" height="12" rx="2" stroke="#555" stroke-width="1.5"/><path d="M2 7l8 5 8-5" stroke="#555" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+
+        <!-- Related articles (monthly, latest) -->
+        {% set related_assetperf = hubdb_table_rows(2601147110, "week_slug__eq=" ~ week ~ "&limit=1") %}
+        {% set related_mktoutlook = hubdb_table_rows(2601119430, "week_slug__eq=" ~ week ~ "&limit=1") %}
+        {% set related_assetoutlook = hubdb_table_rows(2937357033, "week_slug__eq=" ~ week) %}
+        {% set related_mktcalendar = hubdb_table_rows(2679062221, "week_slug__eq=" ~ week ~ "&limit=1") %}
+        {% set related_buylist = hubdb_table_rows(2601119426, "week_slug__eq=" ~ week ~ "&limit=1") %}
+        {% set related_hotissue = hubdb_table_rows(2971421401, "week_slug__eq=" ~ week) | selectattr('hs_id', 'ne', current_row.hs_id) | list %}
+        {% if related_assetperf|length > 0 or related_mktoutlook|length > 0 or related_assetoutlook|length > 0 or related_mktcalendar|length > 0 or related_buylist|length > 0 or related_hotissue|length > 0 %}
+        <div class="related-section">
+          <div class="container">
+          <div class="col-12 col-lg-9 mx-auto">
+          <div class="related-week-header-row">
+            <span class="related-week-chip related-week-chip-monthly">Monthly</span>
+            {% set _m = week[5:7]|int %}{% set _y = week[:4]|int + 543 %}{% set _tm = ["","มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"] %}
+            <span class="related-week-label">{{ _tm[_m] }} {{ _y }}</span>
+          </div>
+          <div class="weekly-related-wrapper">
+            <div class="swiper weekly-related-swiper">
+            <div class="swiper-wrapper">
+              {% for rel in related_hotissue %}
+              <div class="swiper-slide">
+                <div class="insight-card" onclick="location.href='/wealth-single-monthly-hotissue-preview/{{ rel.hs_path }}'">
+                  <div class="insight-card-img-wrap">
+                    <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-hot-issue.png') }}" alt="" />
+                  </div>
+                  <div class="insight-card-content">
+                    <span class="insight-card-img-tag insight-tag tag-hot-issue">Hot issue</span>
+                    <h4 class="insight-card-title">{{ rel.main_title }}</h4>
+                    <p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p>
+                    {% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+              {% for rel in related_assetperf %}
+              <div class="swiper-slide">
+                <div class="insight-card" onclick="location.href='/wealth-single-monthly-asset-performance/{{ rel.week_slug|trim }}'">
+                  <div class="insight-card-img-wrap">
+                    <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-asset-performance.png') }}" alt="{{ rel.main_title }}" />
+                  </div>
+                  <div class="insight-card-content">
+                    <span class="insight-card-img-tag insight-tag tag-asset-perf">Asset performance</span>
+                    <h4 class="insight-card-title">{{ rel.main_title }}</h4>
+                    <p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p>
+                    {% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+              {% for rel in related_mktoutlook %}
+              <div class="swiper-slide">
+                <div class="insight-card" onclick="location.href='/wealth-single-monthly-market-outlook/{{ rel.week_slug|trim }}'">
+                  <div class="insight-card-img-wrap">
+                    <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-market-outlook.png') }}" alt="" />
+                  </div>
+                  <div class="insight-card-content">
+                    <span class="insight-card-img-tag insight-tag tag-mkt-outlook">Market outlook</span>
+                    <h4 class="insight-card-title">{{ rel.main_title }}</h4>
+                    <p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p>
+                    {% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+              {% for rel in related_assetoutlook %}
+              <div class="swiper-slide">
+                <div class="insight-card" onclick="location.href='/wealth-single-monthly-asset-class-outlook-preview/{{ rel.hs_path }}'">
+                  <div class="insight-card-img-wrap">
+                    <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-asset-class-outlook.png') }}" alt="" />
+                  </div>
+                  <div class="insight-card-content">
+                    <span class="insight-card-img-tag insight-tag tag-asset-outlook">Asset class outlook</span>
+                    <h4 class="insight-card-title">{{ rel.main_title }}</h4>
+                    <p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p>
+                    {% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+              {% for rel in related_mktcalendar %}
+              <div class="swiper-slide">
+                <div class="insight-card" onclick="location.href='/wealth-single-monthly-market-calendar/{{ rel.week_slug|trim }}'">
+                  <div class="insight-card-img-wrap">
+                    <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-market-calendar.png') }}" alt="{{ rel.main_title }}" />
+                  </div>
+                  <div class="insight-card-content">
+                    <span class="insight-card-img-tag insight-tag tag-mkt-calendar">Market calendar</span>
+                    <h4 class="insight-card-title">{{ rel.main_title }}</h4>
+                    <p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p>
+                    {% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+              {% for rel in related_buylist %}
+              <div class="swiper-slide">
+                <div class="insight-card" onclick="location.href='/wealth-single-monthly-buy-list/{{ rel.week_slug|trim }}'">
+                  <div class="insight-card-img-wrap">
+                    <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-buy-list.png') }}" alt="{{ rel.main_title }}" />
+                  </div>
+                  <div class="insight-card-content">
+                    <span class="insight-card-img-tag insight-tag tag-buy-list">Buy list</span>
+                    <h4 class="insight-card-title">{{ rel.main_title }}</h4>
+                    <p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p>
+                    {% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+            </div>
+            <div class="swiper-button-prev weekly-prev"></div>
+            <div class="swiper-button-next weekly-next"></div>
+          </div>
+          </div>
+          </div>
+        </div>
+        {% endif %}
+
+      </div>
+    </div>
+  </section>
+
+</div>
+
+{% else %}
+<script>{% if not is_in_editor %}window.location.replace('https://wealth.yuanta.co.th/wealth-insights');{% endif %}</script>
+
+{% endif %}
+
+<!-- WEEK MODAL -->
+<div class="week-modal-overlay" id="weekModalOverlay" onclick="closeWeekModal(event)">
+  <div class="week-modal" id="weekModal">
+    <div class="week-modal-header">
+      <h3 class="week-modal-title">มุมมองเพิ่มเติมสัปดาห์เดียวกัน</h3>
+      <button class="week-modal-close" onclick="closeWeekModalDirect()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="week-modal-body">
+      <div class="related-week-header-row" style="margin-bottom:16px;">
+        <span class="related-week-chip">Weekly</span>
+        <span class="related-week-label">บทวิเคราะห์รายสัปดาห์เดียวกัน</span>
+      </div>
+      <div class="row g-3" id="weekModalGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- NEWSLETTER -->
+<section class="newsletter-section">
+  <div class="container">
+    <div class="row align-items-center gy-5">
+      <div class="col-12 col-lg-6">
+        <p class="newsletter-label">Exclusive Insights</p>
+        <h2 class="newsletter-title">Unlock Insights &amp;<br>Market Intelligence</h2>
+        <p class="newsletter-desc">รับข้อมูลเชิงลึกด้านการลงทุน บทวิเคราะห์ตลาด และโอกาสการลงทุนพิเศษ ส่งตรงถึงอีเมลของคุณทุกสัปดาห์</p>
+      </div>
+      <div class="col-12 col-lg-6">
+        <form class="newsletter-form" id="newsletter-form">
+          <input type="email" id="newsletter-email" placeholder="กรอกอีเมลของคุณ" required />
+          <button type="submit">Subscribe to insights</button>
+        </form>
+        <p id="newsletter-msg" style="display:none; margin-top:12px; font-size:14px; color:rgba(255,255,255,0.8);"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock body %}
+
+{% block scripts %}
+<script>
+  // sync --nav-height to actual navbar rendered height
+  (function() {
+    var nav = document.querySelector('.navbar');
+    if (nav) document.documentElement.style.setProperty('--nav-height', nav.offsetHeight + 'px');
+  })();
+
+  // ── Week modal ──
+  var WEEK_SLUG = '{{ week }}';
+  var PORTAL = '43844850';
+  var FALLBACK_IMG = 'data:image/svg+xml,%3Csvg xmlns%3D%27http%3A//www.w3.org/2000/svg%27 viewBox%3D%270 0 4 3%27%3E%3Crect width%3D%274%27 height%3D%273%27 fill%3D%27%23c8cdd5%27/%3E%3C/svg%3E';
+  var THUMB = {
+    '2599182038': '{{ get_asset_url('../images/thumb-hot-issue.png') }}',
+    '2599723735': '{{ get_asset_url('../images/thumb-asset-performance.png') }}',
+    '2612300495': '{{ get_asset_url('../images/thumb-buy-list.png') }}',
+    '2610619077': '{{ get_asset_url('../images/thumb-market-calendar.png') }}',
+  };
+  var WEEKLY_TABLES = [
+    {id:'2599182038', label:'Hot issue',        cls:'tag-hot-issue',    path:'/wealth-single-weekly-hotissue/'},
+    {id:'2599723735', label:'Asset performance',cls:'tag-asset-perf',   path:'/wealth-single-weekly-asset-performance/'},
+    {id:'2612300495', label:'Buy list',         cls:'tag-buy-list',     path:'/wealth-single-weekly-buy-list/'},
+    {id:'2610619077', label:'Market calendar',  cls:'tag-mkt-calendar', path:'/wealth-single-weekly-market-calendar/'},
+  ];
+  function thaiDateM(ms) {
+    var d = new Date(Number(ms));
+    var m = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+    return d.getDate() + ' ' + m[d.getMonth()] + ' ' + (d.getFullYear() + 543);
+  }
+  function openWeekModal() {
+    document.getElementById('weekModalOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    var grid = document.getElementById('weekModalGrid');
+    grid.innerHTML = '<p style="color:#8f9aac;font-size:14px;font-family:\'Noto Sans Thai\',sans-serif;padding:8px 0;">กำลังโหลด...</p>';
+    var tables = WEEKLY_TABLES.filter(function(t) { return t.id !== '2599182038'; });
+    Promise.all(tables.map(function(t) {
+      return fetch('https://api.hubapi.com/cms/v3/hubdb/tables/' + t.id + '/rows?portalId=' + PORTAL + '&week_slug__eq=' + encodeURIComponent(WEEK_SLUG) + '&limit=1')
+        .then(function(r) { return r.json(); })
+        .then(function(d) { var rows = d.results || []; return rows.length ? Object.assign({}, rows[0], {_t: t}) : null; })
+        .catch(function() { return null; });
+    })).then(function(arts) {
+      var valid = arts.filter(Boolean);
+      if (!valid.length) { grid.innerHTML = '<p style="color:#8f9aac;font-size:14px;font-family:\'Noto Sans Thai\',sans-serif;padding:8px 0;">ไม่พบบทความในสัปดาห์เดียวกัน</p>'; return; }
+      grid.innerHTML = valid.map(function(a) {
+        var t = a._t, src = THUMB[t.id] || FALLBACK_IMG;
+        var url = t.path + (a.values.week_slug || '');
+        return '<div class="col-6 col-lg-3"><div class="insight-card" onclick="location.href=\'' + url + '\'">'
+          + '<div class="insight-card-img-wrap"><img class="insight-card-img" src="' + src + '" alt="" "/>'
+          + '</div>'
+          + '<div class="insight-card-content">'
+          + '<span class="insight-card-img-tag insight-tag ' + t.cls + '">' + t.label + '</span>'
+          + '<h4 class="insight-card-title">' + (a.values.main_title || '') + '</h4>'
+          + '<p class="insight-card-date">' + (a.values.page_date ? thaiDateM(a.values.page_date) : '') + '</p></div></div></div>';
+      }).join('');
+    });
+  }
+  function closeWeekModal(e) { if (e.target === document.getElementById('weekModalOverlay')) closeWeekModalDirect(); }
+  function closeWeekModalDirect() { document.getElementById('weekModalOverlay').classList.remove('open'); document.body.style.overflow = ''; }
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeWeekModalDirect(); });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.article-content table').forEach(function(tbl) {
+      tbl.style.width = '100%';
+      tbl.style.tableLayout = 'fixed'; tbl.style.borderColor = '#eaeaea';
+      tbl.querySelectorAll('col, th, td').forEach(function(el) { el.style.width = ''; el.removeAttribute('width'); }); tbl.querySelectorAll('td').forEach(function(el) { el.style.padding = '10px'; });
+    });
+  });
+  function _wrapTableScroll(root) {
+    if (!root) return;
+    root.querySelectorAll('table').forEach(function(tbl) {
+      if (tbl.parentNode.classList && tbl.parentNode.classList.contains('tbl-scroll-inner')) return;
+      var isDragging = false, startX, scrollLeft;
+      inner.style.cursor = 'grab';
+      inner.addEventListener('mousedown', function(e) { isDragging = true; startX = e.pageX - inner.offsetLeft; scrollLeft = inner.scrollLeft; inner.style.cursor = 'grabbing'; inner.style.userSelect = 'none'; });
+      inner.addEventListener('mouseleave', function() { isDragging = false; inner.style.cursor = 'grab'; });
+      inner.addEventListener('mouseup', function() { isDragging = false; inner.style.cursor = 'grab'; inner.style.userSelect = ''; });
+      inner.addEventListener('mousemove', function(e) { if (!isDragging) return; e.preventDefault(); inner.scrollLeft = scrollLeft - (e.pageX - inner.offsetLeft - startX); });
+    });
+  }
+  function shareToFacebook() { window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(location.href), '_blank'); }
+  function shareToX() { window.open('https://x.com/intent/tweet?url=' + encodeURIComponent(location.href), '_blank'); }
+  function copyLink() { navigator.clipboard.writeText(location.href).then(function() { alert('คัดลอกลิงก์แล้ว'); }); }
+  function shareByEmail() { location.href = 'mailto:?subject=Hot Issue — Yuanta Wealth&body=' + encodeURIComponent(location.href); }
+
+  document.getElementById('newsletter-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var email = document.getElementById('newsletter-email').value;
+    var msg = document.getElementById('newsletter-msg');
+    fetch('https://api.hsforms.com/submissions/v3/integration/submit/43844850/366d7ed2-7a14-44f0-8a7c-dffcba0cd288', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fields: [{ name: 'email', value: email }], context: { pageUri: window.location.href, pageName: document.title } })
+    }).then(function(r) {
+      msg.style.display = 'block';
+      if (r.ok) { msg.textContent = 'ขอบคุณ! เราจะส่ง Insights ให้คุณเร็วๆ นี้'; document.getElementById('newsletter-form').reset(); }
+      else { msg.textContent = 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง'; }
+    }).catch(function() { msg.style.display = 'block'; msg.textContent = 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง'; });
+  });
+
+  new Swiper('.weekly-related-swiper', {
+    slidesPerView: 4,
+    spaceBetween: 16,
+    watchOverflow: false,
+    navigation: { prevEl: '.weekly-prev', nextEl: '.weekly-next', disabledClass: 'swiper-button-disabled' },
+    breakpoints: {
+      0:   { enabled: false },
+      768: { enabled: false },
+      992: { enabled: true, slidesPerView: 4, spaceBetween: 16 }
+    }
+  });
+</script>
+{% endblock scripts %}
