@@ -1,0 +1,27 @@
+name: Backfill HubDB Page Paths
+
+on:
+  schedule:
+    - cron: '0 1 * * *'   # daily at 01:00 UTC (08:00 ICT) — data team updates weekly at an unknown time
+  workflow_dispatch: {}
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Backfill Page Paths for hot-issue / asset-class-outlook topics
+        run: python3 scripts/backfill_page_paths.py --live
+        env:
+          HUBSPOT_ACCESS_KEY: ${{ secrets.HUBSPOT_ACCESS_KEY }}
