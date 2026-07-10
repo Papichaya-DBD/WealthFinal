@@ -357,7 +357,7 @@
         <div class="col-6 col-lg-3">
           <div class="insight-card" onclick="location.href='/wealth-single-monthly-hotissue/{{ rel.week_slug|trim }}'">
             <div class="insight-card-img-wrap">
-              <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-hot-issue.jpg') }}" alt="{{ rel.main_title }}" />
+              <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-hot-issue.png') }}" alt="{{ rel.main_title }}" />
             </div>
             <div class="insight-card-content">
               <span class="insight-card-img-tag insight-tag tag-hot-issue">Hot issue</span>
@@ -372,7 +372,7 @@
         <div class="col-6 col-lg-3">
           <div class="insight-card" onclick="location.href='/wealth-single-monthly-asset-performance/{{ rel.week_slug|trim }}'">
             <div class="insight-card-img-wrap">
-              <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-asset-performance.jpg') }}" alt="{{ rel.main_title }}" />
+              <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-asset-performance.png') }}" alt="{{ rel.main_title }}" />
             </div>
             <div class="insight-card-content">
               <span class="insight-card-img-tag insight-tag tag-asset-perf">Asset performance</span>
@@ -387,7 +387,7 @@
         <div class="col-6 col-lg-3">
           <div class="insight-card" onclick="location.href='/wealth-single-monthly-buy-list/{{ rel.week_slug|trim }}'">
             <div class="insight-card-img-wrap">
-              <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-buy-list.jpg') }}" alt="{{ rel.main_title }}" />
+              <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-buy-list.png') }}" alt="{{ rel.main_title }}" />
             </div>
             <div class="insight-card-content">
               <span class="insight-card-img-tag insight-tag tag-buy-list">Buy list</span>
@@ -402,7 +402,7 @@
         <div class="col-6 col-lg-3">
           <div class="insight-card" onclick="location.href='/wealth-single-monthly-market-calendar/{{ rel.week_slug|trim }}'">
             <div class="insight-card-img-wrap">
-              <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-market-calendar.jpg') }}" alt="{{ rel.main_title }}" />
+              <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-market-calendar.png') }}" alt="{{ rel.main_title }}" />
             </div>
             <div class="insight-card-content">
               <span class="insight-card-img-tag insight-tag tag-mkt-calendar">Market calendar</span>
@@ -417,7 +417,7 @@
         <div class="col-6 col-lg-3">
           <div class="insight-card" onclick="location.href='/wealth-single-monthly-market-outlook/{{ rel.week_slug|trim }}'">
             <div class="insight-card-img-wrap">
-              <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-market-outlook.jpg') }}" alt="{{ rel.main_title }}" />
+              <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-market-outlook.png') }}" alt="{{ rel.main_title }}" />
             </div>
             <div class="insight-card-content">
               <span class="insight-card-img-tag insight-tag tag-mkt-outlook">Market outlook</span>
@@ -432,7 +432,7 @@
         <div class="col-6 col-lg-3">
           <div class="insight-card" onclick="location.href='/wealth-single-monthly-asset-class-outlook/{{ rel.week_slug|trim }}'">
             <div class="insight-card-img-wrap">
-              <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-asset-class-outlook.jpg') }}" alt="{{ rel.main_title }}" />
+              <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-asset-class-outlook.png') }}" alt="{{ rel.main_title }}" />
             </div>
             <div class="insight-card-content">
               <span class="insight-card-img-tag insight-tag tag-asset-outlook">Asset class outlook</span>
@@ -470,7 +470,7 @@
         <div class="col-6 col-lg-3">
           <div class="insight-card" onclick="location.href='/wealth-single-weekly-hotissue/{{ rel.week_slug|trim }}'">
             <div class="insight-card-img-wrap">
-              <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-hot-issue.jpg') }}" alt="{{ rel.main_title }}" />
+              <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-hot-issue.png') }}" alt="{{ rel.main_title }}" />
             </div>
             <div class="insight-card-content">
               <span class="insight-card-img-tag insight-tag tag-hot-issue">Hot issue</span>
@@ -485,7 +485,7 @@
         <div class="col-6 col-lg-3">
           <div class="insight-card" onclick="location.href='/wealth-single-weekly-asset-performance/{{ rel.week_slug|trim }}'">
             <div class="insight-card-img-wrap">
-              <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-asset-performance.jpg') }}" alt="{{ rel.main_title }}" />
+              <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-asset-performance.png') }}" alt="{{ rel.main_title }}" />
             </div>
             <div class="insight-card-content">
               <span class="insight-card-img-tag insight-tag tag-asset-perf">Asset performance</span>
@@ -500,7 +500,7 @@
         <div class="col-6 col-lg-3">
           <div class="insight-card" onclick="location.href='/wealth-single-weekly-buy-list/{{ rel.week_slug|trim }}'">
             <div class="insight-card-img-wrap">
-              <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-buy-list.jpg') }}" alt="{{ rel.main_title }}" />
+              <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-buy-list.png') }}" alt="{{ rel.main_title }}" />
             </div>
             <div class="insight-card-content">
               <span class="insight-card-img-tag insight-tag tag-buy-list">Buy list</span>
@@ -604,10 +604,10 @@
   if (!/^\d{4}-\d{2}-\d{2}$/.test(WEEK_SLUG)) { {% if not is_in_editor %}location.replace('/wealth-insights');{% endif %} }
   var FALLBACK_IMG = '{{ get_asset_url('../images/comingsoon.png') }}';
   var THUMB = {
-    '2599182038': '{{ get_asset_url('../images/thumb-hot-issue.jpg') }}',
-    '2599723735': '{{ get_asset_url('../images/thumb-asset-performance.jpg') }}',
-    '2612300495': '{{ get_asset_url('../images/thumb-buy-list.jpg') }}',
-    '2610619077': '{{ get_asset_url('../images/thumb-market-calendar.jpg') }}',
+    '2599182038': '{{ get_asset_url('../images/thumb-hot-issue.png') }}',
+    '2599723735': '{{ get_asset_url('../images/thumb-asset-performance.png') }}',
+    '2612300495': '{{ get_asset_url('../images/thumb-buy-list.png') }}',
+    '2610619077': '{{ get_asset_url('../images/thumb-market-calendar.png') }}',
   };
   var RELATED_TABLES = [
     {id:'2599182038', label:'Hot issue',        cls:'tag-hot-issue',     path:'/wealth-single-weekly-hotissue/'},
