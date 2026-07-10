@@ -73,7 +73,13 @@
       "Read(//tmp/**)",
       "Bash(echo \"diff exit: $?\")",
       "Bash(sed -i '' 's/\\\\.on-this-page { padding: 0 0 0; margin-bottom: 0; }/.on-this-page { padding: 0 0 0; margin-bottom: 0; background: #F9F7F4; }/' yuanta-wealth-theme/templates/single-hot-issue.html yuanta-wealth-theme/templates/single-hot-issue-preview.html yuanta-wealth-theme/templates/single-weekly-hot-issue.html)",
-      "Bash(sed -i '' 's/\\\\.on-this-page { padding: 28px 0 0; margin-bottom: 0; }/.on-this-page { padding: 28px 0 0; margin-bottom: 0; background: #F9F7F4; }/' yuanta-wealth-theme/templates/single-monthly-hot-issue.html yuanta-wealth-theme/templates/single-monthly-asset-class-outlook.html)"
+      "Bash(sed -i '' 's/\\\\.on-this-page { padding: 28px 0 0; margin-bottom: 0; }/.on-this-page { padding: 28px 0 0; margin-bottom: 0; background: #F9F7F4; }/' yuanta-wealth-theme/templates/single-monthly-hot-issue.html yuanta-wealth-theme/templates/single-monthly-asset-class-outlook.html)",
+      "Bash(rm -rf /tmp/hs-fetch-check)",
+      "Bash(mkdir -p /tmp/hs-fetch-check)",
+      "Bash(grep -n \"^html\\\\|^body\\\\|html {\\\\|body {\\\\|html,\\\\|body,\" /Users/papichaya-dbd/Documents/yuanta-wealth-website/yuanta-wealth-theme/css/theme-overrides.css)",
+      "Bash(rm -rf /tmp/hs-fetch-check2)",
+      "Bash(mkdir -p /tmp/hs-fetch-check2)",
+      "Bash(cd *)"
     ]
   }
 }
