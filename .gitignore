@@ -1,0 +1,7 @@
+# Stray root-level snapshot files (older/mismatched copies of files inside yuanta-wealth-theme/)
+/insights.html
+/main.css
+/single-hot-issue.html
+
+# Test run output
+test-results/
