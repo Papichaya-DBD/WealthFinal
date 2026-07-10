@@ -2323,4 +2323,7 @@ body .related-week-chip { font-family: 'Cormorant Garamond','Noto Sans Thai',Geo
 .tbl-scroll-nav { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 10px 0 4px; }
 .tbl-scroll-nav span { font-family: 'Noto Sans Thai', sans-serif; font-size: 12px; color: #8f9aac; }
 .tbl-scroll-btn { background: none; border: none; padding: 3px 12px; cursor: pointer; color: #8f9aac; font-size: 16px; line-height: 1.4; transition: color .15s; }
+
+/* ─── HubSpot native cookie consent banner (font override) ─── */
+#hs-banner-parent { --hs-banner-font-family: 'Noto Sans Thai', sans-serif; }
 .tbl-scroll-btn:hover { color: #3d506e; }
