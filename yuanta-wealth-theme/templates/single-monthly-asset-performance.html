@@ -485,6 +485,7 @@
     if (!root) return;
     root.querySelectorAll('table').forEach(function(tbl) {
       if (tbl.parentNode.classList && tbl.parentNode.classList.contains('tbl-scroll-inner')) return;
+      tbl.querySelectorAll('col, th, td').forEach(function(el) { el.style.width = ''; el.removeAttribute('width'); });
       var inner = document.createElement('div'); inner.className = 'tbl-scroll-inner';
       tbl.parentNode.insertBefore(inner, tbl); inner.appendChild(tbl);
       var wrap = document.createElement('div'); inner.parentNode.insertBefore(wrap, inner); wrap.appendChild(inner);
