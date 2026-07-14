@@ -484,6 +484,7 @@
   function _wrapTableScroll(root) {
     if (!root) return;
     root.querySelectorAll('table').forEach(function(tbl) {
+      if (tbl.closest('[data-hs-responsive-table]')) return;
       if (tbl.parentNode.classList && tbl.parentNode.classList.contains('tbl-scroll-inner')) return;
       tbl.querySelectorAll('col, th, td').forEach(function(el) { el.style.width = ''; el.removeAttribute('width'); });
       var inner = document.createElement('div'); inner.className = 'tbl-scroll-inner';
