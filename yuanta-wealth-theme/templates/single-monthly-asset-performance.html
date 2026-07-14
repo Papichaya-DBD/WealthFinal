@@ -54,6 +54,7 @@
   .article-content p { margin-bottom: 14px; }
   @media (max-width: 767px) { .article-content h3 { font-size: 18px; } .article-content p { font-size: 16px; } }
   .article-content img { width: 100%; border-radius: 4px; margin: 16px 0; display: block; }
+  .article-content .tbl-scroll-inner table th, .article-content .tbl-scroll-inner table td { white-space: normal; }
   .article-content ul, .article-content ol { padding-left: 20px; margin-bottom: 14px; }
   .article-content ul { list-style: disc; }
   .article-content ol { list-style: decimal; }
@@ -484,7 +485,6 @@
   function _wrapTableScroll(root) {
     if (!root) return;
     root.querySelectorAll('table').forEach(function(tbl) {
-      if (tbl.closest('[data-hs-responsive-table]')) return;
       if (tbl.parentNode.classList && tbl.parentNode.classList.contains('tbl-scroll-inner')) return;
       tbl.querySelectorAll('col, th, td').forEach(function(el) { el.style.width = ''; el.removeAttribute('width'); });
       var inner = document.createElement('div'); inner.className = 'tbl-scroll-inner';
