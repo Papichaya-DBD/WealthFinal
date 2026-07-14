@@ -53,10 +53,6 @@
   .article-content h3 { font-family: 'Noto Sans Thai', sans-serif; font-size: 20px; font-weight: 700; color: #0c244a; margin: 24px 0 12px; }
   .article-content p { margin-bottom: 14px; }
   @media (max-width: 767px) { .article-content h3 { font-size: 18px; } .article-content p { font-size: 16px; } }
-  .article-content table { width: 100% !important; border-collapse: collapse; margin: 20px 0; font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; }
-  .article-content table th { background: #0c244a; color: #fff; padding: 10px 14px; text-align: left; font-weight: 600; word-break: break-word; overflow-wrap: anywhere; }
-  .article-content table td { padding: 10px 14px; border-bottom: 1px solid #eaeaea; color: #1a2e44; vertical-align: top; word-break: break-word; overflow-wrap: anywhere; }
-  .article-content table tr:nth-child(even) td { background: #f9f7f4; }
   .article-content img { width: 100%; border-radius: 4px; margin: 16px 0; display: block; }
   .article-content ul, .article-content ol { padding-left: 20px; margin-bottom: 14px; }
   .article-content ul { list-style: disc; }
@@ -484,12 +480,32 @@
   function closeWeekModalDirect() { document.getElementById('weekModalOverlay').classList.remove('open'); document.body.style.overflow = ''; }
   document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeWeekModalDirect(); });
 
-  document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.article-content table').forEach(function(tbl) {
-      tbl.style.width = '100%';
-      tbl.style.tableLayout = 'fixed'; tbl.style.borderColor = '#eaeaea';
-      tbl.querySelectorAll('col, th, td').forEach(function(el) { el.style.width = ''; el.removeAttribute('width'); }); tbl.querySelectorAll('td').forEach(function(el) { el.style.padding = '10px'; });
+  // ── Table scroll wrapper ──
+  function _wrapTableScroll(root) {
+    if (!root) return;
+    root.querySelectorAll('table').forEach(function(tbl) {
+      if (tbl.parentNode.classList && tbl.parentNode.classList.contains('tbl-scroll-inner')) return;
+      var inner = document.createElement('div'); inner.className = 'tbl-scroll-inner';
+      tbl.parentNode.insertBefore(inner, tbl); inner.appendChild(tbl);
+      var wrap = document.createElement('div'); inner.parentNode.insertBefore(wrap, inner); wrap.appendChild(inner);
+      var nav = document.createElement('div'); nav.className = 'tbl-scroll-nav';
+      nav.innerHTML = '<button class="tbl-scroll-btn" onclick="this.parentNode.previousElementSibling.scrollBy({left:-140,behavior:\'smooth\'})">&#8249;</button>'
+        + '<span>เลื่อนดูเพิ่มเติม</span>'
+        + '<button class="tbl-scroll-btn" onclick="this.parentNode.previousElementSibling.scrollBy({left:140,behavior:\'smooth\'})">&#8250;</button>';
+      wrap.appendChild(nav);
+      function checkNav() { nav.style.display = inner.scrollWidth > inner.clientWidth ? 'flex' : 'none'; }
+      requestAnimationFrame(checkNav); window.addEventListener('resize', checkNav);
+      var isDragging = false, startX, scrollLeft;
+      inner.style.cursor = 'grab';
+      inner.addEventListener('mousedown', function(e) { isDragging = true; startX = e.pageX - inner.offsetLeft; scrollLeft = inner.scrollLeft; inner.style.cursor = 'grabbing'; inner.style.userSelect = 'none'; });
+      inner.addEventListener('mouseleave', function() { isDragging = false; inner.style.cursor = 'grab'; });
+      inner.addEventListener('mouseup', function() { isDragging = false; inner.style.cursor = 'grab'; inner.style.userSelect = ''; });
+      inner.addEventListener('mousemove', function(e) { if (!isDragging) return; e.preventDefault(); inner.scrollLeft = scrollLeft - (e.pageX - inner.offsetLeft - startX); });
     });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.article-content').forEach(function(ac) { _wrapTableScroll(ac); });
   });
   function shareToFacebook() { window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(location.href), '_blank'); }
   function shareToX() { window.open('https://x.com/intent/tweet?url=' + encodeURIComponent(location.href), '_blank'); }
