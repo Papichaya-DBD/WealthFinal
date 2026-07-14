@@ -821,6 +821,7 @@ input, textarea, select { font-family: inherit; }
 @media (max-width: 768px) {
   .cta-section { padding: 60px 0; }
   .cta-text .section-title { font-size: 28px; }
+  .cta-section .btn-primary { width: 100%; justify-content: center; }
 }
 
 /* ============================================
