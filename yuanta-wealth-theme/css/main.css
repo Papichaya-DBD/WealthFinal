@@ -2300,15 +2300,15 @@ body .related-week-chip { font-family: 'Cormorant Garamond','Noto Sans Thai',Geo
 /* ─── Week modal (ดูมุมมองเพิ่มเติม on single monthly pages) ─── */
 .week-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 2000; align-items: flex-start; justify-content: center; padding: 60px 16px 32px; overflow-y: auto; }
 .week-modal-overlay.open { display: flex; }
-.week-modal { background: #fff; width: 100%; max-width: 900px; box-shadow: 0 20px 60px rgba(0,0,0,.18); }
-.week-modal-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid rgba(0,0,0,.08); }
+.week-modal { background: #fff; width: 100%; max-width: 900px; box-shadow: 0 20px 60px rgba(0,0,0,.18); max-height: calc(100vh - 92px); display: flex; flex-direction: column; }
+.week-modal-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid rgba(0,0,0,.08); flex-shrink: 0; }
 .week-modal-title { font-family: 'Noto Sans Thai', sans-serif; font-size: 17px; font-weight: 700; color: #0c244a; margin: 0; }
 .week-modal-close { background: none; border: none; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; color: #555; }
 .week-modal-close:hover { background: #f0f0f0; }
-.week-modal-body { padding: 20px 24px 28px; }
+.week-modal-body { padding: 20px 24px 28px; overflow-y: auto; flex: 1; }
 @media (max-width: 767px) {
   .week-modal-overlay { padding: 0; align-items: flex-end; }
-  .week-modal { max-height: 85vh; overflow-y: auto; border-radius: 16px 16px 0 0; }
+  .week-modal { max-height: 85vh; border-radius: 16px 16px 0 0; }
   .week-modal-header { position: relative; padding-top: 22px; }
   .week-modal-header::before { content: ''; position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 36px; height: 4px; border-radius: 2px; background: rgba(0,0,0,.15); }
 }
