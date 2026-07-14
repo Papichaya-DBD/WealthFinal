@@ -57,6 +57,11 @@
   .article-content [data-hs-responsive-table] { max-height: none !important; overflow-y: visible !important; }
   .article-content .tbl-scroll-inner table { min-width: 960px; }
   .article-content .tbl-scroll-inner table th, .article-content .tbl-scroll-inner table td { white-space: normal; padding: 10px 16px !important; }
+  @media (min-width: 992px) {
+    .article-content .tbl-scroll-inner { overflow-x: visible; }
+    .article-content .tbl-scroll-inner table { min-width: 0; width: 100% !important; }
+    .article-content .tbl-scroll-nav { display: none !important; }
+  }
   .article-content ul, .article-content ol { padding-left: 20px; margin-bottom: 14px; }
   .article-content ul { list-style: disc; }
   .article-content ol { list-style: decimal; }
