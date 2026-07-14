@@ -975,9 +975,14 @@
       var dotEls = dotsWrap ? dotsWrap.querySelectorAll('.week-nav-dot') : [];
 
       function updateListPage() {
+        var pageStart = liCur * liPerPage;
+        var pageEnd = Math.min(pageStart + liPerPage, liTotal);
+        var isFullPage = (pageEnd - pageStart) === liPerPage;
         for (var i = 0; i < liTotal; i++) {
-          listItems[i].style.display = (i >= liCur * liPerPage && i < (liCur + 1) * liPerPage) ? '' : 'none';
+          var visible = i >= pageStart && i < pageEnd;
+          listItems[i].style.display = visible ? '' : 'none';
           listItems[i].style.borderBottom = '';
+          if (visible) listItems[i].style.flex = isFullPage ? '1' : '0 0 auto';
         }
         var lastIdx = Math.min((liCur + 1) * liPerPage - 1, liTotal - 1);
         if (listItems[lastIdx]) listItems[lastIdx].style.borderBottom = 'none';
