@@ -1863,7 +1863,7 @@ input, textarea, select { font-family: inherit; }
 @media (max-width: 576px) {
   .award-item-new { flex-direction: column; }
   .award-thumb { width: 100%; height: 180px; }
-  .awards-section { padding-top: 0; }
+  .awards-section { padding-top: 40px; }
 }
 
 /* ============================================
