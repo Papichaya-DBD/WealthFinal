@@ -17,7 +17,7 @@
 {% set monthly_buylist      = hubdb_table_rows(2601119426, "week_slug__eq=" ~ month_slug ~ "&limit=1") if month_slug else [] %}
 {% set monthly_mktcalendar  = hubdb_table_rows(2679062221, "week_slug__eq=" ~ month_slug ~ "&limit=1") if month_slug else [] %}
 {% set monthly_mktoutlook   = hubdb_table_rows(2601119430, "week_slug__eq=" ~ month_slug ~ "&limit=1") if month_slug else [] %}
-{% set monthly_assetoutlook = hubdb_table_rows(2601147112, "week_slug__eq=" ~ month_slug ~ "&limit=1") if month_slug else [] %}
+{% set monthly_assetoutlook = hubdb_table_rows(2601147112, "week_slug__eq=" ~ month_slug) if month_slug else [] %}
 {% set related_hotissue = hubdb_table_rows(2599182038, "week_slug__eq=" ~ week) | selectattr('hs_id', 'ne', current_row.hs_id) | list if week else [] %}
 
 {{ require_css(get_asset_url('../css/main.css')) }}
@@ -467,7 +467,7 @@
         {% endfor %}
         {% for rel in monthly_assetoutlook %}
         <div class="col-6 col-lg-3">
-          <div class="insight-card" onclick="location.href='/wealth-single-monthly-asset-class-outlook/{{ rel.week_slug|trim }}'">
+          <div class="insight-card" onclick="location.href='/wealth-single-monthly-asset-class-outlook/{{ rel.hs_path }}'">
             <div class="insight-card-img-wrap">
               <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-asset-class-outlook.png') }}" alt="{{ rel.main_title }}" />
             </div>
@@ -475,7 +475,8 @@
               <span class="insight-card-img-tag insight-tag tag-asset-outlook">Asset class outlook</span>
               <h4 class="insight-card-title">{{ rel.main_title }}</h4>
               <p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p>
-              {% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}
+              {% set rel_excerpt = rel.description if rel.description else rel.ai_summary|striptags %}
+              {% if rel_excerpt %}<p class="insight-card-excerpt">{{ rel_excerpt }}</p>{% endif %}
             </div>
           </div>
         </div>
