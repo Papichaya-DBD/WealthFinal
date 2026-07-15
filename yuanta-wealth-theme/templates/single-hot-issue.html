@@ -8,8 +8,8 @@
 
 {% block body %}
 
-{# Monthly modal data — HubL server-side loop (no client-side API fetch) #}
 {% set current_row = dynamic_page_hubdb_row %}
+{% set page = current_row %}
 {% set week = current_row.week_slug if current_row else '' %}
 {% set month_slug = (week[:7] ~ '-01') if week else '' %}
 {% set monthly_hotissue     = hubdb_table_rows(2601147111, "week_slug__eq=" ~ month_slug) if month_slug else [] %}
@@ -18,6 +18,7 @@
 {% set monthly_mktcalendar  = hubdb_table_rows(2679062221, "week_slug__eq=" ~ month_slug ~ "&limit=1") if month_slug else [] %}
 {% set monthly_mktoutlook   = hubdb_table_rows(2601119430, "week_slug__eq=" ~ month_slug ~ "&limit=1") if month_slug else [] %}
 {% set monthly_assetoutlook = hubdb_table_rows(2601147112, "week_slug__eq=" ~ month_slug ~ "&limit=1") if month_slug else [] %}
+{% set related_hotissue = hubdb_table_rows(2599182038, "week_slug__eq=" ~ week) | selectattr('hs_id', 'ne', current_row.hs_id) | list if week else [] %}
 
 {{ require_css(get_asset_url('../css/main.css')) }}
 
@@ -49,18 +50,6 @@
   @media (max-width: 767px) { .article-body { padding: 0; } }
 
   /* ── Tabs ── */
-  .on-this-page { padding: 20px 0 16px; margin-bottom: 0; background: #F9F7F4; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; }
-  .on-this-page-heading { font-family: 'Noto Sans Thai', sans-serif; font-size: 24px; font-weight: 700; color: #0c244a; margin-bottom: 4px; }
-  .on-this-page-count { font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; color: #8f9aac; margin-bottom: 16px; }
-  .on-this-page-tabs-wrap { position: sticky; top: var(--nav-height, 60px); background: #F9F7F4; z-index: 10; padding-bottom: 16px; width: 100vw; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
-  .on-this-page-tabs-wrap .container { padding-top: 0; padding-bottom: 0; }
-  .on-this-page-tabs { display: flex; gap: 0; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-  .on-this-page-tabs::-webkit-scrollbar { display: none; }
-  .on-this-page-tab { font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; font-weight: 500; color: #8f9aac; background: none; border: none; border-bottom: 2px solid transparent; padding: 10px 20px; cursor: pointer; white-space: nowrap; transition: color .15s, border-color .15s; flex-shrink: 0; }
-  .on-this-page-tab:hover { color: #0c244a; }
-  .on-this-page-tab.active { color: #0c244a; font-weight: 700; border-bottom-color: #0c244a; }
-  .tab-panel { display: none; padding-top: 36px; }
-  .tab-panel.active { display: block; }
 
   /* ── AI Summary ── */
   .ai-summary-box { background: url('{{ get_asset_url('../images/bgaisummary.jpg') }}') center/cover no-repeat; border: 1px solid #3b537829; padding: 28px 32px; margin-bottom: 40px; }
@@ -231,12 +220,9 @@
   }
   .week-modal-close { width: 32px; height: 32px; border: none; background: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #3d506e; transition: background .15s; }
   .week-modal-close:hover { background: #f0f0f0; }
-
-  /* ── Loading / error states ── */
-  .page-loading { padding: 80px 0; text-align: center; font-family: 'Noto Sans Thai', sans-serif; font-size: 15px; color: #8f9aac; }
-  .page-error { padding: 80px 0; text-align: center; }
 </style>
 
+{% if page %}
 <div class="insight-page">
 
   <!-- BREADCRUMB -->
@@ -254,14 +240,15 @@
     </div>
   </div>
 
+
   <!-- ARTICLE HEADER -->
   <section class="article-header">
     <div class="container">
       <div class="col-12 col-lg-9 mx-auto">
         <span class="article-category-tag">Hot issue</span>
-        <h1 class="article-title" id="pageTitle">Hot Issue</h1>
-        <p class="article-subtitle" id="pageSubtitle"></p>
-        <p class="article-date" id="pageDate"></p>
+        <h1 class="article-title">{{ page.main_title }}</h1>
+        <p class="article-subtitle">{{ page.page_subtitle }}</p>
+        <p class="article-date">{{ page.page_date|datetimeformat("%d %B %Y") }}</p>
       </div>
     </div>
   </section>
@@ -271,106 +258,109 @@
     <div class="container">
       <div class="col-12 col-lg-9 mx-auto">
 
-        <!-- Loading state -->
-        <div id="pageLoading" class="page-loading">กำลังโหลด...</div>
-
-        <!-- Main content (hidden until loaded) -->
-        <div id="pageContent" style="display:none;">
-
-          <!-- Tabs nav -->
-          <div class="on-this-page">
-            <div class="container">
-            <div class="col-12 col-lg-9 mx-auto">
-            <h3 class="on-this-page-heading">หัวข้อบทวิเคราะห์</h3>
-            <p class="on-this-page-count" id="topicCount"></p>
+        <div class="ai-summary-box">
+          <div class="ai-summary-header">
+            <div class="ai-summary-icon">
+              <img src="{{ get_asset_url('../images/ai-icon.png') }}" alt="AI" />
             </div>
+            <div>
+              <span class="ai-summary-label">AI Summary</span>
+              <p class="ai-summary-sublabel">บทสรุปจาก AI อ้างอิงโดยบทวิเคราะห์</p>
             </div>
           </div>
-          <div class="on-this-page-tabs-wrap"><div class="container"><div class="col-12 col-lg-9 mx-auto"><div class="on-this-page-tabs" id="tabNav"></div></div></div></div>
+          <div class="ai-summary-text">{{ page.ai_summary }}</div>
+        </div>
+        <div class="article-content">{{ page.body }}</div>
 
-          <!-- Tab panels container -->
-          <div id="tabPanels"></div>
-
-          <!-- CTA -->
-          <div class="article-cta-row">
-            <div class="article-cta-left">
-              <p class="article-cta-title">ต้องการดูภาพรวมทั้งสัปดาห์?</p>
-              <p class="article-cta-sub">เนื้อหานี้เป็นส่วนหนึ่งของบทวิเคราะห์ฉบับเต็มที่ครอบคลุมเนื้อหาทุก asset class</p>
-              <a class="article-cta-btn" id="ctaPdfBtn" href="#" target="_blank">ดูมุมมองเพิ่มเติม</a>
-            </div>
-            <div class="article-cta-right">
-              <p class="article-cta-right-title">ดูมุมมอง<br>บทวิเคราะห์อื่นในเดือนนี้</p>
-              <button class="article-cta-outline-btn" onclick="openMonthlyModal()">บทวิเคราะห์ประจำเดือน &gt;</button>
-            </div>
+        <!-- CTA -->
+        <div class="article-cta-row">
+          <div class="article-cta-left">
+            <p class="article-cta-title">ต้องการดูภาพรวมทั้งสัปดาห์?</p>
+            <p class="article-cta-sub">เนื้อหานี้เป็นส่วนหนึ่งของบทวิเคราะห์ฉบับเต็มที่ครอบคลุมเนื้อหาทุก asset class</p>
+            <a class="article-cta-btn" id="ctaPdfBtn" href="/wealth-weekly-report?week={{ week }}" target="_blank" rel="noopener">ดูมุมมองเพิ่มเติม</a>
           </div>
+          <div class="article-cta-right">
+            <p class="article-cta-right-title">ดูมุมมอง<br>บทวิเคราะห์อื่นในเดือนนี้</p>
+            <button class="article-cta-outline-btn" onclick="openMonthlyModal()">บทวิเคราะห์ประจำเดือน &gt;</button>
+          </div>
+        </div>
 
-          <!-- Experts -->
-          {% set experts = hubdb_table_rows(2238813912, "orderBy=order") %}
-          {% if experts %}
-          <div class="experts-section">
-            <p class="experts-title">บทวิเคราะห์โดย</p>
-            <div class="row g-3">
-              {% for expert in experts %}
-              <div class="col-12 col-sm-4">
-                <div class="expert-item">
-                  {% if expert.photo %}
-                  <img class="expert-avatar" src="{{ expert.photo.url }}" alt="{{ expert.name }}" />
+        <!-- Experts -->
+        {% set experts = hubdb_table_rows(2238813912, "orderBy=order") %}
+        {% if experts %}
+        <div class="experts-section">
+          <p class="experts-title">บทวิเคราะห์โดย</p>
+          <div class="row g-3">
+            {% for expert in experts %}
+            <div class="col-12 col-sm-4">
+              <div class="expert-item">
+                {% if expert.photo %}
+                <img class="expert-avatar" src="{{ expert.photo.url }}" alt="{{ expert.name }}" />
+                {% endif %}
+                <div class="expert-info">
+                  <p class="expert-name">{{ expert.name }}</p>
+                  {% if expert.credentials %}
+                  <p class="expert-credentials">{{ expert.credentials }}</p>
                   {% endif %}
-                  <div class="expert-info">
-                    <p class="expert-name">{{ expert.name }}</p>
-                    {% if expert.credentials %}
-                    <p class="expert-credentials">{{ expert.credentials }}</p>
-                    {% endif %}
-                  </div>
                 </div>
               </div>
-              {% endfor %}
             </div>
+            {% endfor %}
           </div>
-          {% endif %}
+        </div>
+        {% endif %}
 
-          <!-- Share buttons -->
-          <div class="article-share">
-            <span class="article-share-label">แชร์</span>
-            <button class="share-btn" onclick="shareToFacebook()" title="Facebook">
-              <svg viewBox="0 0 20 20" fill="none"><path d="M11 10.5h2l.5-2.5H11V6.5c0-.7.35-1.5 1.5-1.5H13.5V2.5A13 13 0 0011.5 2.5C9.14 2.5 8 3.9 8 6v2H5.5v2.5H8V18h3v-7.5z" fill="#1877F2"/></svg>
-            </button>
-            <button class="share-btn" onclick="shareToX()" title="X">
-              <svg viewBox="0 0 20 20" fill="none"><path d="M15.5 3h-2.1l-3.4 4.3L6.4 3H2l5.7 7.3L2.1 17H4.2l3.7-4.6 3.7 4.6H16l-6-7.7L15.5 3z" fill="#000"/></svg>
-            </button>
-            <button class="share-btn" onclick="copyLink()" title="คัดลอก">
-              <svg viewBox="0 0 20 20" fill="none"><path d="M8.5 11.5a4 4 0 005.66 0l2-2a4 4 0 00-5.66-5.66l-1 1" stroke="#555" stroke-width="1.5" stroke-linecap="round"/><path d="M11.5 8.5a4 4 0 00-5.66 0l-2 2a4 4 0 005.66 5.66l1-1" stroke="#555" stroke-width="1.5" stroke-linecap="round"/></svg>
-            </button>
-            <button class="share-btn" onclick="shareByEmail()" title="อีเมล">
-              <svg viewBox="0 0 20 20" fill="none"><rect x="2" y="4" width="16" height="12" rx="2" stroke="#555" stroke-width="1.5"/><path d="M2 7l8 5 8-5" stroke="#555" stroke-width="1.5" stroke-linecap="round"/></svg>
-            </button>
+        <!-- Share buttons -->
+        <div class="article-share">
+          <span class="article-share-label">แชร์</span>
+          <button class="share-btn" onclick="shareToFacebook()" title="Facebook">
+            <svg viewBox="0 0 20 20" fill="none"><path d="M11 10.5h2l.5-2.5H11V6.5c0-.7.35-1.5 1.5-1.5H13.5V2.5A13 13 0 0011.5 2.5C9.14 2.5 8 3.9 8 6v2H5.5v2.5H8V18h3v-7.5z" fill="#1877F2"/></svg>
+          </button>
+          <button class="share-btn" onclick="shareToX()" title="X">
+            <svg viewBox="0 0 20 20" fill="none"><path d="M15.5 3h-2.1l-3.4 4.3L6.4 3H2l5.7 7.3L2.1 17H4.2l3.7-4.6 3.7 4.6H16l-6-7.7L15.5 3z" fill="#000"/></svg>
+          </button>
+          <button class="share-btn" onclick="copyLink()" title="คัดลอก">
+            <svg viewBox="0 0 20 20" fill="none"><path d="M8.5 11.5a4 4 0 005.66 0l2-2a4 4 0 00-5.66-5.66l-1 1" stroke="#555" stroke-width="1.5" stroke-linecap="round"/><path d="M11.5 8.5a4 4 0 00-5.66 0l-2 2a4 4 0 005.66 5.66l1-1" stroke="#555" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+          <button class="share-btn" onclick="shareByEmail()" title="อีเมล">
+            <svg viewBox="0 0 20 20" fill="none"><rect x="2" y="4" width="16" height="12" rx="2" stroke="#555" stroke-width="1.5"/><path d="M2 7l8 5 8-5" stroke="#555" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+
+        <!-- Related section -->
+        <div class="related-section" id="relatedSection"{% if not related_hotissue %} style="display:none;"{% endif %}>
+          <div class="container">
+          <div class="col-12 col-lg-9 mx-auto">
+          <div class="related-week-header-row">
+            <span class="related-week-chip">Weekly</span>
+            <span class="related-week-label" id="relatedWeekLabel">{{ page.page_subtitle }}</span>
           </div>
-
-          <!-- Related section -->
-          <div class="related-section" id="relatedSection" style="display:none;">
-            <div class="container">
-            <div class="col-12 col-lg-9 mx-auto">
-            <div class="related-week-header-row">
-              <span class="related-week-chip">Weekly</span>
-              <span class="related-week-label" id="relatedWeekLabel">บทวิเคราะห์รายสัปดาห์เดียวกัน</span>
-            </div>
-            <div class="weekly-related-wrapper">
-              <div class="swiper weekly-related-swiper">
-                <div class="swiper-wrapper" id="relatedSwiperWrapper"></div>
+          <div class="weekly-related-wrapper">
+            <div class="swiper weekly-related-swiper">
+              <div class="swiper-wrapper" id="relatedSwiperWrapper">
+                {% for rel in related_hotissue %}
+                <div class="swiper-slide">
+                  <div class="insight-card" onclick="location.href='/wealth-single-weekly-hotissue/{{ rel.hs_path }}'">
+                    <div class="insight-card-img-wrap">
+                      <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-hot-issue.png') }}" alt="{{ rel.main_title }}" />
+                    </div>
+                    <div class="insight-card-content">
+                      <span class="insight-card-img-tag insight-tag tag-hot-issue">Hot issue</span>
+                      <h4 class="insight-card-title">{{ rel.main_title }}</h4>
+                      <p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p>
+                      {% set rel_excerpt = rel.description if rel.description else rel.ai_summary|striptags %}
+                      {% if rel_excerpt %}<p class="insight-card-excerpt">{{ rel_excerpt }}</p>{% endif %}
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
               </div>
-              <div class="swiper-button-prev weekly-prev"></div>
-              <div class="swiper-button-next weekly-next"></div>
             </div>
-            </div>
-            </div>
+            <div class="swiper-button-prev weekly-prev"></div>
+            <div class="swiper-button-next weekly-next"></div>
           </div>
-
-        </div><!-- /pageContent -->
-
-        <!-- Error state -->
-        <div id="pageError" style="display:none;" class="page-error">
-          <p style="color:#3d506e;font-size:16px;">ไม่พบบทวิเคราะห์ที่ระบุ</p>
-          <a href="/wealth-insights" style="color:#a2603c;">← กลับไปหน้า Insights</a>
+          </div>
+          </div>
         </div>
 
       </div>
@@ -378,6 +368,11 @@
   </section>
 
 </div>
+
+{% else %}
+<script>{% if not is_in_editor %}window.location.replace('https://wealth.yuanta.co.th/wealth-insights');{% endif %}</script>
+
+{% endif %}
 
 <!-- MONTHLY MODAL -->
 <div class="week-modal-overlay" id="monthlyModalOverlay" onclick="closeMonthlyModal(event)">
@@ -499,7 +494,7 @@
     <div class="week-modal-header">
       <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
         <span class="related-week-chip">Weekly</span>
-        <span class="related-week-label" id="modalWeekLabel">บทวิเคราะห์รายสัปดาห์เดียวกัน</span>
+        <span class="related-week-label" id="modalWeekLabel">{{ page.page_subtitle }}</span>
         <span class="related-week-date" id="modalWeekDate"></span>
       </div>
       <button class="week-modal-close" onclick="closeWeeklyModalDirect()">
@@ -543,7 +538,6 @@
   })();
 
   var PORTAL       = '43844850';
-  var HOT_TABLE    = '2599182038';
   var EXCLUDE_TABLE = '2599182038';
   var WEEKLY_TABLES = [
     {id:'2599182038', label:'Hot issue',        cls:'tag-hot-issue',  path:'/wealth-single-weekly-hotissue/'},
@@ -573,23 +567,6 @@
     return d.getDate() + ' ' + m[d.getMonth()] + ' ' + (d.getFullYear() + 543);
   }
 
-  function switchTab(btn, panelId) {
-    document.querySelectorAll('.on-this-page-tab').forEach(function(t) { t.classList.remove('active'); });
-    document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-    btn.classList.add('active');
-    var panel = document.getElementById(panelId);
-    if (panel) {
-      panel.classList.add('active');
-      var tabsWrap = document.querySelector('.on-this-page-tabs-wrap');
-      var navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-height')) || 60;
-      var isStuck = tabsWrap && tabsWrap.getBoundingClientRect().top <= navH + 1;
-      if (isStuck) {
-        var tabH = tabsWrap.offsetHeight;
-        window.scrollTo({ top: panel.getBoundingClientRect().top + window.scrollY - navH - tabH - 8, behavior: 'smooth' });
-      }
-    }
-  }
-
   function _wrapTableScroll(root) {
     if (!root) return;
     root.querySelectorAll('table').forEach(function(tbl) {
@@ -613,92 +590,21 @@
     });
   }
 
-  // ── Main fetch ──
+  // ── Init ──
   (function() {
-    weekSlug = location.pathname.split('/').filter(Boolean).pop();
-    var pdfBtn = document.getElementById('ctaPdfBtn');
-    if (pdfBtn && weekSlug) pdfBtn.href = '/wealth-weekly-report?week=' + encodeURIComponent(weekSlug);
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(weekSlug)) {
-      {% if not is_in_editor %}location.replace('/wealth-insights');{% endif %}
-      return;
-    }
-    var url = 'https://api.hubapi.com/cms/v3/hubdb/tables/' + HOT_TABLE
-      + '/rows?portalId=' + PORTAL
-      + '&week_slug__eq=' + encodeURIComponent(weekSlug);
-    fetch(url)
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        var rows = data.results || [];
-        if (!rows.length) {
-          document.getElementById('pageLoading').style.display = 'none';
-          document.getElementById('pageError').style.display = '';
-          return;
-        }
-        // Set page-level header from first row
-        var first = rows[0].values;
-        if (first.main_title) document.getElementById('pageTitle').textContent = first.main_title;
-        if (first.page_subtitle) { ['relatedWeekLabel','modalWeekLabel'].forEach(function(id){ var el=document.getElementById(id); if(el) el.textContent=first.page_subtitle; }); }
-        if (first.page_subtitle) document.getElementById('pageSubtitle').textContent = first.page_subtitle;
-        if (first.page_date) document.getElementById('pageDate').textContent = thaiDate(first.page_date);
-
-        // Build tabs
-        var tabNav = document.getElementById('tabNav');
-        var tabPanels = document.getElementById('tabPanels');
-        rows.forEach(function(row, idx) {
-          var v = row.values;
-          var panelId = 'tab-panel-' + idx;
-          var label = v.sub_title || ('หัวข้อที่ ' + (idx + 1));
-          // Tab button
-          var btn = document.createElement('button');
-          btn.className = 'on-this-page-tab' + (idx === 0 ? ' active' : '');
-          btn.textContent = label;
-          btn.setAttribute('onclick', 'switchTab(this, \'' + panelId + '\')');
-          tabNav.appendChild(btn);
-          // Tab panel
-          var aiHtml = '';
-          if (v.ai_summary) {
-            aiHtml = '<div class="ai-summary-box">'
-              + '<div class="ai-summary-header">'
-              + '<div class="ai-summary-icon"><img src="{{ get_asset_url('../images/ai-icon.png') }}" alt="AI" /></div>'
-              + '<div><span class="ai-summary-label">AI Summary</span><p class="ai-summary-sublabel">บทสรุปจาก AI อ้างอิงโดยบทวิเคราะห์</p></div>'
-              + '</div>'
-              + '<div class="ai-summary-text">' + (v.ai_summary || '') + '</div>'
-              + '</div>';
-          }
-          var bodyHtml = v.body ? '<div class="article-content" id="content-' + panelId + '">' + v.body + '</div>' : '';
-          var panel = document.createElement('div');
-          panel.className = 'tab-panel' + (idx === 0 ? ' active' : '');
-          panel.id = panelId;
-          panel.innerHTML = aiHtml + bodyHtml;
-          tabPanels.appendChild(panel);
+    weekSlug = '{{ week }}';
+    loadRelated(weekSlug);
+    requestAnimationFrame(function() {
+      document.querySelectorAll('.article-content table').forEach(function(tbl) {
+        tbl.style.width = '100%'; tbl.style.tableLayout = 'fixed';
+        tbl.querySelectorAll('col, th, td').forEach(function(el) {
+          el.style.width = ''; el.removeAttribute('width');
+          el.style.whiteSpace = 'normal';
+          el.style.wordBreak = 'break-word';
+          el.style.overflowWrap = 'anywhere';
         });
-
-        // Update topic count
-        var countEl = document.getElementById('topicCount');
-        if (countEl) countEl.textContent = 'ทั้งหมด ' + rows.length + ' หน้า';
-
-        document.getElementById('pageLoading').style.display = 'none';
-        document.getElementById('pageContent').style.display = '';
-
-        requestAnimationFrame(function() {
-          document.querySelectorAll('.article-content table').forEach(function(tbl) {
-            tbl.style.width = '100%'; tbl.style.tableLayout = 'fixed';
-            tbl.querySelectorAll('col, th, td').forEach(function(el) {
-              el.style.width = ''; el.removeAttribute('width');
-              el.style.whiteSpace = 'normal';
-              el.style.wordBreak = 'break-word';
-              el.style.overflowWrap = 'anywhere';
-            });
-          });
-        });
-
-        // Load related
-        loadRelated(weekSlug);
-      })
-      .catch(function() {
-        document.getElementById('pageLoading').style.display = 'none';
-        document.getElementById('pageError').style.display = '';
       });
+    });
   })();
 
   // ── Related articles ──
@@ -714,26 +620,28 @@
         .catch(function() { return null; });
     })).then(function(articles) {
       var valid = articles.filter(Boolean);
-      if (!valid.length) return;
       var wrapper = document.getElementById('relatedSwiperWrapper');
       var section = document.getElementById('relatedSection');
       if (!wrapper || !section) return;
-      wrapper.innerHTML = valid.map(function(a) {
-        var t = a._table;
-        var src = THUMB[t.id] || FALLBACK_IMG;
-        var url = t.path + (a.values.week_slug || '');
-        return '<div class="swiper-slide">'
-          + '<div class="insight-card" onclick="location.href=\'' + url + '\'">'
-          + '<div class="insight-card-img-wrap">'
-          + '<img class="insight-card-img" src="' + src + '" alt="" />'
-          + '</div>'
-          + '<div class="insight-card-content">'
-          + '<span class="insight-card-img-tag insight-tag ' + t.cls + '">' + t.label + '</span>'
-          + '<h4 class="insight-card-title">' + (a.values.main_title || '') + '</h4>'
-          + '<p class="insight-card-date">' + (a.values.page_date ? thaiDateM(a.values.page_date) : '') + '</p>'
-          + '<p class="insight-card-excerpt">' + (a.values.description || '') + '</p>'
-          + '</div></div></div>';
-      }).join('');
+      if (valid.length) {
+        wrapper.insertAdjacentHTML('beforeend', valid.map(function(a) {
+          var t = a._table;
+          var src = THUMB[t.id] || FALLBACK_IMG;
+          var url = t.path + (a.values.week_slug || '');
+          return '<div class="swiper-slide">'
+            + '<div class="insight-card" onclick="location.href=\'' + url + '\'">'
+            + '<div class="insight-card-img-wrap">'
+            + '<img class="insight-card-img" src="' + src + '" alt="" />'
+            + '</div>'
+            + '<div class="insight-card-content">'
+            + '<span class="insight-card-img-tag insight-tag ' + t.cls + '">' + t.label + '</span>'
+            + '<h4 class="insight-card-title">' + (a.values.main_title || '') + '</h4>'
+            + '<p class="insight-card-date">' + (a.values.page_date ? thaiDateM(a.values.page_date) : '') + '</p>'
+            + '<p class="insight-card-excerpt">' + (a.values.description || '') + '</p>'
+            + '</div></div></div>';
+        }).join(''));
+      }
+      if (!wrapper.children.length) return;
       section.style.display = '';
       new Swiper('.weekly-related-swiper', {
         slidesPerView: 4,
