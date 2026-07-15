@@ -9,8 +9,7 @@
 
 {% set current_row = dynamic_page_hubdb_row %}
 {% set week = current_row.week_slug %}
-{% set topics = hubdb_table_rows(2601147111, "week_slug__eq=" ~ week) %}
-{% set page = topics[0] %}
+{% set page = current_row %}
 
 {% if page %}
 
@@ -50,18 +49,6 @@
   .ai-summary-text { font-family: 'Noto Sans Thai', sans-serif; font-size: 16px; color: #0C244A; line-height: 1.75; }
   .ai-summary-text p { margin-bottom: 8px; }
   .ai-summary-text p:last-child { margin-bottom: 0; }
-  .on-this-page { padding: 20px 0 16px; margin-bottom: 0; background: #F9F7F4; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; }
-  .on-this-page-heading { font-family: 'Noto Sans Thai', sans-serif; font-size: 24px; font-weight: 700; color: #0c244a; margin-bottom: 4px; }
-  .on-this-page-count { font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; color: #8f9aac; margin-bottom: 16px; }
-  .on-this-page-tabs-wrap { position: sticky; top: var(--nav-height, 60px); background: #F9F7F4; z-index: 10; padding-bottom: 16px; width: 100vw; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
-  .on-this-page-tabs-wrap .container { padding-top: 0; padding-bottom: 0; }
-  .on-this-page-tabs { display: flex; gap: 0; overflow-x: auto; scrollbar-width: none; }
-  .on-this-page-tabs::-webkit-scrollbar { display: none; }
-  .on-this-page-tab { font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; font-weight: 400; color: #3d506e; background: none; border: none; border-bottom: 2px solid transparent; padding: 10px 0; margin-right: 32px; cursor: pointer; white-space: nowrap; transition: color .15s, border-color .15s; flex-shrink: 0; }
-  .on-this-page-tab:hover { color: #0c244a; }
-  .on-this-page-tab.active { color: #0c244a; font-weight: 700; border-bottom-color: #0c244a; }
-  .tab-content { display: none; padding-top: 40px; }
-  .tab-content.active { display: block; }
   .article-content { font-family: 'Noto Sans Thai', sans-serif; font-size: 16px; color: #1a2e44; line-height: 1.75; }
   .article-content h2 { font-family: 'Noto Sans Thai', sans-serif; font-size: 18px; font-weight: 700; color: #0c244a; margin: 32px 0 16px; padding-top: 8px; }
   .article-content h3 { font-family: 'Noto Sans Thai', sans-serif; font-size: 20px; font-weight: 700; color: #0c244a; margin: 24px 0 12px; }
@@ -228,48 +215,19 @@
     <div class="container">
       <div class="col-12 col-lg-9 mx-auto">
 
-        <!-- On this page tabs -->
-        <div class="on-this-page">
-          <div class="container">
-          <div class="col-12 col-lg-9 mx-auto">
-          <h3 class="on-this-page-heading">หัวข้อบทวิเคราะห์</h3>
-          <p class="on-this-page-count">ทั้งหมด {{ topics|length }} หน้า</p>
-          </div>
-          </div>
-        </div>
-        <div class="on-this-page-tabs-wrap">
-          <div class="container">
-          <div class="col-12 col-lg-9 mx-auto">
-          <div class="on-this-page-tabs">
-            {% for topic in topics %}
-            <button class="on-this-page-tab{% if loop.first %} active{% endif %}"
-                    onclick="switchTab(this, 'tab-{{ loop.index }}')">
-              {{ topic.sub_title }}
-            </button>
-            {% endfor %}
-          </div>
-          </div>
-          </div>
-        </div>
-
-        <!-- Tab contents -->
-        {% for topic in topics %}
-        <div class="tab-content{% if loop.first %} active{% endif %}" id="tab-{{ loop.index }}">
-          <div class="ai-summary-box">
-            <div class="ai-summary-header">
-              <div class="ai-summary-icon">
-                <img src="{{ get_asset_url('../images/ai-icon.png') }}" alt="AI" />
-              </div>
-              <div>
-                <span class="ai-summary-label">AI Summary</span>
-                <p class="ai-summary-sublabel">บทสรุปจาก AI อ้างอิงโดยบทวิเคราะห์</p>
-              </div>
+        <div class="ai-summary-box">
+          <div class="ai-summary-header">
+            <div class="ai-summary-icon">
+              <img src="{{ get_asset_url('../images/ai-icon.png') }}" alt="AI" />
             </div>
-            <div class="ai-summary-text">{{ topic.ai_summary }}</div>
+            <div>
+              <span class="ai-summary-label">AI Summary</span>
+              <p class="ai-summary-sublabel">บทสรุปจาก AI อ้างอิงโดยบทวิเคราะห์</p>
+            </div>
           </div>
-          <div class="article-content">{{ topic.body }}</div>
+          <div class="ai-summary-text">{{ page.ai_summary }}</div>
         </div>
-        {% endfor %}
+        <div class="article-content">{{ page.body }}</div>
 
         <!-- CTA -->
         <div class="article-cta-row">
@@ -327,7 +285,8 @@
         {% set related_assetoutlook = hubdb_table_rows(2601147112, "week_slug__eq=" ~ week ~ "&limit=1") %}
         {% set related_mktcalendar = hubdb_table_rows(2679062221, "week_slug__eq=" ~ week ~ "&limit=1") %}
         {% set related_buylist = hubdb_table_rows(2601119426, "week_slug__eq=" ~ week ~ "&limit=1") %}
-        {% if related_assetperf|length > 0 or related_mktoutlook|length > 0 or related_assetoutlook|length > 0 or related_mktcalendar|length > 0 or related_buylist|length > 0 %}
+        {% set related_hotissue = hubdb_table_rows(2601147111, "week_slug__eq=" ~ week) | selectattr('hs_id', 'ne', current_row.hs_id) | list %}
+        {% if related_assetperf|length > 0 or related_mktoutlook|length > 0 or related_assetoutlook|length > 0 or related_mktcalendar|length > 0 or related_buylist|length > 0 or related_hotissue|length > 0 %}
         <div class="related-section">
           <div class="container">
           <div class="col-12 col-lg-9 mx-auto">
@@ -339,6 +298,21 @@
           <div class="weekly-related-wrapper">
             <div class="swiper weekly-related-swiper">
             <div class="swiper-wrapper">
+              {% for rel in related_hotissue %}
+              <div class="swiper-slide">
+                <div class="insight-card" onclick="location.href='/wealth-single-monthly-hotissue/{{ rel.hs_path }}'">
+                  <div class="insight-card-img-wrap">
+                    <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-hot-issue.png') }}" alt="{{ rel.main_title }}" />
+                  </div>
+                  <div class="insight-card-content">
+                    <span class="insight-card-img-tag insight-tag tag-hot-issue">Hot issue</span>
+                    <h4 class="insight-card-title">{{ rel.main_title }}</h4>
+                    <p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p>
+                    {% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
               {% for rel in related_assetperf %}
               <div class="swiper-slide">
                 <div class="insight-card" onclick="location.href='/wealth-single-monthly-asset-performance/{{ rel.week_slug|trim }}'">
@@ -554,21 +528,6 @@
       inner.addEventListener('mouseup', function() { isDragging = false; inner.style.cursor = 'grab'; inner.style.userSelect = ''; });
       inner.addEventListener('mousemove', function(e) { if (!isDragging) return; e.preventDefault(); inner.scrollLeft = scrollLeft - (e.pageX - inner.offsetLeft - startX); });
     });
-  }
-  function switchTab(btn, tabId) {
-    document.querySelectorAll('.on-this-page-tab').forEach(function(t) { t.classList.remove('active'); });
-    document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
-    btn.classList.add('active');
-    var panel = document.getElementById(tabId);
-    panel.classList.add('active');
-    var tabsWrap = document.querySelector('.on-this-page-tabs-wrap');
-    var navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-height')) || 60;
-    var isStuck = tabsWrap && tabsWrap.getBoundingClientRect().top <= navH + 1;
-    if (isStuck) {
-      var tabH = tabsWrap.offsetHeight;
-      window.scrollTo({ top: panel.getBoundingClientRect().top + window.scrollY - navH - tabH - 8, behavior: 'smooth' });
-    }
-    window.dispatchEvent(new Event('resize'));
   }
   function shareToFacebook() { window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(location.href), '_blank'); }
   function shareToX() { window.open('https://x.com/intent/tweet?url=' + encodeURIComponent(location.href), '_blank'); }
