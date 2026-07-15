@@ -528,6 +528,9 @@
       margin: auto;
       border-radius: 4px;
       overflow: hidden;
+      max-height: calc(100vh - 80px);
+      display: flex;
+      flex-direction: column;
     }
     .week-modal-header {
       display: flex;
@@ -535,10 +538,8 @@
       justify-content: space-between;
       padding: 20px 28px;
       border-bottom: 1px solid rgba(0,0,0,.08);
-      position: sticky;
-      top: 0;
       background: #fff;
-      z-index: 1;
+      flex-shrink: 0;
     }
     .week-modal-title {
       font-family: 'Noto Sans Thai', sans-serif;
@@ -562,7 +563,7 @@
       flex-shrink: 0;
     }
     .week-modal-close:hover { background: #f0f0f0; }
-    .week-modal-body { padding: 24px 28px 32px; }
+    .week-modal-body { padding: 24px 28px 32px; overflow-y: auto; flex: 1; }
     @keyframes sheetUp {
       from { transform: translateY(100%); }
       to   { transform: translateY(0); }
@@ -863,7 +864,7 @@
       return (a._table && THUMB[a._table.id]) || FALLBACK_IMG;
     }
     function articleUrl(a) {
-      var slug = a.values.week_slug || a.path || '';
+      var slug = a.path || a.values.week_slug || '';
       return a._table.path + slug;
     }
 
@@ -1218,12 +1219,17 @@
         var allArticles = [].concat.apply([], results);
         if (!allArticles.length) { if (empty) empty.style.display = ''; return; }
 
-        // keep only first row per type+slug (monthly tables may have multiple rows per period)
+        // Split tables (hot-issue per-topic pages) have one row per topic — keep every row.
+        // Other tables may have leftover duplicate/blank-path rows per week — keep only
+        // the first row per type+slug like before.
+        var SPLIT_TABLE_IDS = { '2601147111': true };
         var seenPerType = {};
         allArticles = allArticles.filter(function(a) {
           var type = a._table.type;
           var slug = a.values.week_slug || a.path || '';
-          var key = type + '|' + slug;
+          var key = SPLIT_TABLE_IDS[a._table.id]
+            ? 'row|' + a._table.id + '|' + (a.id || a.path)
+            : type + '|' + slug;
           if (seenPerType[key]) return false;
           seenPerType[key] = true;
           return true;
