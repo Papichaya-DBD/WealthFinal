@@ -1226,7 +1226,7 @@
         // Split tables (hot-issue per-topic pages) have one row per topic — keep every row.
         // Other tables may have leftover duplicate/blank-path rows per week — keep only
         // the first row per type+slug like before.
-        var SPLIT_TABLE_IDS = { '2601147111': true, '2599182038': true };
+        var SPLIT_TABLE_IDS = { '2601147111': true, '2599182038': true, '2601147112': true };
         var seenPerType = {};
         allArticles = allArticles.filter(function(a) {
           var type = a._table.type;
