@@ -33,6 +33,8 @@ THAI_TO_ENGLISH = {
     "ตราสารทุน": "equity",
     "ตราสารหนี้": "fixed-income",
     "พอร์ตตราสารหนี้ต่างประเทศ": "foreign-fixed-income-portfolio",
+    "พอร์ตตราสารหนี้โลก": "global-fixed-income-portfolio",
+    "Gold": "gold",
 }
 
 
@@ -110,9 +112,15 @@ def publish_table(table_id, live):
 
 def main():
     live = "--live" in sys.argv
+    only_table = None
+    if "--table" in sys.argv:
+        only_table = sys.argv[sys.argv.index("--table") + 1]
+        if only_table not in TABLES:
+            sys.exit(f"Unknown table id {only_table!r} — must be one of {list(TABLES)}")
     print(f"Mode: {'LIVE (will write + publish)' if live else 'DRY RUN (no writes)'}\n")
 
-    for table_id, meta in TABLES.items():
+    tables = {only_table: TABLES[only_table]} if only_table else TABLES
+    for table_id, meta in tables.items():
         print(f"=== Table {table_id} ({meta['name']}) ===")
         rows = fetch_rows(table_id)
         changed = 0
