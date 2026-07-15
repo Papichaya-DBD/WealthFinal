@@ -280,7 +280,7 @@
         </div>
 
         <!-- Related articles (monthly, latest) -->
-        {% set related_hotissue = hubdb_table_rows(2601147111, "week_slug__eq=" ~ row.week_slug ~ "&limit=1") %}
+        {% set related_hotissue = hubdb_table_rows(2601147111, "week_slug__eq=" ~ row.week_slug) %}
         {% set related_mktoutlook = hubdb_table_rows(2601119430, "week_slug__eq=" ~ row.week_slug ~ "&limit=1") %}
         {% set related_assetoutlook = hubdb_table_rows(2601147112, "week_slug__eq=" ~ row.week_slug ~ "&limit=1") %}
         {% set related_mktcalendar = hubdb_table_rows(2679062221, "week_slug__eq=" ~ row.week_slug ~ "&limit=1") %}
@@ -299,7 +299,7 @@
             <div class="swiper-wrapper">
               {% for rel in related_hotissue %}
               <div class="swiper-slide">
-                <div class="insight-card" onclick="location.href='/wealth-single-monthly-hotissue/{{ rel.week_slug|trim }}'">
+                <div class="insight-card" onclick="location.href='/wealth-single-monthly-hotissue/{{ rel.hs_path }}'">
                   <div class="insight-card-img-wrap">
                     <img class="insight-card-img" src="{{ get_asset_url('../images/thumb-hot-issue.png') }}" alt="{{ rel.main_title }}" />
                   </div>
@@ -307,7 +307,8 @@
                     <span class="insight-card-img-tag insight-tag tag-hot-issue">Hot issue</span>
                     <h4 class="insight-card-title">{{ rel.main_title }}</h4>
                     <p class="insight-card-date">{{ rel.page_date|datetimeformat("%d %b %Y") }}</p>
-                    {% if rel.description %}<p class="insight-card-excerpt">{{ rel.description }}</p>{% endif %}
+                    {% set rel_excerpt = rel.description if rel.description else rel.ai_summary|striptags %}
+                    {% if rel_excerpt %}<p class="insight-card-excerpt">{{ rel_excerpt }}</p>{% endif %}
                   </div>
                 </div>
               </div>
