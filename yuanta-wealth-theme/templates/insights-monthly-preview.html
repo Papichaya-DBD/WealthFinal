@@ -869,6 +869,10 @@
     }
 
     // ── Card / week HTML builders ──
+    function excerptText(a) {
+      if (a.values.description) return a.values.description;
+      return (a.values.ai_summary || '').replace(/<[^>]+>/g, '').trim();
+    }
     function cardHtml(a) {
       var t = a._table, url = articleUrl(a);
       return '<div class="insight-card" onclick="location.href=\'' + url + '\'">'
@@ -878,7 +882,7 @@
         + '</div><div class="insight-card-content">'
         + '<p class="insight-card-date">' + thaiDate(a.values.page_date) + '</p>'
         + '<h4 class="insight-card-title">' + (a.values.main_title || '') + '</h4>'
-        + '<p class="insight-card-excerpt">' + (a.values.description || '') + '</p>'
+        + '<p class="insight-card-excerpt">' + excerptText(a) + '</p>'
         + '</div></div>';
     }
     function weekHeaderHtml(articles) {
