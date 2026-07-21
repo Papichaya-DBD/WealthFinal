@@ -29,14 +29,14 @@ jobs:
             echo "  - name: yuanta-wealth"
             echo "    portalId: 43844850"
             echo "    authType: personalaccesskey"
-            echo "    personalAccessKey: $HUBSPOT_ACCESS_KEY"
+            echo "    personalAccessKey: $HUBSPOT_PERSONAL_ACCESS_KEY"
             echo "    auth:"
             echo "      tokenInfo:"
-            echo "        accessToken: $HUBSPOT_ACCESS_KEY"
-            echo "        expiresAt: '2099-12-31T00:00:00.000Z'"
+            echo "        accessToken: \"\""
+            echo "        expiresAt: '2020-01-01T00:00:00.000Z'"
           } > hubspot.config.yml
         env:
-          HUBSPOT_ACCESS_KEY: ${{ secrets.HUBSPOT_ACCESS_KEY }}
+          HUBSPOT_PERSONAL_ACCESS_KEY: ${{ secrets.HUBSPOT_PERSONAL_ACCESS_KEY }}
 
       - name: Upload to HubSpot
         run: hs cms upload yuanta-wealth-theme yuanta-wealth-theme --account yuanta-wealth
