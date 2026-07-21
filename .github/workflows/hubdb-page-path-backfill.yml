@@ -2,7 +2,7 @@ name: Backfill HubDB Page Paths
 
 on:
   schedule:
-    - cron: '0 1 * * *'   # daily at 01:00 UTC (08:00 ICT) — data team updates weekly at an unknown time
+    - cron: '0 2,6,10 * * 2,3'   # Tue & Wed, every 4h 09:00-17:00 ICT (02:00/06:00/10:00 UTC)
   workflow_dispatch: {}
 
 jobs:
