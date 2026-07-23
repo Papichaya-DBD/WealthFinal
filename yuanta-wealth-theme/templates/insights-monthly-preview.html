@@ -833,6 +833,11 @@
       var d = new Date(Number(ms));
       return d.getDate() + ' ' + THAI_MONTHS[d.getMonth()] + ' ' + (d.getFullYear() + 543);
     }
+    function cardDate(a) {
+      var v = a.values || {};
+      var isMonthly = /^\d{4}-\d{2}-01$/.test(v.week_slug || '');
+      return thaiDate(isMonthly && v.week_start_date ? v.week_start_date : v.page_date);
+    }
     function thaiMonthYear(articles) {
       var first = articles[0] || {};
       var slug = (first.values && first.values.week_slug) || '';
@@ -914,7 +919,7 @@
           + '<div class="article-list-text">'
           + '<span class="article-list-tag insight-tag ' + t.cls + '">' + t.label + '</span>'
           + '<h4 class="article-list-title">' + (a.values.main_title || '') + '</h4>'
-          + '<p class="article-list-date">' + thaiDate(a.values.page_date) + '</p>'
+          + '<p class="article-list-date">' + cardDate(a) + '</p>'
           + '</div>'
           + '<div class="article-list-thumb-wrap">'
           + '<img src="' + imgUrl(a) + '" alt="" onerror="this.onerror=null;this.src=FALLBACK_IMG" />'
@@ -933,7 +938,7 @@
         + '<span class="featured-card-tag insight-tag ' + ft.cls + '">' + ft.label + '</span>'
         + '</div>'
         + '<div class="featured-card-content">'
-        + '<p class="featured-card-date">' + thaiDate(feat.values.page_date) + '</p>'
+        + '<p class="featured-card-date">' + cardDate(feat) + '</p>'
         + '<h2 class="featured-card-title">' + (feat.values.main_title || '') + '</h2>'
         + '<p class="featured-card-excerpt">' + (feat.values.description || '') + '</p>'
         + '<a href="' + featUrl + '" class="read-more" onclick="event.stopPropagation()">อ่านเพิ่มเติม ' + SVG_ARROW + '</a>'
