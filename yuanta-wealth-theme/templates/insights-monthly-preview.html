@@ -885,7 +885,7 @@
         + '<img class="insight-card-img" src="' + imgUrl(a) + '" alt="" onerror="this.onerror=null;this.src=FALLBACK_IMG" />'
         + '<span class="insight-card-img-tag insight-tag ' + t.cls + '">' + t.label + '</span>'
         + '</div><div class="insight-card-content">'
-        + '<p class="insight-card-date">' + thaiDate(a.values.page_date) + '</p>'
+        + '<p class="insight-card-date">' + cardDate(a) + '</p>'
         + '<h4 class="insight-card-title">' + (a.values.main_title || '') + '</h4>'
         + '<p class="insight-card-excerpt">' + excerptText(a) + '</p>'
         + '</div></div>';
