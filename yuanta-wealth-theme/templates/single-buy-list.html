@@ -737,6 +737,24 @@
       {id:'2599723735', type:'asset-performance', label:'Asset performance',cls:'tag-asset-perf',   path:'/wealth-single-weekly-asset-performance/'},
       {id:'2610619077', type:'market-calendar',   label:'Market calendar',  cls:'tag-mkt-calendar', path:'/wealth-single-weekly-market-calendar/'},
     ];
+    var SPLIT_WEEKLY_TABLE_IDS = { '2599182038': true }; // hot-issue: multiple topic rows can share one week_slug
+
+    function fetchWeekRows(t, week) {
+      var limit = SPLIT_WEEKLY_TABLE_IDS[t.id] ? 50 : 1;
+      return fetch('https://api.hubapi.com/cms/v3/hubdb/tables/' + t.id
+        + '/rows?portalId=' + PORTAL + '&week_slug__eq=' + encodeURIComponent(week) + '&limit=' + limit)
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          var rows = d.results || [];
+          return rows.map(function(row) { return Object.assign({}, row, {_table: t}); });
+        })
+        .catch(function() { return []; });
+    }
+
+    function excerptText(a) {
+      if (a.values.description) return a.values.description;
+      return (a.values.ai_summary || '').replace(/<[^>]+>/g, '').trim();
+    }
 
     var FALLBACK_IMG = '{{ get_asset_url("../images/comingsoon.png") }}';
     var THUMB = {
@@ -954,17 +972,9 @@
 
     // ── Related articles ──
     function loadRelated(week) {
-      Promise.all(RELATED_TABLES.map(function(t) {
-        return fetch('https://api.hubapi.com/cms/v3/hubdb/tables/' + t.id
-          + '/rows?portalId=' + PORTAL + '&week_slug__eq=' + encodeURIComponent(week) + '&limit=1')
-          .then(function(r) { return r.json(); })
-          .then(function(d) {
-            var rows = d.results || [];
-            return rows.length ? Object.assign({}, rows[0], {_table: t}) : null;
-          })
-          .catch(function() { return null; });
-      })).then(function(articles) {
-        var valid = articles.filter(Boolean);
+      Promise.all(RELATED_TABLES.map(function(t) { return fetchWeekRows(t, week); })).then(function(results) {
+        var valid = [];
+        results.forEach(function(rows) { valid = valid.concat(rows); });
         if (!valid.length) return;
         var wrapper = document.getElementById('relatedSwiperWrapper');
         var section = document.getElementById('relatedSection');
@@ -982,7 +992,7 @@
             + '<span class="insight-card-img-tag insight-tag ' + t.cls + '">' + t.label + '</span>'
             + '<h4 class="insight-card-title">' + (a.values.main_title || '') + '</h4>'
             + '<p class="insight-card-date">' + (a.values.page_date ? thaiDate(a.values.page_date) : '') + '</p>'
-            + '<p class="insight-card-excerpt">' + (a.values.description || '') + '</p>'
+            + '<p class="insight-card-excerpt">' + excerptText(a) + '</p>'
             + '</div></div></div>';
         }).join('');
         section.style.display = '';
@@ -1094,16 +1104,12 @@
       var grid = document.getElementById('weeklyModalGrid');
       grid.innerHTML = '<p style="color:#8f9aac;font-size:14px;font-family:\'Noto Sans Thai\',sans-serif;padding:8px 0;">กำลังโหลด...</p>';
       var tables = RELATED_TABLES;
-      Promise.all(tables.map(function(t) {
-        return fetch('https://api.hubapi.com/cms/v3/hubdb/tables/' + t.id + '/rows?portalId=' + PORTAL + '&week_slug__eq=' + encodeURIComponent(BL_WEEK_SLUG) + '&limit=1')
-          .then(function(r) { return r.json(); })
-          .then(function(d) { var rows = d.results || []; return rows.length ? Object.assign({}, rows[0], {_t: t}) : null; })
-          .catch(function() { return null; });
-      })).then(function(arts) {
-        var valid = arts.filter(Boolean);
+      Promise.all(tables.map(function(t) { return fetchWeekRows(t, BL_WEEK_SLUG); })).then(function(results) {
+        var valid = [];
+        results.forEach(function(rows) { valid = valid.concat(rows); });
         if (!valid.length) { grid.innerHTML = '<p style="color:#8f9aac;font-size:14px;font-family:\'Noto Sans Thai\',sans-serif;padding:8px 0;">ไม่พบบทความในสัปดาห์เดียวกัน</p>'; return; }
         grid.innerHTML = valid.map(function(a) {
-          var t = a._t, src = THUMB[t.id] || FALLBACK_IMG;
+          var t = a._table, src = THUMB[t.id] || FALLBACK_IMG;
           var url = t.path + (a.values.week_slug || '');
           return '<div class="col-6 col-lg-3"><div class="insight-card" onclick="location.href=\'' + url + '\'">'
             + '<div class="insight-card-img-wrap"><img class="insight-card-img" src="' + src + '" alt="" />'
@@ -1112,7 +1118,7 @@
             + '<span class="insight-card-img-tag insight-tag ' + t.cls + '">' + t.label + '</span>'
             + '<h4 class="insight-card-title">' + (a.values.main_title || '') + '</h4>'
             + '<p class="insight-card-date">' + (a.values.page_date ? thaiDate(a.values.page_date) : '') + '</p>'
-            + '<p class="insight-card-excerpt">' + (a.values.description || '') + '</p>'
+            + '<p class="insight-card-excerpt">' + excerptText(a) + '</p>'
             + '</div></div></div>';
         }).join('');
       });
