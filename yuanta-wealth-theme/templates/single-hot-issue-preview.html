@@ -81,11 +81,7 @@
   .article-content h3 { font-family: 'Noto Sans Thai', sans-serif; font-size: 20px; font-weight: 700; color: #0c244a; margin: 24px 0 12px; }
   .article-content p { margin-bottom: 14px; }
   @media (max-width: 767px) { .article-content h3 { font-size: 18px; } .article-content p { font-size: 16px; } }
-  .article-content table { table-layout: fixed !important; width: 100% !important; border-collapse: collapse; }
   .article-content tbody, .article-content td, .article-content tfoot, .article-content th, .article-content thead, .article-content tr { border-width: 1px; }
-  .article-content td, .article-content th { padding: 10px 20px; width: auto; white-space: normal; word-break: break-word; }
-  .article-content .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  td { padding: 10px 20px !important; }
   .article-content img { width: 100%; border-radius: 4px; margin: 16px 0; display: block; }
   .article-content ul, .article-content ol { padding-left: 20px; margin-bottom: 14px; }
   .article-content ul { list-style: disc; }
@@ -681,17 +677,7 @@
         document.getElementById('pageLoading').style.display = 'none';
         document.getElementById('pageContent').style.display = '';
 
-        requestAnimationFrame(function() {
-          document.querySelectorAll('.article-content table').forEach(function(tbl) {
-            tbl.style.width = '100%'; tbl.style.tableLayout = 'fixed';
-            tbl.querySelectorAll('col, th, td').forEach(function(el) {
-              el.style.width = ''; el.removeAttribute('width');
-              el.style.whiteSpace = 'normal';
-              el.style.wordBreak = 'break-word';
-              el.style.overflowWrap = 'anywhere';
-            });
-          });
-        });
+        document.querySelectorAll('.article-content').forEach(function(ac) { _wrapTableScroll(ac); });
 
         // Load related
         loadRelated(weekSlug);

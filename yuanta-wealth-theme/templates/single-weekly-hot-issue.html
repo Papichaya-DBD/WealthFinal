@@ -70,7 +70,6 @@
   .article-content h3 { font-family: 'Noto Sans Thai', sans-serif; font-size: 20px; font-weight: 700; color: #0c244a; margin: 24px 0 12px; }
   .article-content p { margin-bottom: 14px; }
   @media (max-width: 767px) { .article-content h3 { font-size: 18px; } .article-content p { font-size: 16px; } }
-  td { padding: 10px 20px !important; }
   .article-content img { width: 100%; border-radius: 4px; margin: 16px 0; display: block; }
   .article-content ul, .article-content ol { padding-left: 20px; margin-bottom: 14px; }
   .article-content li { margin-bottom: 6px; }
@@ -98,12 +97,6 @@
   .expert-name { font-family: 'Noto Sans Thai', sans-serif; font-size: 14px; font-weight: 700; color: #0c244a; margin-bottom: 4px; }
   .expert-credentials { font-family: 'Noto Sans Thai', sans-serif; font-size: 12px; color: #3d506e; font-weight: 600; margin-bottom: 0; }
 
-  /* ── Table scroll ── */
-  .article-content table { width: 100% !important; table-layout: fixed !important; border-collapse: collapse; font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; }
-  .article-content table col { width: auto !important; }
-  .article-content table th { padding: 10px 14px; text-align: left; font-weight: 600; white-space: normal !important; word-break: break-word !important; overflow-wrap: anywhere !important; }
-  .article-content table td { padding: 10px 14px; border-bottom: 1px solid rgba(0,0,0,.07); vertical-align: top; white-space: normal !important; word-break: break-word !important; overflow-wrap: anywhere !important; }
-  .article-content table tr:nth-child(even) td { background: #f9f7f4; }
 
   /* ── Insight cards / tags ── */
   .insight-card { background: #fff; display: flex; flex-direction: column; height: 100%; cursor: pointer; transition: box-shadow .2s, transform .18s; box-shadow: 0 0 1px rgba(102,102,102,.14), 0 2px 6px rgba(102,102,102,.08); }
@@ -544,17 +537,7 @@
         document.getElementById('pageLoading').style.display = 'none';
         document.getElementById('pageContent').style.display = '';
 
-        requestAnimationFrame(function() {
-          document.querySelectorAll('.article-content table').forEach(function(tbl) {
-            tbl.style.width = '100%'; tbl.style.tableLayout = 'fixed';
-            tbl.querySelectorAll('col, th, td').forEach(function(el) {
-              el.style.width = ''; el.removeAttribute('width');
-              el.style.whiteSpace = 'normal';
-              el.style.wordBreak = 'break-word';
-              el.style.overflowWrap = 'anywhere';
-            });
-          });
-        });
+        document.querySelectorAll('.article-content').forEach(function(ac) { _wrapTableScroll(ac); });
 
         // Load related
         loadRelated(weekSlug);

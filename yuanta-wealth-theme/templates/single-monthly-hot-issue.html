@@ -63,10 +63,6 @@
   .article-table th { background: #0c244a; color: #fff; padding: 10px 14px; text-align: left; font-weight: 600; white-space: nowrap; }
   .article-table td { padding: 10px 14px !important; border-bottom: 1px solid #eaeaea; color: #1a2e44; vertical-align: top; word-break: break-word; min-width: 160px; }
   .article-table tr:nth-child(even) td { background: #f9f7f4; }
-  .article-content table { width: 100% !important; table-layout: fixed; border-collapse: collapse; margin: 20px 0; font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; }
-  .article-content table th { padding: 10px 14px; text-align: left; font-weight: 600; word-break: break-word; overflow-wrap: anywhere; }
-  .article-content table td { padding: 10px 14px; border-bottom: 1px solid #eaeaea; vertical-align: top; word-break: break-word; overflow-wrap: anywhere; }
-  .article-content table tr:nth-child(even) td { background: #f9f7f4; }
   .article-cta-row { margin-bottom: 32px; }
   .article-cta-left { border: 1.5px solid #0000001A; background: url('{{ get_asset_url('../images/bgoverall.jpg') }}') center/cover no-repeat; padding: 44px 40px; }
   .article-cta-title { font-family: 'Noto Sans Thai', sans-serif; font-size: 32px; font-weight: 700; color: #0c244a; margin-bottom: 10px; line-height: 1.3; }
@@ -522,16 +518,22 @@
   document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeWeekModalDirect(); });
 
   document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.article-content table').forEach(function(tbl) {
-      tbl.style.width = '100%';
-      tbl.style.tableLayout = 'fixed'; tbl.style.borderColor = '#eaeaea';
-      tbl.querySelectorAll('col, th, td').forEach(function(el) { el.style.width = ''; el.removeAttribute('width'); }); tbl.querySelectorAll('td').forEach(function(el) { el.style.padding = '10px'; });
-    });
+    document.querySelectorAll('.article-content').forEach(function(ac) { _wrapTableScroll(ac); });
   });
   function _wrapTableScroll(root) {
     if (!root) return;
     root.querySelectorAll('table').forEach(function(tbl) {
       if (tbl.parentNode.classList && tbl.parentNode.classList.contains('tbl-scroll-inner')) return;
+      var inner = document.createElement('div'); inner.className = 'tbl-scroll-inner';
+      tbl.parentNode.insertBefore(inner, tbl); inner.appendChild(tbl);
+      var wrap = document.createElement('div'); inner.parentNode.insertBefore(wrap, inner); wrap.appendChild(inner);
+      var nav = document.createElement('div'); nav.className = 'tbl-scroll-nav';
+      nav.innerHTML = '<button class="tbl-scroll-btn" onclick="this.parentNode.previousElementSibling.scrollBy({left:-140,behavior:\'smooth\'})">&#8249;</button>'
+        + '<span>เลื่อนดูเพิ่มเติม</span>'
+        + '<button class="tbl-scroll-btn" onclick="this.parentNode.previousElementSibling.scrollBy({left:140,behavior:\'smooth\'})">&#8250;</button>';
+      wrap.appendChild(nav);
+      function checkNav() { nav.style.display = inner.scrollWidth > inner.clientWidth ? 'flex' : 'none'; }
+      requestAnimationFrame(checkNav); window.addEventListener('resize', checkNav);
       var isDragging = false, startX, scrollLeft;
       inner.style.cursor = 'grab';
       inner.addEventListener('mousedown', function(e) { isDragging = true; startX = e.pageX - inner.offsetLeft; scrollLeft = inner.scrollLeft; inner.style.cursor = 'grabbing'; inner.style.userSelect = 'none'; });
