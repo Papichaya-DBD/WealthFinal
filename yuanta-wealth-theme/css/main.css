@@ -2318,7 +2318,7 @@ body .related-week-chip { font-family: 'Cormorant Garamond','Noto Sans Thai',Geo
 .tbl-scroll-inner::-webkit-scrollbar { display: none; }
 .tbl-scroll-inner table { min-width: 560px; width: auto !important; table-layout: auto !important; border-collapse: collapse; font-family: 'Noto Sans Thai', sans-serif; font-size: 13px; }
 .tbl-scroll-inner table th { background: #a2603c; color: #fff; font-weight: 600; padding: 10px 16px; text-align: center; white-space: nowrap; letter-spacing: .02em; }
-.tbl-scroll-inner table td { padding: 10px 16px; border-bottom: 1px solid #e8ecf2; color: #3d506e; vertical-align: middle; white-space: nowrap; text-align: center; }
+.tbl-scroll-inner table td { padding: 10px 16px; color: #3d506e; vertical-align: middle; white-space: nowrap; text-align: center; }
 .tbl-scroll-inner table tr:last-child td { border-bottom: none; }
 .tbl-scroll-inner table tr:nth-child(even) td { background: #f8f6f3; }
 .tbl-scroll-inner table tr:hover td { background: #f0ede8; }
