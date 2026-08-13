@@ -596,7 +596,7 @@
       return (a._table && THUMB[a._table.id]) || HOME_FALLBACK_IMG;
     }
     function articleUrl(a) {
-      var slug = a.values.week_slug || a.path || '';
+      var slug = a.path || a.values.week_slug || '';
       return a._table.path + slug;
     }
     function mobileCardHtml(a) {
