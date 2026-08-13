@@ -718,13 +718,17 @@
       var allArticles = [].concat.apply([], results);
       if (!allArticles.length) return;
 
-      // deduplicate buy-list and hot-issue (multiple rows per week)
+      // Split tables (hot-issue per-topic pages) have one row per topic — keep every row.
+      // Other multi-row-per-week tables (buy-list) keep only the first row per type+slug.
+      var SPLIT_TABLE_IDS = { '2599182038': true };
       var seenPerType = {};
       allArticles = allArticles.filter(function(a) {
         var type = a._table.type;
         if (type !== 'buy-list' && type !== 'hot-issue') return true;
         var slug = a.values.week_slug || a.path || '';
-        var key = type + '|' + slug;
+        var key = SPLIT_TABLE_IDS[a._table.id]
+          ? 'row|' + a._table.id + '|' + (a.id || a.path)
+          : type + '|' + slug;
         if (seenPerType[key]) return false;
         seenPerType[key] = true;
         return true;
