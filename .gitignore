@@ -5,3 +5,6 @@
 
 # Test run output
 test-results/
+
+# Separate sandbox PoC repo (own .git, not part of this repo's history)
+/yuanta-wealth-supabase-poc/
