@@ -704,7 +704,7 @@
     }
 
     Promise.all(WEEKLY_TABLES.map(function(t) {
-      return fetch('https://api.hubapi.com/cms/v3/hubdb/tables/' + t.id + '/rows?portalId=' + PORTAL_ID + '&orderBy=-page_date&limit=20')
+      return fetch('https://api.hubapi.com/cms/v3/hubdb/tables/' + t.id + '/rows?portalId=' + PORTAL_ID + '&sort=-page_date&limit=20')
         .then(function(r){ return r.json(); })
         .then(function(d){
           return (d.results || [])

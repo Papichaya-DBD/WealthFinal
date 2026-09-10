@@ -108,6 +108,7 @@
       padding: 3px 10px;
       white-space: nowrap;
     }
+    .week-chip-monthly { background: #0C244A; }
     .week-label {
       font-family: 'Noto Sans Thai', sans-serif;
       font-size: 20px;
@@ -116,7 +117,7 @@
     }
     .week-see-all {
       font-family: 'Noto Sans Thai', sans-serif;
-      font-size: 13px;
+      font-size: 16px;
       color: #a2603c;
       text-decoration: none;
       display: inline-flex;
@@ -130,7 +131,7 @@
     /* ── Featured + list layout (first week) ── */
     .week-featured-layout {
       display: grid;
-      grid-template-columns: 3fr 2fr;
+      grid-template-columns: 1fr 1fr;
       gap: 0;
     }
     .featured-card {
@@ -147,7 +148,8 @@
     }
     .featured-card-img-wrap img {
       width: 100%;
-      height: 320px;
+      aspect-ratio: 16 / 9;
+      height: auto;
       object-fit: cover;
       display: block;
     }
@@ -211,7 +213,6 @@
       border-bottom: 1px solid rgba(0,0,0,.07);
       cursor: pointer;
       transition: background .15s;
-      flex: 1;
     }
     .article-list-item:last-of-type { border-bottom: none; }
     .article-list-item:nth-last-child(2) { border-bottom: none; }
@@ -223,12 +224,13 @@
       align-items: center;
       gap: 8px;
       padding: 12px 20px 8px;
+      margin-top: auto;
     }
     .week-nav-btn {
       width: 32px; height: 32px;
       border: 1.5px solid rgba(0,0,0,.18);
       background: #fff;
-      border-radius: 50%;
+      border-radius: 0;
       display: flex; align-items: center; justify-content: center;
       cursor: pointer;
       transition: background .15s;
@@ -246,20 +248,31 @@
     .week-nav-btn.wk-next::after { transform: rotate(45deg) translateX(-1px); }
     .week-nav-btn:hover:not(:disabled) { background: #f0f0f0; }
     .week-nav-btn:disabled { opacity: .3; cursor: default; }
+    .week-nav-dots { display: none; align-items: center; gap: 6px; }
+    .week-nav-dot { width: 8px; height: 8px; border-radius: 50%; background: #d0d5df; border: none; padding: 0; cursor: pointer; transition: all .2s; }
+    .week-nav-dot.active { width: 20px; border-radius: 4px; background: #0c244a; }
     .article-list-text {
       flex: 1;
       min-width: 0;
       padding-right: 14px;
     }
+    .article-list-tag {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 500;
+      border: 1px solid rgba(0,0,0,.12);
+      letter-spacing: .03em;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
     .article-list-date {
       font-family: 'Noto Sans Thai', sans-serif;
       font-size: 11px;
       color: #3D506E;
-      margin-bottom: 5px;
+      margin-top: 6px;
     }
     .article-list-title {
       font-family: 'Noto Sans Thai', sans-serif;
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 700;
       color: #0c244a;
       line-height: 1.4;
@@ -280,15 +293,6 @@
       height: 100%;
       object-fit: cover;
       display: block;
-    }
-    .article-list-thumb-tag {
-      position: absolute;
-      top: 6px;
-      left: 6px;
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 500;
-      border: 1px solid rgba(0,0,0,.12);
-      letter-spacing: .03em;
     }
     .article-list-footer {
       display: flex;
@@ -341,7 +345,7 @@
       height: 36px;
       border: 1.5px solid rgba(0,0,0,.2);
       background: #fff;
-      border-radius: 50%;
+      border-radius: 0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -472,7 +476,7 @@
     }
     .insight-card-title {
       font-family: 'Noto Sans Thai', sans-serif;
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 700;
       color: #0c244a;
       line-height: 1.45;
@@ -485,7 +489,7 @@
     }
     .insight-card-excerpt {
       font-family: 'Noto Sans Thai', sans-serif;
-      font-size: 13px;
+      font-size: 16px;
       color: #3d506e;
       line-height: 1.55;
       flex: 1;
@@ -524,6 +528,9 @@
       margin: auto;
       border-radius: 4px;
       overflow: hidden;
+      max-height: calc(100vh - 80px);
+      display: flex;
+      flex-direction: column;
     }
     .week-modal-header {
       display: flex;
@@ -531,10 +538,8 @@
       justify-content: space-between;
       padding: 20px 28px;
       border-bottom: 1px solid rgba(0,0,0,.08);
-      position: sticky;
-      top: 0;
       background: #fff;
-      z-index: 1;
+      flex-shrink: 0;
     }
     .week-modal-title {
       font-family: 'Noto Sans Thai', sans-serif;
@@ -558,7 +563,7 @@
       flex-shrink: 0;
     }
     .week-modal-close:hover { background: #f0f0f0; }
-    .week-modal-body { padding: 24px 28px 32px; }
+    .week-modal-body { padding: 24px 28px 32px; overflow-y: auto; flex: 1; }
     @keyframes sheetUp {
       from { transform: translateY(100%); }
       to   { transform: translateY(0); }
@@ -612,22 +617,11 @@
     @media (max-width: 991px) {
       .featured-card-content { padding: 18px 20px 20px; }
       .featured-card-title { font-size: 16px; }
-      .week-carousel-track .col-card { flex: 0 0 calc(50% - 8px); }
-    }
+      .article-list-thumb-wrap { width: 130px; height: 90px; }
+      .week-nav-btn { display: none; }
+      .week-nav-dots { display: flex; }
 
-    @media (max-width: 767px) {
-      .insights-content { padding: 24px 0 60px; }
-      .insights-filter-bar { padding: 16px 0; }
-
-      .week-label { font-size: 16px; }
-      .week-section { margin-bottom: 32px; }
-
-      /* Featured layout: stack vertically on mobile */
-      .week-featured-layout { grid-template-columns: 1fr; }
-      .article-list { border-left: none; border-top: 1px solid rgba(0,0,0,.08); }
-      .featured-card-img-wrap img { min-height: 200px; }
-
-      /* Carousel: edge-to-edge native scroll */
+      /* Carousel: edge-to-edge native scroll (tablet + mobile) */
       .carousel-nav { display: none; }
       .week-carousel-track-wrap {
         overflow-x: auto;
@@ -647,7 +641,23 @@
         max-width: calc(100vw - 56px);
         scroll-snap-align: start;
       }
+      .week-carousel-feat .week-carousel-track .col-card {
+        flex: 0 0 300px;
+        scroll-snap-stop: always;
+      }
       .week-carousel-track::after { content: ''; flex: 0 0 24px; }
+    }
+
+    @media (max-width: 767px) {
+      .insights-content { padding: 24px 0 60px; }
+      .insights-filter-bar { padding: 16px 0; }
+
+      .week-label { font-size: 16px; }
+      .week-section { margin-bottom: 32px; }
+
+      /* Featured layout: stack vertically on mobile */
+      .week-featured-layout { grid-template-columns: 1fr; }
+      .article-list { border-left: none; border-top: 1px solid rgba(0,0,0,.08); }
 
       .insight-card-img { height: 130px; }
       .article-list-item { padding: 14px 16px; }
@@ -679,7 +689,7 @@
     /* Toggle desktop/mobile layouts */
     .d-lg-grid { display: grid; }
     .d-lg-none { display: flex !important; }
-    @media (min-width: 992px) {
+    @media (min-width: 768px) {
       .d-lg-grid { display: grid !important; }
       .d-lg-none { display: none !important; }
     }
@@ -817,10 +827,25 @@
 
     // ── Thai date helpers ──
     var THAI_MONTHS = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+    var THAI_MONTHS_FULL = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
     function thaiDate(ms) {
       if (!ms) return '';
       var d = new Date(Number(ms));
       return d.getDate() + ' ' + THAI_MONTHS[d.getMonth()] + ' ' + (d.getFullYear() + 543);
+    }
+    function cardDate(a) {
+      var v = a.values || {};
+      var isMonthly = /^\d{4}-\d{2}-01$/.test(v.week_slug || '');
+      return thaiDate(isMonthly && v.week_start_date ? v.week_start_date : v.page_date);
+    }
+    function thaiMonthYear(articles) {
+      var first = articles[0] || {};
+      var slug = (first.values && first.values.week_slug) || '';
+      var m = slug.match(/^(\d{4})-(\d{2})-\d{2}$/);
+      if (!m) return '';
+      var y  = parseInt(m[1], 10) + 543;
+      var mo = parseInt(m[2], 10) - 1;
+      return THAI_MONTHS_FULL[mo] + ' ' + y;
     }
     function thaiDateRange(articles) {
       var first = articles[0] || {};
@@ -836,19 +861,23 @@
       var dS = new Date(start), dE = new Date(end || start);
       var y  = dE.getFullYear() + 543;
       if (dS.getMonth() === dE.getMonth()) {
-        return dS.getDate() + '–' + dE.getDate() + ' ' + THAI_MONTHS[dE.getMonth()] + ' ' + y;
+        return dS.getDate() + '–' + dE.getDate() + ' ' + THAI_MONTHS_FULL[dE.getMonth()] + ' ' + y;
       }
-      return dS.getDate() + ' ' + THAI_MONTHS[dS.getMonth()] + '–' + dE.getDate() + ' ' + THAI_MONTHS[dE.getMonth()] + ' ' + y;
+      return dS.getDate() + ' ' + THAI_MONTHS_FULL[dS.getMonth()] + '–' + dE.getDate() + ' ' + THAI_MONTHS_FULL[dE.getMonth()] + ' ' + y;
     }
     function imgUrl(a) {
       return (a._table && THUMB[a._table.id]) || FALLBACK_IMG;
     }
     function articleUrl(a) {
-      var slug = a.values.week_slug || a.path || '';
+      var slug = a.path || a.values.week_slug || '';
       return a._table.path + slug;
     }
 
     // ── Card / week HTML builders ──
+    function excerptText(a) {
+      if (a.values.description) return a.values.description;
+      return (a.values.ai_summary || '').replace(/<[^>]+>/g, '').trim();
+    }
     function cardHtml(a) {
       var t = a._table, url = articleUrl(a);
       return '<div class="insight-card" onclick="location.href=\'' + url + '\'">'
@@ -856,18 +885,21 @@
         + '<img class="insight-card-img" src="' + imgUrl(a) + '" alt="" onerror="this.onerror=null;this.src=FALLBACK_IMG" />'
         + '<span class="insight-card-img-tag insight-tag ' + t.cls + '">' + t.label + '</span>'
         + '</div><div class="insight-card-content">'
-        + '<p class="insight-card-date">' + thaiDate(a.values.page_date) + '</p>'
+        + '<p class="insight-card-date">' + cardDate(a) + '</p>'
         + '<h4 class="insight-card-title">' + (a.values.main_title || '') + '</h4>'
-        + '<p class="insight-card-excerpt">' + (a.values.description || '') + '</p>'
+        + '<p class="insight-card-excerpt">' + excerptText(a) + '</p>'
         + '</div></div>';
     }
     function weekHeaderHtml(articles) {
       var _slug = (articles[0] && articles[0].values.week_slug) || '';
-      var _chip = /^\d{4}-\d{2}-01$/.test(_slug) ? 'Monthly' : 'Weekly';
+      var _isMonthly = /^\d{4}-\d{2}-01$/.test(_slug);
+      var _chip = _isMonthly ? 'Monthly' : 'Weekly';
+      var _chipCls = 'week-chip' + (_isMonthly ? ' week-chip-monthly' : '');
+      var _dateLabel = _isMonthly ? thaiMonthYear(articles) : thaiDateRange(articles);
       return '<div class="week-section-header">'
         + '<div class="week-section-left">'
-        + '<span class="week-chip">' + _chip + '</span>'
-        + '<span class="week-label">' + thaiDateRange(articles) + '</span>'
+        + '<span class="' + _chipCls + '">' + _chip + '</span>'
+        + '<span class="week-label">' + _dateLabel + '</span>'
         + '</div>'
         + '<a href="#" class="week-see-all">ดูทั้งหมด ' + SVG_ARROW + '</a>'
         + '</div>';
@@ -885,12 +917,12 @@
         var t = a._table, url = articleUrl(a);
         return '<div class="article-list-item" data-category="' + t.type + '" onclick="location.href=\'' + url + '\'">'
           + '<div class="article-list-text">'
-          + '<p class="article-list-date">' + thaiDate(a.values.page_date) + '</p>'
+          + '<span class="article-list-tag insight-tag ' + t.cls + '">' + t.label + '</span>'
           + '<h4 class="article-list-title">' + (a.values.main_title || '') + '</h4>'
+          + '<p class="article-list-date">' + cardDate(a) + '</p>'
           + '</div>'
           + '<div class="article-list-thumb-wrap">'
           + '<img src="' + imgUrl(a) + '" alt="" onerror="this.onerror=null;this.src=FALLBACK_IMG" />'
-          + '<span class="article-list-thumb-tag insight-tag ' + t.cls + '">' + t.label + '</span>'
           + '</div></div>';
       }).join('');
 
@@ -906,7 +938,7 @@
         + '<span class="featured-card-tag insight-tag ' + ft.cls + '">' + ft.label + '</span>'
         + '</div>'
         + '<div class="featured-card-content">'
-        + '<p class="featured-card-date">' + thaiDate(feat.values.page_date) + '</p>'
+        + '<p class="featured-card-date">' + cardDate(feat) + '</p>'
         + '<h2 class="featured-card-title">' + (feat.values.main_title || '') + '</h2>'
         + '<p class="featured-card-excerpt">' + (feat.values.description || '') + '</p>'
         + '<a href="' + featUrl + '" class="read-more" onclick="event.stopPropagation()">อ่านเพิ่มเติม ' + SVG_ARROW + '</a>'
@@ -915,9 +947,10 @@
         + '<div class="week-nav-row">'
         + '<button class="week-nav-btn wk-prev" disabled></button>'
         + '<button class="week-nav-btn wk-next"></button>'
+        + '<div class="week-nav-dots"></div>'
         + '</div></div>'
         + '</div>'
-        + '<div class="week-carousel d-lg-none" data-perpage="4">'
+        + '<div class="week-carousel week-carousel-feat d-lg-none" data-perpage="4">'
         + '<button class="carousel-nav prev" disabled>' + SVG_PREV + '</button>'
         + '<div class="week-carousel-track-wrap"><div class="week-carousel-track">' + mobileCards + '</div></div>'
         + '<button class="carousel-nav next">' + SVG_NEXT + '</button>'
@@ -931,16 +964,43 @@
       var liCur = 0;
       var prevBtn = div.querySelector('.wk-prev');
       var nextBtn = div.querySelector('.wk-next');
+      var navRow = div.querySelector('.week-nav-row');
+      if (navRow) navRow.style.display = liPages <= 1 ? 'none' : '';
+      var dotsWrap = div.querySelector('.week-nav-dots');
+      if (dotsWrap) {
+        for (var d = 0; d < liPages; d++) {
+          var dot = document.createElement('button');
+          dot.className = 'week-nav-dot';
+          dot.type = 'button';
+          (function(pageIdx) {
+            dot.addEventListener('click', function(e) {
+              e.stopPropagation();
+              liCur = pageIdx;
+              updateListPage();
+            });
+          })(d);
+          dotsWrap.appendChild(dot);
+        }
+      }
+      var dotEls = dotsWrap ? dotsWrap.querySelectorAll('.week-nav-dot') : [];
 
       function updateListPage() {
+        var pageStart = liCur * liPerPage;
+        var pageEnd = Math.min(pageStart + liPerPage, liTotal);
+        var isFullPage = (pageEnd - pageStart) === liPerPage;
         for (var i = 0; i < liTotal; i++) {
-          listItems[i].style.display = (i >= liCur * liPerPage && i < (liCur + 1) * liPerPage) ? '' : 'none';
+          var visible = i >= pageStart && i < pageEnd;
+          listItems[i].style.display = visible ? '' : 'none';
           listItems[i].style.borderBottom = '';
+          if (visible) listItems[i].style.flex = isFullPage ? '1' : '0 0 auto';
         }
         var lastIdx = Math.min((liCur + 1) * liPerPage - 1, liTotal - 1);
         if (listItems[lastIdx]) listItems[lastIdx].style.borderBottom = 'none';
         if (prevBtn) prevBtn.disabled = liCur === 0;
         if (nextBtn) nextBtn.disabled = liCur >= liPages - 1;
+        for (var j = 0; j < dotEls.length; j++) {
+          dotEls[j].classList.toggle('active', j === liCur);
+        }
       }
 
       if (prevBtn) prevBtn.addEventListener('click', function(e) {
@@ -1113,11 +1173,14 @@
         });
         filterGrid.innerHTML = weekOrder.map(function(slug) {
           var arts = weekGroups[slug];
-          var _chip = /^\d{4}-\d{2}-01$/.test(slug) ? 'Monthly' : 'Weekly';
+          var _isMonthly = /^\d{4}-\d{2}-01$/.test(slug);
+          var _chip = _isMonthly ? 'Monthly' : 'Weekly';
+          var _chipCls = 'week-chip' + (_isMonthly ? ' week-chip-monthly' : '');
+          var _dateLabel = _isMonthly ? thaiMonthYear(arts) : thaiDateRange(arts);
           return '<div class="week-section">'
             + '<div class="week-section-header"><div class="week-section-left">'
-            + '<span class="week-chip">' + _chip + '</span>'
-            + '<span class="week-label">' + thaiDateRange(arts) + '</span>'
+            + '<span class="' + _chipCls + '">' + _chip + '</span>'
+            + '<span class="week-label">' + _dateLabel + '</span>'
             + '</div></div>'
             + '<div class="row g-3">'
             + arts.map(function(a) {
@@ -1152,7 +1215,7 @@
       var empty     = document.getElementById('insightsEmpty');
 
       Promise.all(WEEKLY_TABLES.concat(MONTHLY_TABLES).map(function(t) {
-        return fetch('https://api.hubapi.com/cms/v3/hubdb/tables/' + t.id + '/rows?portalId=' + PORTAL_ID + '&orderBy=-page_date&limit=50')
+        return fetch('https://api.hubapi.com/cms/v3/hubdb/tables/' + t.id + '/rows?portalId=' + PORTAL_ID + '&sort=-page_date&limit=50')
           .then(function(r){ return r.json(); })
           .then(function(d){
             return (d.results || [])
@@ -1165,12 +1228,17 @@
         var allArticles = [].concat.apply([], results);
         if (!allArticles.length) { if (empty) empty.style.display = ''; return; }
 
-        // keep only first row per type+slug (monthly tables may have multiple rows per period)
+        // Split tables (hot-issue per-topic pages) have one row per topic — keep every row.
+        // Other tables may have leftover duplicate/blank-path rows per week — keep only
+        // the first row per type+slug like before.
+        var SPLIT_TABLE_IDS = { '2601147111': true, '2599182038': true, '2601147112': true };
         var seenPerType = {};
         allArticles = allArticles.filter(function(a) {
           var type = a._table.type;
           var slug = a.values.week_slug || a.path || '';
-          var key = type + '|' + slug;
+          var key = SPLIT_TABLE_IDS[a._table.id]
+            ? 'row|' + a._table.id + '|' + (a.id || a.path)
+            : type + '|' + slug;
           if (seenPerType[key]) return false;
           seenPerType[key] = true;
           return true;
